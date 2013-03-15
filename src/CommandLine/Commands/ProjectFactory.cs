@@ -19,7 +19,6 @@ namespace NuGet.Commands
     internal class ProjectFactory : IPropertyProvider
     {
         private readonly Project _project;
-        private FrameworkName _frameworkName;
         private ILogger _logger;
         private ISettings _settings;
 
@@ -56,7 +55,14 @@ namespace NuGet.Commands
             _project = project;
             ProjectProperties = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
             AddSolutionDir();
-            _settings = null;            
+            _settings = null;
+
+            // Get the target framework of the project
+            string targetFrameworkMoniker = _project.GetPropertyValue("TargetFrameworkMoniker");
+            if (!String.IsNullOrEmpty(targetFrameworkMoniker))
+            {
+                TargetFramework = new FrameworkName(targetFrameworkMoniker);
+            }
         }
 
         private ISettings DefaultSettings
@@ -79,21 +85,8 @@ namespace NuGet.Commands
 
         private FrameworkName TargetFramework
         {
-            get
-            {
-                if (_frameworkName == null)
-                {
-                    // Get the target framework of the project
-                    string targetFrameworkMoniker = _project.GetPropertyValue("TargetFrameworkMoniker");
-
-                    if (!String.IsNullOrEmpty(targetFrameworkMoniker))
-                    {
-                        _frameworkName = new FrameworkName(targetFrameworkMoniker);
-                    }
-                }
-
-                return _frameworkName;
-            }
+            get;
+            set;
         }
 
         public bool IncludeSymbols { get; set; }
@@ -394,6 +387,8 @@ namespace NuGet.Commands
                     referencedProject.IncludeSymbols = IncludeSymbols;
                     referencedProject.Build = Build;
                     referencedProject.IncludeReferencedProjects = IncludeReferencedProjects;
+                    referencedProject.ProjectProperties = ProjectProperties;
+                    referencedProject.TargetFramework = TargetFramework;
                     referencedProject.BuildProject();
                     referencedProject.RecursivelyApply(action, alreadyAppliedProjects);
                 }
@@ -446,11 +441,14 @@ namespace NuGet.Commands
                         }
                         else
                         {
-                            var referencedProject = new Project(
-                                fullPath, 
-                                globalProperties: null, 
-                                toolsVersion: null, 
-                                projectCollection: projectCollection);
+                            var loadedProjects = projectCollection.GetLoadedProjects(fullPath);
+                            var referencedProject = loadedProjects.Count > 0 ?
+                                loadedProjects.First() :
+                                new Project(
+                                    fullPath,
+                                    globalProperties: null,
+                                    toolsVersion: null,
+                                    projectCollection: projectCollection);
                             projectsToProcess.Enqueue(referencedProject);
                         }
                     }
@@ -549,7 +547,6 @@ namespace NuGet.Commands
         {
             // get all packages and dependencies, including the ones in project references
             var packagesAndDependencies = new Dictionary<String, Tuple<IPackage, PackageDependency>>();
-            
             ApplyAction(p => p.AddDependencies(packagesAndDependencies));
 
             // list of all dependency packages
