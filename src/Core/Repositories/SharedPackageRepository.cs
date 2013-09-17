@@ -145,6 +145,7 @@ namespace NuGet
 
         public override void AddPackage(IPackage package)
         {
+            // add .nupkg file
             base.AddPackage(package);
 
             // if this is a solution-level package, add it to the solution's packages.config file
@@ -156,10 +157,27 @@ namespace NuGet
 
         public override void RemovePackage(IPackage package)
         {
-            // Delete the entire package directory
+            // IMPORTANT (bug #3114) Even though we delete the entire package's directory, 
+            // we still need to explicitly delete the .nuspec and .nupkg files in order to 
+            // undo pending TFS add operations, if any.
+            string manifestFilePath = GetManifestFilePath(package.Id, package.Version);
+            if (FileSystem.FileExists(manifestFilePath))
+            {
+                // delete .nuspec file
+                FileSystem.DeleteFileSafe(manifestFilePath);
+            }
+            
+            string packageFilePath = GetPackageFilePath(package);
+            if (FileSystem.FileExists(packageFilePath))
+            {
+                // Delete the .nupkg file
+                FileSystem.DeleteFileSafe(packageFilePath);
+            }
+
+            // Now delete the entire package's directory, just in case some files are left behind
             FileSystem.DeleteDirectorySafe(PathResolver.GetPackageDirectory(package), recursive: true);
 
-            // If this is the last package delete the package directory
+            // If this is the last package delete the 'packages' directory
             if (!FileSystem.GetFilesSafe(String.Empty).Any() &&
                 !FileSystem.GetDirectoriesSafe(String.Empty).Any())
             {
@@ -187,6 +205,11 @@ namespace NuGet
 
         protected override IPackage OpenPackage(string path)
         {
+            if (!FileSystem.FileExists(path))
+            {
+              return null;
+            }
+
             string extension = Path.GetExtension(path);
             if (extension.Equals(Constants.PackageExtension, StringComparison.OrdinalIgnoreCase))
             {
@@ -354,7 +377,7 @@ namespace NuGet
                     {
                         try
                         {
-                            return XDocument.Load(stream);
+                            return XmlUtility.LoadSafe(stream);
                         }
                         catch (XmlException)
                         {
@@ -398,7 +421,46 @@ namespace NuGet
 
         private bool IsSolutionLevel(IPackage package)
         {
-            return !package.HasProjectContent() && !IsReferenced(package.Id, package.Version);
+            // A package is solution level if 
+            // - it doesn't have project content & 
+            // - it doesn't have dependency on non solution-level package &
+            // - it is not referenced by any project.
+            if (package.HasProjectContent())
+            {
+                return false;
+            }
+
+            if (HasProjectLevelPackageDependency(package))
+            {
+                return false;
+            }
+
+            if (IsReferenced(package.Id, package.Version))
+            {
+                return false;
+            }
+
+            return true;
+        }
+
+        /// <summary>
+        /// Returns true if the package has a dependency on a project-level package.
+        /// </summary>
+        /// <param name="package">The package to check.</param>
+        /// <returns>True if the package has a dependency on a project-level package.</returns>
+        private bool HasProjectLevelPackageDependency(IPackage package)
+        {
+            var dependencies = package.DependencySets.SelectMany(p => p.Dependencies);
+            if (dependencies.IsEmpty())
+            {
+                return false;
+            }
+
+            HashSet<string> solutionLevelPackages = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+            solutionLevelPackages.AddRange(
+                PackageReferenceFile.GetPackageReferences().Select(packageReference => packageReference.Id));
+
+            return dependencies.Any(dependency => !solutionLevelPackages.Contains(dependency.Id));
         }
 
         private string GetManifestFilePath(string packageId, SemanticVersion version)

@@ -83,5 +83,44 @@ namespace NuGet.Test
             Assert.Equal(srcCmdLine, push.ResolveSource(@"X:\test\foobar.symbols.nupkg"));
         }
 
+        [Fact]
+        public void PushCommandUsesSourceFromConfigurationDefaultsWhenDefaultPushSourceNotSpecifiedByUserOrInConfigFile()
+        {
+            // Arrange
+            var push = new PushCommand();
+            push.SourceProvider = CreateSourceProvider();
+            push.Settings = CreateSettings();
+
+            // Set Configuration Defaults
+            var mockFileSystem = new MockFileSystem();
+            var configurationDefaultsPath = "NuGetDefaults.config";
+            mockFileSystem.AddFile(configurationDefaultsPath, @"
+<configuration>
+     <config>
+        <add key='DefaultPushSource' value='http://contoso.com/packages/' />
+    </config>
+</configuration>");
+
+            ConfigurationDefaults configurationDefaults = new ConfigurationDefaults(mockFileSystem, configurationDefaultsPath);
+
+            // Act & Assert
+            Assert.Equal(push.ResolveSource(@"X:\test\foobar.symbols.nupkg", configurationDefaults.DefaultPushSource), "http://contoso.com/packages/");
+        }
+
+        [Fact]
+        public void PushCommandThrowsAnExceptionWhenPackageFileDoesntExist()
+        {
+            // Arrange            
+            var packageFilename = "non.existant.file.nupkg";
+
+            var push = new PushCommand();
+            push.Arguments.Add(packageFilename);
+            push.ApiKey = "apikey";
+            var expectedErrorMessage = String.Format("File does not exist ({0}).", packageFilename);
+
+            // Act & Assert            
+            ExceptionAssert.Throws<CommandLineException>(() => push.Execute(), expectedErrorMessage);
+        }
+
     }
 }

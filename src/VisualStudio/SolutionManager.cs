@@ -181,7 +181,7 @@ namespace NuGet.VisualStudio
                 // When using a temporary solution, (such as by saying File -> New File), querying this value throws.
                 // Since we wouldn't be able to do manage any packages at this point, we return null. Consumers of this property typically 
                 // use a String.IsNullOrEmpty check either way, so it's alright.
-                solutionFilePath = property.Value;
+                solutionFilePath = (string)property.Value;
             }
             catch (COMException)
             {
@@ -253,7 +253,7 @@ namespace NuGet.VisualStudio
             }
 
             // Try searching for simple names first
-            string name = project.Name;
+            string name = project.GetName();
             if (GetProject(name) == project)
             {
                 return name;
@@ -377,7 +377,7 @@ namespace NuGet.VisualStudio
                 return;
             }
             ProjectName oldProjectName;
-            _projectCache.TryGetProjectNameByShortName(project.Name, out oldProjectName);
+            _projectCache.TryGetProjectNameByShortName(project.GetName(), out oldProjectName);
 
             ProjectName newProjectName = _projectCache.AddProject(project);
 
@@ -425,7 +425,7 @@ namespace NuGet.VisualStudio
             var solutionBuild = (SolutionBuild2)_dte.Solution.SolutionBuild;
             if (solutionBuild.StartupProjects != null)
             {
-                IEnumerable<object> startupProjects = solutionBuild.StartupProjects;
+                IEnumerable<object> startupProjects = (IEnumerable<object>)solutionBuild.StartupProjects;
                 string startupProjectName = startupProjects.Cast<string>().FirstOrDefault();
                 if (!String.IsNullOrEmpty(startupProjectName))
                 {
@@ -458,7 +458,7 @@ namespace NuGet.VisualStudio
             {
                 foreach (var proj in GetProjects())
                 {
-                    if (project.SupportsReferences())
+                    if (proj.SupportsReferences())
                     {
                         foreach (var referencedProject in proj.GetReferencedProjects())
                         {
@@ -477,15 +477,15 @@ namespace NuGet.VisualStudio
             return Enumerable.Empty<Project>();
         }
 
-        private static void AddDependentProject(IDictionary<string, List<Project>> dependentProjects,
-                                         Project project,
-                                         Project dependent)
+        private static void AddDependentProject(IDictionary<string, List<Project>> dependentProjects, Project project, Project dependent)
         {
+            string uniqueName = project.GetUniqueName();
+
             List<Project> dependents;
-            if (!dependentProjects.TryGetValue(project.GetUniqueName(), out dependents))
+            if (!dependentProjects.TryGetValue(uniqueName, out dependents))
             {
                 dependents = new List<Project>();
-                dependentProjects[project.UniqueName] = dependents;
+                dependentProjects[uniqueName] = dependents;
             }
             dependents.Add(dependent);
         }

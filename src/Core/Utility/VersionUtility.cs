@@ -113,7 +113,8 @@ namespace NuGet
             { new FrameworkName("WindowsPhone, Version=v8.0"), new FrameworkName("Silverlight, Version=v8.0, Profile=WindowsPhone") },
 
             { new FrameworkName("Windows, Version=v0.0"), new FrameworkName(".NETCore, Version=v4.5") },
-            { new FrameworkName("Windows, Version=v8.0"), new FrameworkName(".NETCore, Version=v4.5") }
+            { new FrameworkName("Windows, Version=v8.0"), new FrameworkName(".NETCore, Version=v4.5") },
+            { new FrameworkName("Windows, Version=v8.1"), new FrameworkName(".NETCore, Version=v4.5.1") }
         };
 
         public static Version DefaultTargetFrameworkVersion
@@ -584,7 +585,7 @@ namespace NuGet
                     {
                         return VersionUtility.ParseFrameworkFolderName(
                             frameworkPart,
-                            strictParsing: knownFolders[i] != Constants.ContentDirectory,
+                            strictParsing: knownFolders[i] == Constants.LibDirectory,
                             effectivePath: out effectivePath);
                     }
                     catch (ArgumentException)

@@ -124,8 +124,7 @@ namespace Proj2
             }
         }
 
-        // Test that when creating a symbols package from project file, referenced projects
-        // are also included in the package.
+        // Test that -IncludeReferencedProjects and -Symbols cannot be used together.
         [Fact]
         public void PackCommand_WithProjectReferences_Symbols()
         {
@@ -210,38 +209,11 @@ namespace Proj2
                     nugetexe, 
                     workingDirectory,
                     "pack proj2.csproj -build -symbols -IncludeReferencedProjects",
-                    waitForExit: true);                    
-                Assert.Equal(0, r.Item1);
-
+                    waitForExit: true);    
+                
                 // Assert
-                var package = new OptimizedZipPackage(Path.Combine(workingDirectory, "proj2.0.0.0.0.nupkg"));
-                var files = package.GetFiles().Select(f => f.Path).ToArray();
-                Array.Sort(files);
-                Assert.Equal(
-                    files,
-                    new string[] 
-                    { 
-                        @"content\proj1_file2.txt",
-                        @"lib\net40\proj1.dll", 
-                        @"lib\net40\proj2.dll" 
-                    });
-
-                var symbolPackage = new OptimizedZipPackage(
-                    Path.Combine(workingDirectory, "proj2.0.0.0.0.symbols.nupkg"));
-                files = symbolPackage.GetFiles().Select(f => f.Path).ToArray();
-                Array.Sort(files);
-                Assert.Equal(
-                    files,
-                    new string[] 
-                    { 
-                        @"content\proj1_file2.txt",
-                        @"lib\net40\proj1.dll",
-                        @"lib\net40\proj1.pdb", 
-                        @"lib\net40\proj2.dll",
-                        @"lib\net40\proj2.pdb",
-                        @"src\proj1_file1.cs",
-                        @"src\proj2_file1.cs"
-                    });
+                Assert.NotEqual(0, r.Item1);
+                Assert.True(r.Item2.Contains("not supported"));
             }
             finally
             {
@@ -358,6 +330,188 @@ namespace Proj2
                     {
                         new PackageDependency("proj2", VersionUtility.ParseVersionSpec("1.0.0.0")),
                         new PackageDependency("proj6", VersionUtility.ParseVersionSpec("2.0.0.0"))
+                    },
+                    new PackageDepencyComparer());
+            }
+            finally
+            {
+                Directory.Delete(workingDirectory, true);
+            }
+        }
+
+
+        // Test that when creating a package from project file, a referenced project that
+        // has a nuspec file is added as dependency. withCustomReplacementTokens = true 
+        // adds the token $prefix$ to the referenced nuspec's id field (see Issue #3536)
+        [Fact]
+        public void PackCommand_ReferencedProjectWithCustomTokensInNuspec() {
+            const string prefixTokenValue = "fooBar";
+
+            var targetDir = ConfigurationManager.AppSettings["TargetDir"];
+            var nugetexe = Path.Combine(targetDir, "nuget.exe");
+            var workingDirectory = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString());
+
+
+            try {
+                // Arrange
+                Util.CreateDirectory(workingDirectory);
+
+                // create test projects. There are 7 projects, with the following 
+                // dependency relationships:
+                // proj1 depends on proj2 & proj3
+                // proj2 depends on proj4 & proj5
+                // proj3 depends on proj5 & proj7
+                //
+                // proj2 and proj6 have nuspec files.
+                CreateTestProject(workingDirectory, "proj1",
+                    new string[] { 
+                        @"..\proj2\proj2.csproj",
+                        @"..\proj3\proj3.csproj"
+                    });
+                CreateTestProject(workingDirectory, "proj2",
+                    new string[] { 
+                        @"..\proj4\proj4.csproj",
+                        @"..\proj5\proj5.csproj"
+                    });
+                CreateTestProject(workingDirectory, "proj3",
+                    new string[] { 
+                        @"..\proj6\proj6.csproj",
+                        @"..\proj7\proj7.csproj"
+                    });
+                CreateTestProject(workingDirectory, "proj4", null);
+                CreateTestProject(workingDirectory, "proj5", null);
+                CreateTestProject(workingDirectory, "proj6", null);
+                CreateTestProject(workingDirectory, "proj7", null);
+                Util.CreateFile(
+                    Path.Combine(workingDirectory, "proj2"),
+                    "proj2.nuspec",
+@"<package xmlns='http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd'>
+  <metadata>
+    <id>proj2</id>
+    <version>1.0.0.0</version>
+    <title>Proj2</title>
+    <authors>test</authors>
+    <owners>test</owners>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>Description</description>
+    <copyright>Copyright ©  2013</copyright>
+    <dependencies>
+      <dependency id='p1' version='1.5.11' />
+    </dependencies>
+  </metadata>
+</package>");
+                Util.CreateFile(
+                    Path.Combine(workingDirectory, "proj6"),
+                    "proj6.nuspec",
+@"<package xmlns='http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd'>
+  <metadata>
+    <id>$prefix$proj6</id>
+    <version>2.0.0.0</version>
+    <title>Proj6</title>
+    <authors>test</authors>
+    <owners>test</owners>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>Description</description>
+    <copyright>Copyright ©  2013</copyright>
+    <dependencies>
+      <dependency id='p2' version='1.5.11' />
+    </dependencies>
+  </metadata>
+</package>");
+
+                // Act
+                var proj1Directory = Path.Combine(workingDirectory, "proj1");
+                var r = CommandRunner.Run(
+                    nugetexe,
+                    proj1Directory,
+                    "pack proj1.csproj -build -IncludeReferencedProjects -Properties prefix=" + prefixTokenValue,
+                    waitForExit: true);
+                Assert.Equal(0, r.Item1);
+
+                // Assert
+                var package = new OptimizedZipPackage(Path.Combine(proj1Directory, "proj1.0.0.0.0.nupkg"));
+                
+                // proj2 and proj6 are added as dependencies.
+                var dependencies = package.DependencySets.First().Dependencies.OrderBy(d => d.Id);
+                Assert.Equal(
+                    dependencies.OrderBy(d => d.ToString()),
+                    new PackageDependency[]
+                    {
+                        new PackageDependency("proj2", VersionUtility.ParseVersionSpec("1.0.0.0")),
+                        new PackageDependency(prefixTokenValue + "proj6", VersionUtility.ParseVersionSpec("2.0.0.0"))
+                    }.OrderBy(d => d.ToString()),
+                    new PackageDepencyComparer());
+            } finally {
+                Directory.Delete(workingDirectory, true);
+            }
+        }
+
+        // Test that recognized tokens such as $id$ in the nuspec file of the 
+        // referenced project are replaced.
+        [Fact]
+        public void PackCommand_NuspecFileWithTokens()
+        {
+            var targetDir = ConfigurationManager.AppSettings["TargetDir"];
+            var nugetexe = Path.Combine(targetDir, "nuget.exe");
+            var workingDirectory = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString());
+
+            try
+            {
+                // Arrange
+                Util.CreateDirectory(workingDirectory);
+
+                CreateTestProject(workingDirectory, "proj1",
+                    new string[] { 
+                        @"..\proj2\proj2.csproj"
+                    });
+                CreateTestProject(workingDirectory, "proj2", null, "v4.0", "1.2");                
+                Util.CreateFile(
+                    Path.Combine(workingDirectory, "proj2"),
+                    "proj2.nuspec",
+@"<package xmlns='http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd'>
+  <metadata>
+    <id>$id$</id>
+    <version>$version$</version>
+    <title>Proj2</title>
+    <authors>test</authors>
+    <owners>test</owners>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>Description</description>
+    <copyright>Copyright ©  2013</copyright>
+    <dependencies>
+      <dependency id='p1' version='1.5.11' />
+    </dependencies>
+  </metadata>
+</package>");
+                
+                // Act
+                var proj1Directory = Path.Combine(workingDirectory, "proj1");
+                var r = CommandRunner.Run(
+                    nugetexe,
+                    proj1Directory,
+                    "pack proj1.csproj -build -IncludeReferencedProjects",
+                    waitForExit: true);
+                Assert.Equal(0, r.Item1);
+
+                // Assert
+                var package = new OptimizedZipPackage(Path.Combine(proj1Directory, "proj1.0.0.0.0.nupkg"));
+                var files = package.GetFiles().Select(f => f.Path).ToArray();
+                Array.Sort(files);
+
+                Assert.Equal(
+                    files,
+                    new string[] 
+                    { 
+                        @"lib\net40\proj1.dll"
+                    });
+
+                // proj2 is added as dependencies.
+                var dependencies = package.DependencySets.First().Dependencies.OrderBy(d => d.Id);
+                Assert.Equal(
+                    dependencies,
+                    new PackageDependency[]
+                    {
+                        new PackageDependency("proj2", VersionUtility.ParseVersionSpec("1.2.0.0"))
                     },
                     new PackageDepencyComparer());
             }
@@ -735,6 +889,169 @@ namespace Proj2
             }
         }
 
+        // Test that exclude masks starting with '**' work also
+        // for files outside of the package/project root.
+        [Fact]
+        public void PackCommand_ExcludesFilesOutsideRoot()
+        {
+            var targetDir = ConfigurationManager.AppSettings["TargetDir"];
+            var nugetexe = Path.Combine(targetDir, "nuget.exe");
+            var workingDirectory = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString());
+
+            var projDirectory = Path.Combine(workingDirectory, "package");
+            var otherDirectory = Path.Combine(workingDirectory, "other");
+
+            try
+            {
+                // Arrange
+                Util.CreateDirectory(workingDirectory);
+                Util.CreateDirectory(projDirectory);
+                Util.CreateDirectory(otherDirectory);
+
+                Util.CreateFile(projDirectory, "include.me", "some text");
+                Util.CreateFile(projDirectory, "exclude.me", "some text");
+                Util.CreateFile(otherDirectory, "exclude.me", "some text");
+
+                Util.CreateFile(
+                    projDirectory,
+                    "package.nuspec",
+@"<package xmlns='http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd'>
+  <metadata>
+    <id>ExcludeBug</id>
+    <version>0.1.0.0</version>
+    <authors>test</authors>
+    <description>Sample package for reproducing bug in file/@exclude matching.</description>
+  </metadata>
+  <files>
+    <file src=""**"" exclude=""**\exclude.me"" target=""Content\package"" />
+    <file src=""..\other\**"" exclude=""**\exclude.me"" target=""Content\other"" />
+  </files>
+</package>");
+                
+                // Act
+                var r = CommandRunner.Run(
+                    nugetexe,
+                    projDirectory,
+                    "pack package.nuspec",
+                    waitForExit: true);
+
+                Assert.Equal(0, r.Item1);
+
+                // Assert
+                var package = new OptimizedZipPackage(Path.Combine(projDirectory, "ExcludeBug.0.1.0.0.nupkg"));
+                var files = package.GetFiles().Select(f => f.Path).ToArray();
+                Array.Sort(files);
+
+                Assert.Equal(
+                    files,
+                    new string[] 
+                    { 
+                        @"Content\package\include.me"
+                    });
+
+            }
+            finally
+            {
+                Directory.Delete(workingDirectory, true);
+            }
+        }
+
+        // Test that NuGet packages of the project are added as dependencies
+        [Fact]
+        public void PackCommand_PackagesAddedAsDependencies()
+        {
+            var targetDir = ConfigurationManager.AppSettings["TargetDir"];
+            var nugetexe = Path.Combine(targetDir, "nuget.exe");
+            var workingDirectory = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString());
+
+            try
+            {
+                Util.CreateDirectory(workingDirectory);
+                var proj1Directory = Path.Combine(workingDirectory, "proj1");
+                var packagesFolder = Path.Combine(proj1Directory, "packages");
+                Util.CreateDirectory(proj1Directory);
+                Util.CreateDirectory(packagesFolder);
+
+                // create project 1
+                Util.CreateFile(
+                    proj1Directory,
+                    "proj1.csproj",
+@"<Project ToolsVersion='4.0' DefaultTargets='Build' 
+    xmlns='http://schemas.microsoft.com/developer/msbuild/2003'>
+  <PropertyGroup>
+    <OutputType>Library</OutputType>
+    <OutputPath>out</OutputPath>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include='proj1_file1.cs' />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include='proj1_file2.txt' />
+    <Content Include='packages.config' />
+  </ItemGroup>
+  <Import Project='$(MSBuildToolsPath)\Microsoft.CSharp.targets' />
+</Project>");
+                Util.CreateFile(
+                    proj1Directory,
+                    "proj1_file1.cs",
+@"using System;
+
+namespace Proj1
+{
+    public class Class1
+    {
+        public int A { get; set; }
+    }
+}");
+                Util.CreateFile(
+                    proj1Directory,
+                    "packages.config",
+@"<?xml version=""1.0"" encoding=""utf-8""?>
+<packages>
+  <package id=""testPackage1"" version=""1.1.0"" targetFramework=""net45"" />
+  <package id=""testPackage2"" version=""1.1.0"" targetFramework=""net45"" developmentDependency=""true"" />
+</packages>");
+                Util.CreateTestPackage("testPackage1", "1.1.0", packagesFolder);
+                Util.CreateTestPackage("testPackage2", "1.1.0", packagesFolder);
+
+                Util.CreateFile(
+                    proj1Directory,
+                    "proj1_file2.txt",
+                    "file2");
+
+                Util.CreateFile(
+                    proj1Directory,
+                    "test.sln",
+                    "# test solution");
+
+                // Act                 
+                var r = CommandRunner.Run(
+                    nugetexe,
+                    proj1Directory,
+                    "pack proj1.csproj -build",
+                    waitForExit: true);
+                Assert.Equal(0, r.Item1);
+
+                // Assert
+                var package = new OptimizedZipPackage(Path.Combine(proj1Directory, "proj1.0.0.0.0.nupkg"));
+                Assert.Equal(1, package.DependencySets.Count());
+                var dependencySet = package.DependencySets.First();
+
+                // verify that only testPackage1 is added as dependency. testPackage2 is not adde
+                // as dependency because its developmentDependency is true.
+                Assert.Equal(1, dependencySet.Dependencies.Count);                
+                var dependency = dependencySet.Dependencies.First();
+                Assert.Equal("testPackage1", dependency.Id);
+                Assert.Equal("1.1.0", dependency.VersionSpec.ToString());
+            }
+            finally
+            {
+                Directory.Delete(workingDirectory, true);
+            }
+        }
+
+
         /// <summary>
         /// Creates a simple project.
         /// </summary>
@@ -746,11 +1063,13 @@ namespace Proj2
         /// <param name="projectName">The name of the project.</param>
         /// <param name="referencedProject">The list of projects referenced by this project. Can be null.</param>
         /// <param name="targetFrameworkVersion">The target framework version of the project.</param>
+        /// <param name="version">The version of the assembly.</param>
         private void CreateTestProject(
             string baseDirectory, 
             string projectName, 
             string[] referencedProject,
-            string targetFrameworkVersion = "v4.0")
+            string targetFrameworkVersion = "v4.0",
+            string version = "0.0.0.0")
         {
             var projectDirectory = Path.Combine(baseDirectory, projectName);
             Util.CreateDirectory(projectDirectory);
@@ -789,8 +1108,11 @@ namespace Proj2
 
             Util.CreateFile(
                 projectDirectory,
-                "file1.cs",                
+                "file1.cs",
 @"using System;
+using System.Reflection;
+
+[assembly: AssemblyVersion(" + "\"" + version + "\"" + @")]
 
 namespace " + projectName + @" 
 {

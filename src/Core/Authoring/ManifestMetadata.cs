@@ -162,7 +162,7 @@ namespace NuGet
         {
             get
             {
-                if (ReferenceSets == null)
+                if (ReferenceSets == null || ReferenceSets.Count == 0)
                 {
                     return null;
                 }
@@ -188,7 +188,7 @@ namespace NuGet
         [XmlIgnore]
         public List<ManifestReferenceSet> ReferenceSets { get; set; }
 
-        SemanticVersion IPackageMetadata.Version
+        SemanticVersion IPackageName.Version
         {
             get
             {

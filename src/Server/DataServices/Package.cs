@@ -19,6 +19,7 @@ namespace NuGet.Server.DataServices
         {
             Id = package.Id;
             Version = package.Version.ToString();
+            IsPrerelease = !String.IsNullOrEmpty(package.Version.SpecialVersion);
             Title = package.Title;
             Authors = String.Join(",", package.Authors);
             Owners = String.Join(",", package.Owners);
@@ -75,6 +76,12 @@ namespace NuGet.Server.DataServices
         {
             get;
             set;
+        }
+
+        public bool IsPrerelease
+        {
+            get;
+            private set;
         }
 
         public string Title

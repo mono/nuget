@@ -341,7 +341,7 @@ namespace NuGet.Dialog.Providers
         private LoadPageResult ExecuteAsync(int pageNumber, CancellationToken token)
         {
             token.ThrowIfCancellationRequested();
-            
+
             if (_query == null)
             {
                 IQueryable<IPackage> query = GetPackages(searchTerm: null, allowPrereleaseVersions: Provider.IncludePrerelease);
@@ -355,6 +355,11 @@ namespace NuGet.Dialog.Providers
 
                 // Execute the total count query
                 _totalCount = query.Count();
+
+                if (_totalCount == 0)
+                {
+                    return new LoadPageResult(new IPackage[0], 0, 0);
+                }
 
                 // make sure we don't query a page that is greater than the maximum page number.
                 int maximumPages = (_totalCount + PageSize - 1)/PageSize;
@@ -479,21 +484,28 @@ namespace NuGet.Dialog.Providers
             // Only process the result if this node is still selected.
             if (IsSelected)
             {
-                if (task.IsCanceled)
+                if (task.IsFaulted)
+                {
+                    if (cancellationSource.IsCancellationRequested)
+                    {
+                        HideProgressPane();
+                    }
+                    else
+                    {
+                        // show error message in the Message pane
+                        ShowMessagePane(ExceptionUtility.Unwrap(exception).Message);
+                    }
+                }
+                else if (task.IsCanceled)
                 {
                     HideProgressPane();
-                }
-                else if (task.IsFaulted)
-                {
-                    // show error message in the Message pane
-                    ShowMessagePane(ExceptionUtility.Unwrap(exception).Message);
                 }
                 else
                 {
                     LoadPageResult result = task.Result;
 
                     UpdateNewPackages(result.Packages.ToList());
-                    
+
                     int totalPages = (result.TotalCount + PageSize - 1) / PageSize;
                     TotalPages = Math.Max(1, totalPages);
                     CurrentPage = Math.Max(1, result.PageNumber);
@@ -621,6 +633,7 @@ namespace NuGet.Dialog.Providers
                     if (_includePrereleaseWhenLastLoaded != Provider.IncludePrerelease)
                     {
                         Refresh(resetQueryBeforeRefresh: true);
+                        return;
                     }
 
                     if (Provider.RefreshOnNodeSelection) 
@@ -628,6 +641,17 @@ namespace NuGet.Dialog.Providers
                         Refresh();
                     }
                 } 
+            }
+        }
+
+        /// <summary>
+        /// Called when the focus switches away from this node
+        /// </summary>
+        internal virtual void OnClosed()
+        {
+            if (IsSearchResultsNode)
+            {
+                Provider.RemoveSearchNode();
             }
         }
     }

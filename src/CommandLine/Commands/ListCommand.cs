@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.Diagnostics.CodeAnalysis;
+using System.Globalization;
 using System.Linq;
 using NuGet.Common;
 
@@ -71,7 +72,7 @@ namespace NuGet.Commands
         {
             if (Verbose)
             {
-                Console.WriteWarning(NuGetResources.Option_VerboseDeprecated);
+                Console.WriteWarning(LocalizedResourceManager.GetString("Option_VerboseDeprecated"));
                 Verbosity = Verbosity.Detailed;
             }
 
@@ -97,6 +98,11 @@ namespace NuGet.Commands
                         Console.PrintJustified(0, p.Id);
                         Console.PrintJustified(1, p.Version.ToString());
                         Console.PrintJustified(1, p.Description);
+                        if (p.LicenseUrl != null && !string.IsNullOrEmpty(p.LicenseUrl.OriginalString))
+                        {
+                            Console.PrintJustified(1, 
+                                String.Format(CultureInfo.InvariantCulture, LocalizedResourceManager.GetString("ListCommand_LicenseUrl"), p.LicenseUrl.OriginalString));
+                        }
                         Console.WriteLine();
                         hasPackages = true;
                     }
@@ -117,7 +123,7 @@ namespace NuGet.Commands
 
             if (!hasPackages)
             {
-                Console.WriteLine(NuGetResources.ListCommandNoPackages);
+                Console.WriteLine(LocalizedResourceManager.GetString("ListCommandNoPackages"));
             }
         }
     }

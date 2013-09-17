@@ -76,6 +76,20 @@ namespace NuGet
             _allowPrereleaseVersions = allowPrereleaseVersions;
         }
 
+        internal bool DisableWalkInfo
+        { 
+            get; 
+            set; 
+        }
+
+        protected override bool IgnoreWalkInfo
+        {
+            get
+            {
+                return DisableWalkInfo ? true : base.IgnoreWalkInfo;
+            }
+        }
+
         protected ILogger Logger
         {
             get;
@@ -329,23 +343,14 @@ namespace NuGet
             // First try to get a local copy of the package
             // Bug1638: Include prereleases when resolving locally installed dependencies.
             IPackage package = Repository.ResolveDependency(dependency, ConstraintProvider, allowPrereleaseVersions: true, preferListedPackages: false);
+            if (package != null)
+            {
+                return package;
+            }
 
             // Next, query the source repo for the same dependency
             IPackage sourcePackage = SourceRepository.ResolveDependency(dependency, ConstraintProvider, AllowPrereleaseVersions, preferListedPackages: true);
-
-            // We didn't find a copy in the local repository
-            if (package == null)
-            {
-                return sourcePackage;
-            }
-
-            // Only use the package from the source repository if it's a newer version (it'll only be newer in bug fixes)
-            if (sourcePackage != null && package.Version < sourcePackage.Version)
-            {
-                return sourcePackage;
-            }
-
-            return package;
+            return sourcePackage;
         }
 
         protected override void OnDependencyResolveError(PackageDependency dependency)
@@ -379,7 +384,7 @@ namespace NuGet
             IEnumerable<IPackage> packages = _operations.GetPackages(PackageAction.Uninstall);
 
             return conflict.DependentsResolver.GetDependents(conflict.Package)
-                                              .Except(packages, PackageEqualityComparer.IdAndVersion);
+                                              .Except<IPackage>(packages, PackageEqualityComparer.IdAndVersion);
         }
 
         private static InvalidOperationException CreatePackageConflictException(IPackage resolvedPackage, IPackage package, IEnumerable<IPackage> dependents)

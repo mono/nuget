@@ -94,12 +94,12 @@ namespace NuGet
 
         public void InstallPackage(string packageId, SemanticVersion version)
         {
-            InstallPackage(packageId, version, ignoreDependencies: false, allowPrereleaseVersions: false);
+            InstallPackage(packageId: packageId, version: version, ignoreDependencies: false, allowPrereleaseVersions: false);
         }
 
         public virtual void InstallPackage(string packageId, SemanticVersion version, bool ignoreDependencies, bool allowPrereleaseVersions)
         {
-            IPackage package = PackageHelper.ResolvePackage(SourceRepository, LocalRepository, packageId, version, allowPrereleaseVersions);
+            IPackage package = PackageRepositoryHelper.ResolvePackage(SourceRepository, LocalRepository, packageId, version, allowPrereleaseVersions);
 
             InstallPackage(package, ignoreDependencies, allowPrereleaseVersions);
         }
@@ -109,14 +109,25 @@ namespace NuGet
             InstallPackage(package, targetFramework: null, ignoreDependencies: ignoreDependencies, allowPrereleaseVersions: allowPrereleaseVersions);
         }
 
-        protected void InstallPackage(IPackage package, FrameworkName targetFramework, bool ignoreDependencies, bool allowPrereleaseVersions)
+        public void InstallPackage(IPackage package, bool ignoreDependencies, bool allowPrereleaseVersions, bool ignoreWalkInfo)
         {
-            Execute(package, new InstallWalker(LocalRepository,
-                                               SourceRepository,
-                                               targetFramework,
-                                               Logger,
-                                               ignoreDependencies,
-                                               allowPrereleaseVersions));
+            InstallPackage(package, targetFramework: null, ignoreDependencies: ignoreDependencies, allowPrereleaseVersions: allowPrereleaseVersions, ignoreWalkInfo: ignoreWalkInfo);
+        }
+
+        protected void InstallPackage(
+            IPackage package,
+            FrameworkName targetFramework,
+            bool ignoreDependencies,
+            bool allowPrereleaseVersions,
+            bool ignoreWalkInfo = false)
+        {
+            var installerWalker = new InstallWalker(
+                    LocalRepository, SourceRepository, targetFramework, Logger, ignoreDependencies, allowPrereleaseVersions)
+                {
+                    DisableWalkInfo = ignoreWalkInfo
+                };
+            
+            Execute(package, installerWalker);
         }
 
         private void Execute(IPackage package, IPackageOperationResolver resolver)
@@ -203,7 +214,7 @@ namespace NuGet
 
                 // If this is a Satellite Package, then copy the satellite files into the related runtime package folder too
                 IPackage runtimePackage;
-                if (PackageUtility.IsSatellitePackage(package, LocalRepository, targetFramework: null, runtimePackage: out runtimePackage))
+                if (PackageHelper.IsSatellitePackage(package, LocalRepository, targetFramework: null, runtimePackage: out runtimePackage))
                 {
                     var satelliteFiles = package.GetSatelliteFiles();
                     var runtimePath = PathResolver.GetPackageDirectory(runtimePackage);
@@ -287,7 +298,7 @@ namespace NuGet
             }
 
             OnRemoveFiles(args);
-            
+
             LocalRepository.RemovePackage(package);
 
             Logger.Log(MessageLevel.Info, NuGetResources.Log_SuccessfullyUninstalledPackage, packageFullName);
@@ -301,7 +312,7 @@ namespace NuGet
 
             // If this is a Satellite Package, then remove the files from the related runtime package folder too
             IPackage runtimePackage;
-            if (PackageUtility.IsSatellitePackage(package, LocalRepository, targetFramework: null, runtimePackage: out runtimePackage))
+            if (PackageHelper.IsSatellitePackage(package, LocalRepository, targetFramework: null, runtimePackage: out runtimePackage))
             {
                 var satelliteFiles = package.GetSatelliteFiles();
                 var runtimePath = PathResolver.GetPackageDirectory(runtimePackage);

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.IO;
@@ -15,6 +16,7 @@ namespace NuGet
     {
         private readonly string _path;
         private readonly Dictionary<string, string> _constraints = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+        private readonly Dictionary<string, string> _developmentFlags = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
 
         public PackageReferenceFile(string path) :
             this(new PhysicalFileSystem(Path.GetDirectoryName(path)),
@@ -60,6 +62,8 @@ namespace NuGet
                 string versionString = e.GetOptionalAttributeValue("version");
                 string versionConstraintString = e.GetOptionalAttributeValue("allowedVersions");
                 string targetFrameworkString = e.GetOptionalAttributeValue("targetFramework");
+                string developmentFlagString = e.GetOptionalAttributeValue("developmentDependency");
+                string requireReinstallationString = e.GetOptionalAttributeValue("requireReinstallation");
                 SemanticVersion version = null;
 
                 if (String.IsNullOrEmpty(id))
@@ -67,7 +71,7 @@ namespace NuGet
                     // If the id is empty, ignore the record unless unspecified versions are allowed
                     continue;
                 }
-                
+
                 if (String.IsNullOrEmpty(versionString))
                 {
                     // If the version is empty, ignore the record unless unspecified versions are allowed
@@ -100,9 +104,29 @@ namespace NuGet
                     {
                         targetFramework = null;
                     }
-                } 
+                }
 
-                yield return new PackageReference(id, version, versionConstaint, targetFramework);
+                var developmentFlag = false;
+                if (!String.IsNullOrEmpty(developmentFlagString))
+                {
+                    if (!Boolean.TryParse(developmentFlagString, out developmentFlag))
+                    {
+                        throw new InvalidDataException(String.Format(CultureInfo.CurrentCulture, NuGetResources.ReferenceFile_InvalidDevelopmentFlag, developmentFlagString, _path));
+                    }
+
+                    _developmentFlags[id] = developmentFlagString;
+                }
+
+                var requireReinstallation = false;
+                if (!String.IsNullOrEmpty(requireReinstallationString))
+                {
+                    if (!Boolean.TryParse(requireReinstallationString, out requireReinstallation))
+                    {
+                        throw new InvalidDataException(String.Format(CultureInfo.CurrentCulture, NuGetResources.ReferenceFile_InvalidRequireReinstallationFlag, requireReinstallationString, _path));
+                    }
+                }
+
+                yield return new PackageReference(id, version, versionConstaint, targetFramework, developmentFlag, requireReinstallation);
             }
         }
 
@@ -144,7 +168,25 @@ namespace NuGet
             AddEntry(document, id, version, targetFramework);
         }
 
+        public void MarkEntryForReinstallation(string id, SemanticVersion version, FrameworkName targetFramework, bool requireReinstallation)
+        {
+            Debug.Assert(id != null);
+            Debug.Assert(version != null);
+
+            XDocument document = GetDocument();
+            if (document != null)
+            {
+                DeleteEntry(id, version);
+                AddEntry(document, id, version, targetFramework, requireReinstallation);
+            }
+        }
+
         private void AddEntry(XDocument document, string id, SemanticVersion version, FrameworkName targetFramework)
+        {
+            AddEntry(document, id, version, targetFramework, requireReinstallation: false);
+        }
+
+        private void AddEntry(XDocument document, string id, SemanticVersion version, FrameworkName targetFramework, bool requireReinstallation)
         {
             XElement element = FindEntry(document, id, version);
 
@@ -166,6 +208,18 @@ namespace NuGet
             if (_constraints.TryGetValue(id, out versionConstraint))
             {
                 newElement.Add(new XAttribute("allowedVersions", versionConstraint));
+            }
+
+            // Restore the development dependency flag
+            string developmentFlag;
+            if (_developmentFlags.TryGetValue(id, out developmentFlag))
+            {
+                newElement.Add(new XAttribute("developmentDependency", developmentFlag));
+            }
+
+            if (requireReinstallation)
+            {
+                newElement.Add(new XAttribute("requireReinstallation", Boolean.TrueString));
             }
 
             document.Root.Add(newElement);
@@ -221,6 +275,13 @@ namespace NuGet
                     _constraints[id] = versionConstraint;
                 }
 
+                // Preserve the developmentDependency attribute for this package id (if any defined)
+                var developmentFlag = element.GetOptionalAttributeValue("developmentDependency");
+                if (!String.IsNullOrEmpty(developmentFlag))
+                {
+                    _developmentFlags[id] = developmentFlag;
+                }
+
                 // Remove the element from the xml dom
                 element.Remove();
 
@@ -248,7 +309,7 @@ namespace NuGet
                 {
                     using (Stream stream = FileSystem.OpenFile(_path))
                     {
-                        return XDocument.Load(stream);
+                        return XmlUtility.LoadSafe(stream);
                     }
                 }
 

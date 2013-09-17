@@ -123,6 +123,146 @@ namespace NuGet.Test
         }
 
         [Fact]
+        public void AddPackageReferenceShouldLeaveDependencyPackageAloneIfItSatisfiesTheVersionConstraint()
+        {
+            // Arrange            
+            var sourceRepository = new MockPackageRepository();
+            var projectSystem = new MockProjectSystem();
+            var projectManager = new ProjectManager(sourceRepository, new DefaultPackagePathResolver(projectSystem), projectSystem, new MockPackageRepository());
+            IPackage packageA1 = PackageUtility.CreatePackage(
+                "A",
+                "1.1.2",
+                assemblyReferences: new[] { "lib\\a1.dll" });
+
+            IPackage packageA2 = PackageUtility.CreatePackage(
+                "A",
+                "1.1.9",
+                assemblyReferences: new[] { "lib\\a2.dll" });
+
+            IPackage packageB = PackageUtility.CreatePackage(
+               "B",
+               "1.0",
+               dependencies: new [] { new PackageDependency("A", VersionUtility.ParseVersionSpec("1.1.0")) },
+               assemblyReferences: new[] { "lib\\b.dll" });
+
+            sourceRepository.AddPackage(packageA1);
+            sourceRepository.AddPackage(packageA2);
+            sourceRepository.AddPackage(packageB);
+
+            // first install package A, version 1.1.2 into project
+            projectManager.AddPackageReference(packageA1, ignoreDependencies: true, allowPrereleaseVersions: true);
+            Assert.True(projectManager.LocalRepository.Exists("A", new SemanticVersion("1.1.2")));
+
+            // Act
+            // Now install B, which depends on A >= 1.1.0.
+            projectManager.AddPackageReference("B");
+
+            // Assert
+            // NuGet should leave version 1.1.2 intact, because it already satisfies the version spec
+            // It should not upgrade A to 1.1.9
+            Assert.True(projectManager.LocalRepository.Exists("A", new SemanticVersion("1.1.2")));
+            Assert.True(projectManager.LocalRepository.Exists("B", new SemanticVersion("1.0")));
+            Assert.False(projectManager.LocalRepository.Exists("A", new SemanticVersion("1.1.9")));
+        }
+
+        [Fact]
+        public void UpdatePackageReferenceShouldLeaveDependencyPackageAloneIfItSatisfiesTheVersionConstraint()
+        {
+            // Arrange            
+            var sourceRepository = new MockPackageRepository();
+            var projectSystem = new MockProjectSystem();
+            var projectManager = new ProjectManager(sourceRepository, new DefaultPackagePathResolver(projectSystem), projectSystem, new MockPackageRepository());
+            IPackage packageA1 = PackageUtility.CreatePackage(
+                "A",
+                "1.0.0",
+                assemblyReferences: new[] { "lib\\a1.dll" });
+
+            IPackage packageA2 = PackageUtility.CreatePackage(
+                "A",
+                "2.0.0",
+                dependencies: new[] { new PackageDependency("B", VersionUtility.ParseVersionSpec("1.0.0")) },
+                assemblyReferences: new[] { "lib\\a2.dll" });
+
+            IPackage packageB1 = PackageUtility.CreatePackage(
+               "B",
+               "1.0.0",
+               assemblyReferences: new[] { "lib\\b1.dll" });
+
+            IPackage packageB2 = PackageUtility.CreatePackage(
+               "B",
+               "1.0.2",
+               assemblyReferences: new[] { "lib\\b2.dll" });
+
+            sourceRepository.AddPackage(packageA1);
+            sourceRepository.AddPackage(packageA2);
+            sourceRepository.AddPackage(packageB1);
+            sourceRepository.AddPackage(packageB2);
+
+            projectManager.LocalRepository.AddPackage(packageA1);
+            projectManager.LocalRepository.AddPackage(packageB1);
+
+            // Act
+            // Now install B, which depends on A >= 1.1.0.
+            projectManager.UpdatePackageReference("A");
+
+            // Assert
+            // NuGet should leave version 1.1.2 intact, because it already satisfies the version spec
+            // It should not upgrade A to 1.1.9
+            Assert.True(projectManager.LocalRepository.Exists("A", new SemanticVersion("2.0.0")));
+            Assert.True(projectManager.LocalRepository.Exists("B", new SemanticVersion("1.0")));
+            Assert.False(projectManager.LocalRepository.Exists("B", new SemanticVersion("1.0.2")));
+        }
+
+        [Fact]
+        public void UpdatePackageReferenceShouldLeaveDependencyPackageAloneIfItSatisfiesTheVersionConstraint2()
+        {
+            // Arrange            
+            var sourceRepository = new MockPackageRepository();
+            var projectSystem = new MockProjectSystem();
+            var projectManager = new ProjectManager(sourceRepository, new DefaultPackagePathResolver(projectSystem), projectSystem, new MockPackageRepository());
+            IPackage packageA1 = PackageUtility.CreatePackage(
+                "A",
+                "1.0.0",
+                dependencies: new[] { new PackageDependency("B", VersionUtility.ParseVersionSpec("1.0.0")) },
+                assemblyReferences: new[] { "lib\\a1.dll" });
+
+            IPackage packageA2 = PackageUtility.CreatePackage(
+                "A",
+                "2.0.0",
+                dependencies: new[] { new PackageDependency("B", VersionUtility.ParseVersionSpec("1.0.0")) },
+                assemblyReferences: new[] { "lib\\a2.dll" });
+
+            IPackage packageB1 = PackageUtility.CreatePackage(
+               "B",
+               "1.0.0",
+               assemblyReferences: new[] { "lib\\b1.dll" });
+
+            IPackage packageB2 = PackageUtility.CreatePackage(
+               "B",
+               "1.0.2",
+               assemblyReferences: new[] { "lib\\b2.dll" });
+
+            sourceRepository.AddPackage(packageA1);
+            sourceRepository.AddPackage(packageA2);
+            sourceRepository.AddPackage(packageB1);
+            sourceRepository.AddPackage(packageB2);
+
+            projectManager.LocalRepository.AddPackage(packageA1);
+            projectManager.LocalRepository.AddPackage(packageB1);
+
+            // Act
+            // Now install B, which depends on A >= 1.1.0.
+            projectManager.UpdatePackageReference("A");
+
+            // Assert
+            // NuGet should leave version 1.1.2 intact, because it already satisfies the version spec
+            // It should not upgrade A to 1.1.9
+            Assert.True(projectManager.LocalRepository.Exists("A", new SemanticVersion("2.0.0")));
+            Assert.True(projectManager.LocalRepository.Exists("B", new SemanticVersion("1.0")));
+            Assert.False(projectManager.LocalRepository.Exists("B", new SemanticVersion("1.0.2")));
+        }
+
+        [Fact]
         public void AddPackageReferenceAppliesPackageReferencesCorrectlyWhenReferencesFilterOutAllAssemblies()
         {
             // Arrange            
@@ -911,18 +1051,21 @@ namespace NuGet.Test
             var localRepository = new MockPackageRepository();
             var projectSystem = new Mock<MockProjectSystem>() { CallBase = true };
             var projectManager = new ProjectManager(sourceRepository, new DefaultPackagePathResolver(projectSystem.Object), projectSystem.Object, localRepository);
-            IPackage packageA = PackageUtility.CreatePackage("A", "1.0", new[] { "a", "b", "packages.config.pp", "PACKAGES.config.transform" });
+            IPackage packageA = PackageUtility.CreatePackage("A", "1.0", 
+                new[] { "a", "b", "packages.config.pp", "PACKAGES.config.transform", "packages.config.install.xdt", "packages.config.uninstall.xdt" });
             sourceRepository.AddPackage(packageA);
 
             // Act
             projectManager.AddPackageReference("A");
 
             // Assert
-            Assert.Equal(4, projectSystem.Object.Paths.Count);
+            Assert.Equal(6, projectSystem.Object.Paths.Count);
             Assert.True(projectSystem.Object.FileExists("a"));
             Assert.True(projectSystem.Object.FileExists("b"));
             Assert.True(projectSystem.Object.FileExists("packages.config.pp"));
             Assert.True(projectSystem.Object.FileExists("packages.config.transform"));
+            Assert.True(projectSystem.Object.FileExists("packages.config.install.xdt"));
+            Assert.True(projectSystem.Object.FileExists("packages.config.uninstall.xdt"));
             Assert.True(localRepository.Exists("A"));
             Assert.False(projectSystem.Object.FileExists("packages.config"));
         }
@@ -935,18 +1078,20 @@ namespace NuGet.Test
             var localRepository = new MockPackageRepository();
             var projectSystem = new Mock<MockProjectSystem>() { CallBase = true };
             var projectManager = new ProjectManager(sourceRepository, new DefaultPackagePathResolver(projectSystem.Object), projectSystem.Object, localRepository);
-            IPackage packageA = PackageUtility.CreatePackage("A", "1.0", new[] { "a", "b", "sub\\packages.config.pp", "local\\PACKAGES.config.transform" });
+            IPackage packageA = PackageUtility.CreatePackage("A", "1.0", new[] { "a", "b", "sub\\packages.config.pp", "local\\PACKAGES.config.transform", "fod\\packages.config.Install.XDT", "car\\Packages.Config.uninstall.Xdt" });
             sourceRepository.AddPackage(packageA);
 
             // Act
             projectManager.AddPackageReference("A");
 
             // Assert
-            Assert.Equal(4, projectSystem.Object.Paths.Count);
+            Assert.Equal(6, projectSystem.Object.Paths.Count);
             Assert.True(projectSystem.Object.FileExists("a"));
             Assert.True(projectSystem.Object.FileExists("b"));
             Assert.True(projectSystem.Object.FileExists("sub\\packages.config.pp"));
             Assert.True(projectSystem.Object.FileExists("local\\packages.config.transform"));
+            Assert.True(projectSystem.Object.FileExists("fod\\packages.config.install.xdt"));
+            Assert.True(projectSystem.Object.FileExists("car\\packages.config.uninstall.xdt"));
             Assert.True(localRepository.Exists("A"));
             Assert.False(projectSystem.Object.FileExists("sub\\packages.config"));
             Assert.False(projectSystem.Object.FileExists("local\\packages.config"));
@@ -973,10 +1118,12 @@ namespace NuGet.Test
             var file = new Mock<IPackageFile>();
             file.Setup(m => m.Path).Returns(@"content\web.config.transform");
             file.Setup(m => m.EffectivePath).Returns("web.config.transform");
+            // in the transform snippet below, we put the <add> tag on the same line 
+            // as <configSections> tag to verify that the transform engine preserves 
+            // formatting of the transform file.
             file.Setup(m => m.GetStream()).Returns(() =>
 @"<configuration>
-    <configSections>
-        <add a=""n"" />
+    <configSections> <add a=""n"" />
     </configSections>
 </configuration>
 ".AsStream());
@@ -991,9 +1138,8 @@ namespace NuGet.Test
             // It does not at the moment, therefore <system.web> element has different indent than <configSections>.
             Assert.Equal(@"<?xml version=""1.0"" encoding=""utf-8""?>
 <configuration>
-  <configSections>
-    <add a=""n"" />
-  </configSections>
+  <configSections> <add a=""n"" />
+    </configSections>
     <system.web>
         <compilation debug=""true"" targetFramework=""4.0"" />
     </system.web>
@@ -3305,7 +3451,7 @@ namespace NuGet.Test
 
             // Assert 2
             Assert.Contains(packageA, localRepository);
-            Assert.Contains(packageB101, localRepository);
+            Assert.Contains(packageB10, localRepository);
             Assert.Contains(packageC, localRepository);
         }
 

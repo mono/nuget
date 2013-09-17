@@ -100,18 +100,28 @@ namespace NuGet.Commands
         [ImportMany]
         public IEnumerable<IPackageRule> Rules { get; set; }
 
+        // TODO: Temporarily hide the real ConfigFile parameter from the help text.
+        // When we fix #3230, we should remove this property.
+        public new string ConfigFile { get; set; }
+
         public override void ExecuteCommand()
         {
+            if (IncludeReferencedProjects && Symbols)
+            {
+                throw new CommandLineException(
+                    LocalizedResourceManager.GetString("Error_IncludeReferencedProjectsAndSymbolsNotSupported"));
+            }
+
             if (Verbose)
             {
-                Console.WriteWarning(NuGetResources.Option_VerboseDeprecated);
+                Console.WriteWarning(LocalizedResourceManager.GetString("Option_VerboseDeprecated"));
                 Verbosity = Verbosity.Detailed;
-            }
+            }            
 
             // Get the input file
             string path = GetInputFile();
 
-            Console.WriteLine(NuGetResources.PackageCommandAttemptingToBuildPackage, Path.GetFileName(path));
+            Console.WriteLine(LocalizedResourceManager.GetString("PackageCommandAttemptingToBuildPackage"), Path.GetFileName(path));
 
             // If the BasePath is not specified, use the directory of the input file (nuspec / proj) file
             BasePath = String.IsNullOrEmpty(BasePath) ? Path.GetDirectoryName(Path.GetFullPath(path)) : BasePath;
@@ -120,7 +130,7 @@ namespace NuGet.Commands
             {
                 if (!System.Version.TryParse(MinClientVersion, out _minClientVersionValue))
                 {
-                    throw new CommandLineException(NuGetResources.PackageCommandInvalidMinClientVersion);
+                    throw new CommandLineException(LocalizedResourceManager.GetString("PackageCommandInvalidMinClientVersion"));
                 }
             }
 
@@ -169,7 +179,7 @@ namespace NuGet.Commands
                 PrintVerbose(outputPath);
             }
 
-            Console.WriteLine(NuGetResources.PackageCommandSuccess, outputPath);
+            Console.WriteLine(LocalizedResourceManager.GetString("PackageCommandSuccess"), outputPath);
 
             return new OptimizedZipPackage(outputPath);
         }
@@ -208,7 +218,7 @@ namespace NuGet.Commands
 
             foreach (var file in package.GetFiles().OrderBy(p => p.Path))
             {
-                Console.WriteLine(NuGetResources.PackageCommandAddedFile, file.Path);
+                Console.WriteLine(LocalizedResourceManager.GetString("PackageCommandAddedFile"), file.Path);
             }
 
             Console.WriteLine();
@@ -294,7 +304,7 @@ namespace NuGet.Commands
 
                 if (!packageBuilder.Files.Any())
                 {
-                    throw new CommandLineException(String.Format(CultureInfo.CurrentCulture, NuGetResources.PackageCommandNoFilesForLibPackage,
+                    throw new CommandLineException(String.Format(CultureInfo.CurrentCulture, LocalizedResourceManager.GetString("PackageCommandNoFilesForLibPackage"),
                         path, CommandLineConstants.NuGetDocs));
                 }
             }
@@ -317,7 +327,7 @@ namespace NuGet.Commands
 
             if (!symbolsBuilder.Files.Any())
             {
-                throw new CommandLineException(String.Format(CultureInfo.CurrentCulture, NuGetResources.PackageCommandNoFilesForSymbolsPackage,
+                throw new CommandLineException(String.Format(CultureInfo.CurrentCulture, LocalizedResourceManager.GetString("PackageCommandNoFilesForSymbolsPackage"),
                         path, CommandLineConstants.NuGetDocs));
             }
 
@@ -366,7 +376,11 @@ namespace NuGet.Commands
             // Add the additional Properties to the properties of the Project Factory
             foreach (var property in Properties)
             {
-                factory.ProjectProperties.Add(property.Key, property.Value);
+                if (factory.ProjectProperties.ContainsKey(property.Key))
+                {
+                    Console.WriteWarning(LocalizedResourceManager.GetString("Warning_DuplicatePropertyKey"), property.Key);
+                }
+                factory.ProjectProperties[property.Key] = property.Value;
             }
 
             // Create a builder for the main package as well as the sources/symbols package
@@ -382,7 +396,7 @@ namespace NuGet.Commands
             }
 
             Console.WriteLine();
-            Console.WriteLine(NuGetResources.PackageCommandAttemptingToBuildSymbolsPackage, Path.GetFileName(path));
+            Console.WriteLine(LocalizedResourceManager.GetString("PackageCommandAttemptingToBuildSymbolsPackage"), Path.GetFileName(path));
 
             factory.IncludeSymbols = true;
             PackageBuilder symbolsBuilder = factory.CreateBuilder(BasePath);
@@ -410,7 +424,7 @@ namespace NuGet.Commands
             if (issues.Count > 0)
             {
                 Console.WriteLine();
-                Console.WriteWarning(NuGetResources.PackageCommandPackageIssueSummary, issues.Count, package.Id);
+                Console.WriteWarning(LocalizedResourceManager.GetString("PackageCommandPackageIssueSummary"), issues.Count, package.Id);
                 foreach (var issue in issues)
                 {
                     PrintPackageIssue(issue);
@@ -423,19 +437,19 @@ namespace NuGet.Commands
             Console.WriteLine();
             Console.WriteWarning(
                 prependWarningText: false,
-                value: NuGetResources.PackageCommandIssueTitle,
+                value: LocalizedResourceManager.GetString("PackageCommandIssueTitle"),
                 args: issue.Title);
 
             Console.WriteWarning(
                 prependWarningText: false,
-                value: NuGetResources.PackageCommandIssueDescription,
+                value: LocalizedResourceManager.GetString("PackageCommandIssueDescription"),
                 args: issue.Description);
 
             if (!String.IsNullOrEmpty(issue.Solution))
             {
                 Console.WriteWarning(
                     prependWarningText: false,
-                    value: NuGetResources.PackageCommandIssueSolution,
+                    value: LocalizedResourceManager.GetString("PackageCommandIssueSolution"),
                     args: issue.Solution);
             }
         }
@@ -465,7 +479,7 @@ namespace NuGet.Commands
                     }
                     goto default;
                 default:
-                    throw new CommandLineException(NuGetResources.PackageCommandSpecifyInputFileError);
+                    throw new CommandLineException(LocalizedResourceManager.GetString("PackageCommandSpecifyInputFileError"));
             }
         }
 
