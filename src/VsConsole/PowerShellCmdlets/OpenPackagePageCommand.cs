@@ -42,7 +42,7 @@ namespace NuGet.PowerShell.Commands
 
         [Parameter(Position = 1)]
         [ValidateNotNull]
-        public SemanticVersion Version { get; set; }
+        public string Version { get; set; }
 
         [Parameter(Position = 2)]
         [ValidateNotNullOrEmpty]
@@ -61,7 +61,9 @@ namespace NuGet.PowerShell.Commands
         {
             IPackageRepository repository = GetRepository();
 
-            IPackage package = repository.FindPackage(Id, Version);
+            SemanticVersion semVer = GetSemanticVersion(Version);
+
+            IPackage package = repository.FindPackage(Id, semVer);
             if (package != null)
             {
                 Uri targetUrl;

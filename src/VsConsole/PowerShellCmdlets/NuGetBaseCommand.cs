@@ -10,6 +10,7 @@ using System.Management.Automation.Host;
 using EnvDTE;
 using NuGet.VisualStudio;
 using NuGet.VisualStudio.Resources;
+using NuGet.Versioning;
 
 namespace NuGet.PowerShell.Commands
 {
@@ -531,6 +532,18 @@ namespace NuGet.PowerShell.Commands
             {
                 return item.ActivityId;
             }
+        }
+
+        protected SemanticVersion GetSemanticVersion(string version)
+        {
+            SemanticVersion semVer = null;
+            if (!SemanticVersion.TryParse(version, out semVer) || semVer == null)
+            {
+                // TODO: find a better exception
+                throw new PSArgumentException("Invalid version");
+            }
+
+            return semVer;
         }
     }
 }

@@ -78,7 +78,7 @@ namespace NuGet.PowerShell.Commands
 
         [Parameter(Position = 2, ParameterSetName = "Project")]
         [ValidateNotNull]
-        public SemanticVersion Version { get; set; }
+        public string Version { get; set; }
 
         [Parameter(Position = 3)]
         [ValidateNotNullOrEmpty]
@@ -195,7 +195,7 @@ namespace NuGet.PowerShell.Commands
                     }
                     else
                     {
-                        PackageManager.UpdatePackage(Id, Version, !IgnoreDependencies.IsPresent, IncludePrerelease, this, this);
+                        PackageManager.UpdatePackage(Id, GetSemanticVersion(Version), !IgnoreDependencies.IsPresent, IncludePrerelease, this, this);
                     }
                 }
                 else if (projectManager != null)
@@ -207,7 +207,7 @@ namespace NuGet.PowerShell.Commands
                     }
                     else
                     {
-                        PackageManager.UpdatePackage(projectManager, Id, Version, !IgnoreDependencies, IncludePrerelease, this);
+                        PackageManager.UpdatePackage(projectManager, Id, GetSemanticVersion(Version), !IgnoreDependencies, IncludePrerelease, this);
                     }
                 }
             }

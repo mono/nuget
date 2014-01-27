@@ -67,7 +67,7 @@ namespace NuGet.PowerShell.Commands
 
         [Parameter(Position = 2)]
         [ValidateNotNull]
-        public SemanticVersion Version { get; set; }
+        public string Version { get; set; }
 
         [Parameter(Position = 3)]
         [ValidateNotNullOrEmpty]
@@ -151,7 +151,7 @@ namespace NuGet.PowerShell.Commands
                 //Check if the package is installed
                 IPackage packageToBeUninstalled = ProjectManager.LocalRepository.FindPackage(Id);
                 //Downgrade only if package to be installed newly is lower version than the one currently installed
-                if (packageToBeUninstalled != null && packageToBeUninstalled.Version > Version)
+                if (packageToBeUninstalled != null && packageToBeUninstalled.Version > GetSemanticVersion(Version))
                 {
                    return true;
                 }
@@ -187,7 +187,9 @@ namespace NuGet.PowerShell.Commands
 
                 if (IsDowngradePackage())
                 {
-                    PackageManager.UpdatePackage(ProjectManager, Id, Version, !IgnoreDependencies, IncludePrerelease.IsPresent, logger: this);
+                    SemanticVersion semVer = GetSemanticVersion(Version);
+
+                    PackageManager.UpdatePackage(ProjectManager, Id, semVer, !IgnoreDependencies, IncludePrerelease.IsPresent, logger: this);
                 }
                 else
                 {
@@ -275,7 +277,7 @@ namespace NuGet.PowerShell.Commands
 
             packageManager.DependencyVersion = DependencyVersion;
             packageManager.WhatIf = WhatIf;
-            packageManager.InstallPackage(ProjectManager, Id, Version, IgnoreDependencies, IncludePrerelease.IsPresent, logger: this);
+            packageManager.InstallPackage(ProjectManager, Id, GetSemanticVersion(Version), IgnoreDependencies, IncludePrerelease.IsPresent, logger: this);
         }
     }
 }

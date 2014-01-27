@@ -45,7 +45,7 @@ namespace NuGet.PowerShell.Commands.Test
             var cmdlet = new UpdatePackageCommand(TestUtils.GetSolutionManagerWithProjects("foo"), packageManagerFactory.Object, repositoryFactory.Object, sourceProvider, null, null, new Mock<IVsCommonOperations>().Object, new Mock<IDeleteOnRestartManager>().Object);
             cmdlet.Source = "somesource";
             cmdlet.Id = "my-id";
-            cmdlet.Version = new SemanticVersion("2.8");
+            cmdlet.Version = "2.8";
             cmdlet.ProjectName = "foo";
 
             // Act
@@ -68,7 +68,7 @@ namespace NuGet.PowerShell.Commands.Test
             repositoryFactory.Setup(c => c.CreateRepository(It.Is<string>(s => s == "somesource"))).Returns(mockPackageRepository);
             var cmdlet = new UpdatePackageCommand(TestUtils.GetSolutionManagerWithProjects("foo"), packageManagerFactory.Object, repositoryFactory.Object, sourceProvider, null, null, new Mock<IVsCommonOperations>().Object, new Mock<IDeleteOnRestartManager>().Object);
             cmdlet.Id = "my-id";
-            cmdlet.Version = new SemanticVersion("2.8");
+            cmdlet.Version = "2.8";
             cmdlet.ProjectName = "foo";
 
             // Act
@@ -92,7 +92,7 @@ namespace NuGet.PowerShell.Commands.Test
             repositoryFactory.Setup(c => c.CreateRepository(It.Is<string>(s => s == "somesource"))).Returns(mockPackageRepository);
             var cmdlet = new UpdatePackageCommand(TestUtils.GetSolutionManagerWithProjects("foo"), packageManagerFactory.Object, repositoryFactory.Object, sourceProvider, null, null, new Mock<IVsCommonOperations>().Object, new Mock<IDeleteOnRestartManager>().Object);
             cmdlet.Id = "my-id";
-            cmdlet.Version = new SemanticVersion("2.8");
+            cmdlet.Version = "2.8";
             cmdlet.ProjectName = "foo";
 
             // Act
@@ -117,7 +117,7 @@ namespace NuGet.PowerShell.Commands.Test
             repositoryFactory.Setup(c => c.CreateRepository(It.Is<string>(s => s == "somesource"))).Returns(mockPackageRepository);
             var cmdlet = new UpdatePackageCommand(TestUtils.GetSolutionManagerWithProjects("foo"), packageManagerFactory.Object, repositoryFactory.Object, sourceProvider, null, null, new Mock<IVsCommonOperations>().Object, new Mock<IDeleteOnRestartManager>().Object);
             cmdlet.Id = "my-id";
-            cmdlet.Version = new SemanticVersion("2.8");
+            cmdlet.Version = "2.8";
             cmdlet.IgnoreDependencies = new SwitchParameter(isPresent: true);
             cmdlet.ProjectName = "foo";
 
@@ -148,7 +148,7 @@ namespace NuGet.PowerShell.Commands.Test
             repositoryFactory.Setup(c => c.CreateRepository(source)).Returns(sourceRepository.Object);
             var cmdlet = new UpdatePackageCommand(TestUtils.GetSolutionManagerWithProjects("foo"), packageManagerFactory.Object, repositoryFactory.Object, sourceProvider, null, productUpdateService.Object, new Mock<IVsCommonOperations>().Object, new Mock<IDeleteOnRestartManager>().Object);
             cmdlet.Id = "my-id";
-            cmdlet.Version = new SemanticVersion("2.8");
+            cmdlet.Version = "2.8";
             cmdlet.IgnoreDependencies = new SwitchParameter(isPresent: true);
             cmdlet.Source = source;
             cmdlet.ProjectName = "foo";
@@ -177,7 +177,7 @@ namespace NuGet.PowerShell.Commands.Test
             repositoryFactory.Setup(c => c.CreateRepository(source)).Returns(sourceRepository.Object);
             var cmdlet = new UpdatePackageCommand(TestUtils.GetSolutionManagerWithProjects("foo"), packageManagerFactory.Object, repositoryFactory.Object, sourceProvider, null, productUpdateService.Object, new Mock<IVsCommonOperations>().Object, new Mock<IDeleteOnRestartManager>().Object);
             cmdlet.Id = "my-id";
-            cmdlet.Version = new SemanticVersion("2.8");
+            cmdlet.Version = "2.8";
             cmdlet.IgnoreDependencies = new SwitchParameter(isPresent: true);
             cmdlet.Source = "bing";
             cmdlet.ProjectName = "foo";
@@ -206,7 +206,7 @@ namespace NuGet.PowerShell.Commands.Test
             repositoryFactory.Setup(c => c.CreateRepository(source)).Returns(sourceRepository.Object);
             var cmdlet = new UpdatePackageCommand(TestUtils.GetSolutionManagerWithProjects("foo"), packageManagerFactory.Object, repositoryFactory.Object, sourceProvider, null, productUpdateService.Object, new Mock<IVsCommonOperations>().Object, new Mock<IDeleteOnRestartManager>().Object);
             cmdlet.Id = "my-id";
-            cmdlet.Version = new SemanticVersion("2.8");
+            cmdlet.Version = "2.8";
             cmdlet.IgnoreDependencies = new SwitchParameter(isPresent: true);
             cmdlet.Source = source;
             cmdlet.ProjectName = "foo";
@@ -377,7 +377,7 @@ namespace NuGet.PowerShell.Commands.Test
             // Act
             var cmdlet = new UpdatePackageCommand(TestUtils.GetSolutionManager(), packageManagerFactory.Object, null, new Mock<IVsPackageSourceProvider>().Object, new Mock<IHttpClientEvents>().Object, null, new Mock<IVsCommonOperations>().Object, new Mock<IDeleteOnRestartManager>().Object);
             cmdlet.Id = "A";
-            cmdlet.Version = new SemanticVersion(versionA2);
+            cmdlet.Version = versionA2;
             cmdlet.Execute();
 
             // Assert

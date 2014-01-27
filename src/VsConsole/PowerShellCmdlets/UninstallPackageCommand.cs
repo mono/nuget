@@ -31,7 +31,7 @@ namespace NuGet.PowerShell.Commands
 
         [Parameter(Position = 2)]
         [ValidateNotNull]
-        public SemanticVersion Version { get; set; }
+        public string Version { get; set; }
 
         [Parameter]
         public SwitchParameter Force { get; set; }
@@ -57,7 +57,9 @@ namespace NuGet.PowerShell.Commands
                 projectManager.WhatIf = WhatIf;
             }
 
-            PackageManager.UninstallPackage(projectManager, Id, Version, Force.IsPresent, RemoveDependencies.IsPresent, this);
+            SemanticVersion semVer = GetSemanticVersion(Version);
+
+            PackageManager.UninstallPackage(projectManager, Id, semVer, Force.IsPresent, RemoveDependencies.IsPresent, this);
         }
     }
 }

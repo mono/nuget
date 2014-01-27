@@ -48,7 +48,7 @@ namespace NuGet.PowerShell.Commands.Test
             var cmdlet = new InstallPackageCommand(TestUtils.GetSolutionManager(), packageManagerFactory.Object, repositoryFactory.Object, sourceProvider, null, null, new Mock<IVsCommonOperations>().Object, new Mock<IDeleteOnRestartManager>().Object, true);
             cmdlet.Source = "somesource";
             cmdlet.Id = "my-id";
-            cmdlet.Version = new SemanticVersion("2.8");
+            cmdlet.Version = "2.8";
 
             // Act
             cmdlet.Execute();
@@ -76,7 +76,7 @@ namespace NuGet.PowerShell.Commands.Test
                 new Mock<IDeleteOnRestartManager>().Object,
                 true);
             cmdlet.Id = "my-id";
-            cmdlet.Version = new SemanticVersion("2.8");
+            cmdlet.Version = "2.8";
 
             // Act
             cmdlet.Execute();
@@ -104,7 +104,7 @@ namespace NuGet.PowerShell.Commands.Test
                 new Mock<IVsCommonOperations>().Object,
                 new Mock<IDeleteOnRestartManager>().Object, true);
             cmdlet.Id = "my-id";
-            cmdlet.Version = new SemanticVersion("2.8");
+            cmdlet.Version = "2.8";
             cmdlet.IgnoreDependencies = new SwitchParameter(true);
 
             // Act
@@ -133,7 +133,7 @@ namespace NuGet.PowerShell.Commands.Test
             packageManagerFactory.Setup(m => m.CreatePackageManager(sourceRepository.Object, true)).Returns(vsPackageManager);
             var cmdlet = new InstallPackageCommand(TestUtils.GetSolutionManager(), packageManagerFactory.Object, packageRepositoryFactory.Object, sourceProvider, null, productUpdateService.Object, new Mock<IVsCommonOperations>().Object, new Mock<IDeleteOnRestartManager>().Object, true);
             cmdlet.Id = "my-id";
-            cmdlet.Version = new SemanticVersion("2.8");
+            cmdlet.Version = "2.8";
             cmdlet.IgnoreDependencies = new SwitchParameter(true);
             cmdlet.Source = source;
 
@@ -162,7 +162,7 @@ namespace NuGet.PowerShell.Commands.Test
             packageManagerFactory.Setup(m => m.CreatePackageManager(sourceRepository.Object, true)).Returns(vsPackageManager);
             var cmdlet = new InstallPackageCommand(TestUtils.GetSolutionManager(), packageManagerFactory.Object, packageRepositoryFactory.Object, sourceProvider, null, productUpdateService.Object, new Mock<IVsCommonOperations>().Object, new Mock<IDeleteOnRestartManager>().Object, true);
             cmdlet.Id = "my-id";
-            cmdlet.Version = new SemanticVersion("2.8");
+            cmdlet.Version = "2.8";
             cmdlet.IgnoreDependencies = new SwitchParameter(true);
             cmdlet.Source = sourceName;
 
@@ -190,7 +190,7 @@ namespace NuGet.PowerShell.Commands.Test
             packageRepositoryFactory.Setup(c => c.CreateRepository(source)).Returns(sourceRepository.Object);
             var cmdlet = new InstallPackageCommand(TestUtils.GetSolutionManager(), packageManagerFactory.Object, packageRepositoryFactory.Object, sourceProvider, null, productUpdateService.Object, new Mock<IVsCommonOperations>().Object, new Mock<IDeleteOnRestartManager>().Object, true);
             cmdlet.Id = "my-id";
-            cmdlet.Version = new SemanticVersion("2.8");
+            cmdlet.Version = "2.8";
             cmdlet.IgnoreDependencies = new SwitchParameter(true);
             cmdlet.Source = source;
 
@@ -219,7 +219,7 @@ namespace NuGet.PowerShell.Commands.Test
             packageRepositoryFactory.Setup(c => c.CreateRepository(source)).Returns(sourceRepository.Object);
             var cmdlet = new InstallPackageCommand(TestUtils.GetSolutionManager(), packageManagerFactory.Object, packageRepositoryFactory.Object, sourceProvider, null, productUpdateService.Object, new Mock<IVsCommonOperations>().Object, new Mock<IDeleteOnRestartManager>().Object, true);
             cmdlet.Id = "my-id";
-            cmdlet.Version = new SemanticVersion("2.8");
+            cmdlet.Version = "2.8";
             cmdlet.IgnoreDependencies = new SwitchParameter(true);
             cmdlet.Source = sourceName;
 
@@ -511,7 +511,7 @@ Mock<IVsShellInfo>().Object);
             // Act
             var cmdlet = new InstallPackageCommand(TestUtils.GetSolutionManager(), packageManagerFactory.Object, null, new Mock<IVsPackageSourceProvider>().Object, new Mock<IHttpClientEvents>().Object, null, new Mock<IVsCommonOperations>().Object, new Mock<IDeleteOnRestartManager>().Object, true);
             cmdlet.Id = "A";
-            cmdlet.Version = new SemanticVersion("2.0.0");
+            cmdlet.Version = "2.0.0";
             cmdlet.Execute();
 
             // Assert
@@ -539,7 +539,7 @@ Mock<IVsShellInfo>().Object);
             // Act
             var cmdlet = new InstallPackageCommand(TestUtils.GetSolutionManager(), packageManagerFactory.Object, null, new Mock<IVsPackageSourceProvider>().Object, new Mock<IHttpClientEvents>().Object, null, new Mock<IVsCommonOperations>().Object, new Mock<IDeleteOnRestartManager>().Object, true);
             cmdlet.Id = "A";
-            cmdlet.Version = new SemanticVersion("1.0.0-ReleaseCandidate");
+            cmdlet.Version = "1.0.0-ReleaseCandidate";
             cmdlet.IncludePrerelease = true;
             cmdlet.Execute();
 

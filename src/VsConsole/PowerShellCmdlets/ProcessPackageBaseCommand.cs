@@ -11,6 +11,7 @@ using EnvDTE;
 using NuGet.Resources;
 using NuGet.VisualStudio;
 using NuGet.VisualStudio.Resources;
+using NuGet.Versioning;
 
 namespace NuGet.PowerShell.Commands
 {
