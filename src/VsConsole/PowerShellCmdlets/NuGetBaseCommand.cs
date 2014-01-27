@@ -534,16 +534,18 @@ namespace NuGet.PowerShell.Commands
             }
         }
 
-        protected SemanticVersion GetSemanticVersion(string version)
+        protected static SemanticVersion GetSemanticVersion(string version)
         {
             SemanticVersion semVer = null;
-            if (!SemanticVersion.TryParse(version, out semVer) || semVer == null)
+            if (SemanticVersion.TryParse(version, out semVer))
             {
                 // TODO: find a better exception
-                throw new PSArgumentException("Invalid version");
+                //throw new PSArgumentException("Invalid version");
+
+                return semVer;
             }
 
-            return semVer;
+            return null;
         }
     }
 }

@@ -34,7 +34,6 @@ namespace NuGet
         {
             AssemblyMetadata assemblyMetadata = GetMetadata(assemblyPath);
             builder.Id = assemblyMetadata.Name;
-            builder.Version = assemblyMetadata.Version;
             builder.Title = assemblyMetadata.Title;
             builder.Description = assemblyMetadata.Description;
             builder.Copyright = assemblyMetadata.Copyright;
@@ -42,6 +41,17 @@ namespace NuGet
             if (!builder.Authors.Any() && !String.IsNullOrEmpty(assemblyMetadata.Company))
             {
                 builder.Authors.Add(assemblyMetadata.Company);
+            }
+
+            SemanticVersion semVer = null;
+            if (SemanticVersion.TryParse(assemblyMetadata.Version, out semVer))
+            {
+                builder.Version = semVer;
+            }
+            else
+            {
+                // TODO: Clean this up
+                throw new ArgumentNullException("Version");
             }
         }
 
@@ -91,7 +101,7 @@ namespace NuGet
                     return new AssemblyMetadata
                     {
                         Name = assemblyName.Name,
-                        Version = version,
+                        Version = version.ToString(),
                         Title = GetAttributeValueOrDefault<AssemblyTitleAttribute>(attributes),
                         Company = GetAttributeValueOrDefault<AssemblyCompanyAttribute>(attributes),
                         Description = GetAttributeValueOrDefault<AssemblyDescriptionAttribute>(attributes),

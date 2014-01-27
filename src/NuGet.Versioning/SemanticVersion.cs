@@ -5,6 +5,7 @@ using System.Text;
 using System.ComponentModel;
 using System.Globalization;
 using System.Text.RegularExpressions;
+using System.Runtime.Serialization;
 
 namespace NuGet.Versioning
 {
