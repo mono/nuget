@@ -14,6 +14,7 @@ namespace NuGet.VisualStudio.Test
 {
     using PackageUtility = NuGet.Test.PackageUtility;
     using System.Collections.Generic;
+    using NuGet.Versioning;
 
     public partial class VsPackageManagerTest
     {

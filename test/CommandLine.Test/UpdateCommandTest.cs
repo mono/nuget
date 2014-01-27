@@ -7,6 +7,7 @@ using Xunit;
 using NuGet.Common;
 using System.IO;
 using System;
+using NuGet.Versioning;
 
 namespace NuGet.Test.NuGetCommandLine.Commands
 {

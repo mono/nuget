@@ -13,6 +13,7 @@ namespace NuGet.PowerShell.Commands.Test
 
     using System.Collections.Generic;
     using PackageUtility = NuGet.Test.PackageUtility;
+    using NuGet.Versioning;
 
 
     public class GetPackageCommandTest

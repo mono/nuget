@@ -6,6 +6,7 @@ using NuGet.Test;
 using NuGet.Test.Mocks;
 using Xunit;
 using Xunit.Extensions;
+using NuGet.Versioning;
 
 namespace NuGet.Dialog.Test
 {

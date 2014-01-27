@@ -5,6 +5,7 @@ using System.Web;
 using System.Web.Routing;
 using NuGet.Server.DataServices;
 using NuGet.Server.Infrastructure;
+using NuGet.Versioning;
 
 namespace NuGet.Server
 {

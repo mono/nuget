@@ -6,6 +6,7 @@ using System.Runtime.Versioning;
 using System.Text;
 using Moq;
 using NuGet.Test.Utility;
+using NuGet.Versioning;
 
 namespace NuGet.Test
 {

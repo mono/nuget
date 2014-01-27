@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using EnvDTE;
 using NuGetConsole;
+using NuGet.Versioning;
 
 namespace NuGet.VisualStudio
 {

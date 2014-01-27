@@ -8,6 +8,7 @@ using System.Web.Configuration;
 using Ninject;
 using NuGet.Resources;
 using NuGet.Server.DataServices;
+using NuGet.Versioning;
 
 namespace NuGet.Server.Infrastructure
 {

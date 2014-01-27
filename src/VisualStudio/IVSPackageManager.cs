@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using EnvDTE;
+using NuGet.Versioning;
 
 namespace NuGet.VisualStudio
 {

@@ -7,6 +7,7 @@ using NuGet.Common;
 using NuGet.ServerExtensions;
 using NuGet.Test.Mocks;
 using Xunit;
+using NuGet.Versioning;
 
 namespace NuGet.Test.ServerExtensions
 {

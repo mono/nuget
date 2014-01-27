@@ -5,6 +5,7 @@ using NuGet.Commands;
 using NuGet.Common;
 using NuGet.Test.Mocks;
 using Xunit;
+using NuGet.Versioning;
 
 namespace NuGet.Test.NuGetCommandLine.Commands
 {

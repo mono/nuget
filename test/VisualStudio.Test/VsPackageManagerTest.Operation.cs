@@ -4,6 +4,7 @@ using Xunit;
 
 namespace NuGet.VisualStudio.Test
 {
+    using NuGet.Versioning;
     using PackageUtility = NuGet.Test.PackageUtility;
 
     public partial class VsPackageManagerTest

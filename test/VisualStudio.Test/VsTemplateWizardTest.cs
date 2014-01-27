@@ -11,6 +11,7 @@ using NuGet.VisualStudio.Resources;
 using NuGetConsole;
 using Xunit;
 using Xunit.Extensions;
+using NuGet.Versioning;
 
 namespace NuGet.VisualStudio.Test
 {

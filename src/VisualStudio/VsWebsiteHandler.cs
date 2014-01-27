@@ -6,6 +6,7 @@ using System.IO;
 using System.Linq;
 using System.Runtime.Versioning;
 using EnvDTE;
+using NuGet.Versioning;
 
 namespace NuGet.VisualStudio
 {

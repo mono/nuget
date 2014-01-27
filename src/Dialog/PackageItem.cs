@@ -8,6 +8,7 @@ using System.Runtime.Versioning;
 using System.Windows.Media.Imaging;
 using EnvDTE;
 using Microsoft.VisualStudio.ExtensionsExplorer;
+using NuGet.Versioning;
 
 namespace NuGet.Dialog.Providers
 {

@@ -8,6 +8,7 @@ using System.IO.Packaging;
 using System.Linq;
 using System.Text.RegularExpressions;
 using NuGet.Resources;
+using NuGet.Versioning;
 
 namespace NuGet
 {

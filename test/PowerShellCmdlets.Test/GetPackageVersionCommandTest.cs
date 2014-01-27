@@ -5,6 +5,7 @@ using NuGet.VisualStudio;
 using NuGet.VisualStudio.Test;
 using Xunit;
 using System.Collections.Generic;
+using NuGet.Versioning;
 
 namespace NuGet.PowerShell.Commands.Test
 {

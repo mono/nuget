@@ -7,6 +7,7 @@ using Moq;
 using Xunit;
 using Xunit.Extensions;
 using NuGet.Test.Utility;
+using NuGet.Versioning;
 
 namespace NuGet.Test
 {

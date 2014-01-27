@@ -13,6 +13,7 @@ using Microsoft.Build.Execution;
 using Microsoft.Build.Framework;
 using Microsoft.Build.Logging;
 using NuGet.Common;
+using NuGet.Versioning;
 
 namespace NuGet.Commands
 {

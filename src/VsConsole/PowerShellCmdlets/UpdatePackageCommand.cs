@@ -2,6 +2,7 @@ using System;
 using System.Management.Automation;
 using EnvDTE;
 using NuGet.VisualStudio;
+using NuGet.Versioning;
 
 namespace NuGet.PowerShell.Commands
 {

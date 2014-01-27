@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using NuGet.Versioning;
+using System.Collections.Generic;
 
 namespace NuGet.VisualStudio
 {

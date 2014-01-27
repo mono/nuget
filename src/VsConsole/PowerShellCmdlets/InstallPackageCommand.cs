@@ -4,6 +4,7 @@ using System.IO;
 using System.Management.Automation;
 using System.Net.NetworkInformation;
 using NuGet.VisualStudio;
+using NuGet.Versioning;
 
 namespace NuGet.PowerShell.Commands
 {

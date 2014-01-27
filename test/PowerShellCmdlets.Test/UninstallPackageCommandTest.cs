@@ -6,6 +6,7 @@ using NuGet.Test;
 using NuGet.VisualStudio;
 using NuGet.VisualStudio.Test;
 using Xunit;
+using NuGet.Versioning;
 
 namespace NuGet.PowerShell.Commands.Test
 {

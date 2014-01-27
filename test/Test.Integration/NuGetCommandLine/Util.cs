@@ -2,6 +2,7 @@
 using System.IO;
 using Moq;
 using Xunit;
+using NuGet.Versioning;
 
 namespace NuGet.Test.Integration.NuGetCommandLine
 {

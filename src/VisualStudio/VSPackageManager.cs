@@ -8,6 +8,7 @@ using EnvDTE;
 using Microsoft.VisualStudio.Shell.Interop;
 using NuGet.Resources;
 using NuGet.VisualStudio.Resources;
+using NuGet.Versioning;
 
 namespace NuGet.VisualStudio
 {

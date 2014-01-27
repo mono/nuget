@@ -6,6 +6,7 @@ using System.Windows;
 using EnvDTE;
 using Microsoft.VisualStudio.ExtensionsExplorer;
 using NuGet.VisualStudio;
+using NuGet.Versioning;
 
 namespace NuGet.Dialog.Providers
 {

@@ -8,6 +8,7 @@ using Xunit;
 namespace NuGet.VisualStudio.Test
 {
     using NuGet.Test;
+    using NuGet.Versioning;
 
     public class FallbackRepositoryTest
     {

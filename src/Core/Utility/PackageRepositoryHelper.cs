@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Globalization;
 using NuGet.Resources;
+using NuGet.Versioning;
 
 namespace NuGet
 {

@@ -1,5 +1,6 @@
 using System.Management.Automation;
 using NuGet.VisualStudio;
+using NuGet.Versioning;
 
 namespace NuGet.PowerShell.Commands
 {

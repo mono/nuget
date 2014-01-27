@@ -1,5 +1,6 @@
 ﻿using System.IO;
 using Moq;
+using NuGet.Versioning;
 
 namespace NuGet.Test.Integration.NuGetCommandLine
 {

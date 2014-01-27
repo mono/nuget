@@ -3,6 +3,7 @@ using System.Globalization;
 using System.IO;
 using System.Net;
 using NuGet.Resources;
+using NuGet.Versioning;
 
 namespace NuGet
 {

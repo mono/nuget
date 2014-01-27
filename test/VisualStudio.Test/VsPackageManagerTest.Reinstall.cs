@@ -10,6 +10,7 @@ using Xunit;
 namespace NuGet.VisualStudio.Test
 {
     using PackageUtility = NuGet.Test.PackageUtility;
+    using NuGet.Versioning;
 
     public partial class VsPackageManagerTest
     {

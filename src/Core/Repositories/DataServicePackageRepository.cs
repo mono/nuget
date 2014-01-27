@@ -9,6 +9,7 @@ using System.Linq;
 using System.Runtime.Versioning;
 using System.Windows;
 using NuGet.Resources;
+using NuGet.Versioning;
 
 namespace NuGet
 {

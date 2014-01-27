@@ -15,6 +15,7 @@ using Xunit.Extensions;
 namespace NuGet.PowerShell.Commands.Test
 {
     using PackageUtility = NuGet.Test.PackageUtility;
+    using NuGet.Versioning;
     
     public class InstallPackageCommandTest
     {

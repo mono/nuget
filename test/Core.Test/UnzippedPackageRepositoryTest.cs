@@ -3,6 +3,7 @@ using System.IO;
 using System.Linq;
 using NuGet.Test.Mocks;
 using Xunit;
+using NuGet.Versioning;
 
 namespace NuGet.Test
 {

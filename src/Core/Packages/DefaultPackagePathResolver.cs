@@ -1,3 +1,4 @@
+using NuGet.Versioning;
 using System;
 using System.IO;
 

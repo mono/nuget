@@ -1,4 +1,5 @@
-﻿using Xunit;
+﻿using NuGet.Versioning;
+using Xunit;
 
 namespace NuGet.Test
 {

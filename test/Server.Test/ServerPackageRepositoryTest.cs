@@ -5,6 +5,7 @@ using Moq;
 using NuGet.Server.Infrastructure;
 using NuGet.Test.Mocks;
 using Xunit;
+using NuGet.Versioning;
 
 namespace NuGet.Test.Server.Infrastructure
 {

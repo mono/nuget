@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using NuGet.Runtime;
+using NuGet.Versioning;
 
 namespace NuGet
 {

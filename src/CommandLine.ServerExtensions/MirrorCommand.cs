@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using NuGet.Common;
 using NuGet.Commands;
+using NuGet.Versioning;
 
 namespace NuGet.ServerExtensions
 {

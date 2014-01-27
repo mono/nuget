@@ -4,6 +4,7 @@ using System.ComponentModel.Composition;
 using System.Linq;
 using EnvDTE;
 using NuGet.VisualStudio.Resources;
+using NuGet.Versioning;
 
 namespace NuGet.VisualStudio
 {

@@ -7,6 +7,7 @@ using NuGet.Dialog.Providers;
 using NuGet.Test;
 using NuGet.VisualStudio;
 using Xunit;
+using NuGet.Versioning;
 
 namespace NuGet.Dialog.Test
 {

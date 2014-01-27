@@ -1,6 +1,8 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2012
+# Visual Studio 2013
+VisualStudioVersion = 12.0.21005.1
+MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{E7B39EAD-EA32-4011-845A-C949A336389A}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "notices", "notices", "{E8BEECAD-4A51-48A6-9602-6D8C6F41841E}"
@@ -131,6 +133,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VsEvents.Test", "test\VsEvents.Test\VsEvents.Test.csproj", "{61C7D2E8-79A2-4645-AA84-3C81C89588E9}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VisualStudio11.Test", "test\VisualStudio11.Test\VisualStudio11.Test.csproj", "{25A2D439-B045-4059-9E1F-738362B72554}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NuGet.Versioning", "src\NuGet.Versioning\NuGet.Versioning.csproj", "{0333984F-E0A3-44FB-AFE9-A1207DA1E975}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -809,6 +813,26 @@ Global
 		{25A2D439-B045-4059-9E1F-738362B72554}.Release|Any CPU.Build.0 = Release|Any CPU
 		{25A2D439-B045-4059-9E1F-738362B72554}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{25A2D439-B045-4059-9E1F-738362B72554}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{0333984F-E0A3-44FB-AFE9-A1207DA1E975}.Coverage|Any CPU.ActiveCfg = Coverage|Any CPU
+		{0333984F-E0A3-44FB-AFE9-A1207DA1E975}.Coverage|Any CPU.Build.0 = Coverage|Any CPU
+		{0333984F-E0A3-44FB-AFE9-A1207DA1E975}.Coverage|Mixed Platforms.ActiveCfg = Coverage|Any CPU
+		{0333984F-E0A3-44FB-AFE9-A1207DA1E975}.Coverage|Mixed Platforms.Build.0 = Coverage|Any CPU
+		{0333984F-E0A3-44FB-AFE9-A1207DA1E975}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0333984F-E0A3-44FB-AFE9-A1207DA1E975}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0333984F-E0A3-44FB-AFE9-A1207DA1E975}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{0333984F-E0A3-44FB-AFE9-A1207DA1E975}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{0333984F-E0A3-44FB-AFE9-A1207DA1E975}.Mono Debug|Any CPU.ActiveCfg = Mono Debug|Any CPU
+		{0333984F-E0A3-44FB-AFE9-A1207DA1E975}.Mono Debug|Any CPU.Build.0 = Mono Debug|Any CPU
+		{0333984F-E0A3-44FB-AFE9-A1207DA1E975}.Mono Debug|Mixed Platforms.ActiveCfg = Mono Debug|Any CPU
+		{0333984F-E0A3-44FB-AFE9-A1207DA1E975}.Mono Debug|Mixed Platforms.Build.0 = Mono Debug|Any CPU
+		{0333984F-E0A3-44FB-AFE9-A1207DA1E975}.Mono Release|Any CPU.ActiveCfg = Mono Release|Any CPU
+		{0333984F-E0A3-44FB-AFE9-A1207DA1E975}.Mono Release|Any CPU.Build.0 = Mono Release|Any CPU
+		{0333984F-E0A3-44FB-AFE9-A1207DA1E975}.Mono Release|Mixed Platforms.ActiveCfg = Mono Release|Any CPU
+		{0333984F-E0A3-44FB-AFE9-A1207DA1E975}.Mono Release|Mixed Platforms.Build.0 = Mono Release|Any CPU
+		{0333984F-E0A3-44FB-AFE9-A1207DA1E975}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0333984F-E0A3-44FB-AFE9-A1207DA1E975}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0333984F-E0A3-44FB-AFE9-A1207DA1E975}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{0333984F-E0A3-44FB-AFE9-A1207DA1E975}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

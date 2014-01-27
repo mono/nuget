@@ -8,6 +8,7 @@ using System.Linq;
 using System.Runtime.Versioning;
 using System.Xml.Serialization;
 using NuGet.Resources;
+using NuGet.Versioning;
 
 namespace NuGet
 {

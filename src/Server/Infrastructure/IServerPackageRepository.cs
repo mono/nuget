@@ -1,4 +1,5 @@
 ﻿using NuGet.Server.DataServices;
+using NuGet.Versioning;
 
 namespace NuGet.Server.Infrastructure
 {

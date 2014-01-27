@@ -11,6 +11,7 @@ using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
 using NuGet.VisualStudio;
 using NuGet.VisualStudio.Resources;
+using NuGet.Versioning;
 
 namespace NuGet.VsEvents
 {

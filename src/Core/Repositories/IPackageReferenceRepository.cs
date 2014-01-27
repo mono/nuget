@@ -1,4 +1,5 @@
-﻿using System.Runtime.Versioning;
+﻿using NuGet.Versioning;
+using System.Runtime.Versioning;
 
 namespace NuGet
 {

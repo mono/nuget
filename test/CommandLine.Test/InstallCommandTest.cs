@@ -9,6 +9,7 @@ using NuGet.Common;
 using NuGet.Test.Mocks;
 using Xunit;
 using Xunit.Extensions;
+using NuGet.Versioning;
 
 namespace NuGet.Test.NuGetCommandLine.Commands
 {

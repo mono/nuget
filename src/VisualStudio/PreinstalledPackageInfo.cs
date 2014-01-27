@@ -1,4 +1,5 @@
-﻿using System;
+﻿using NuGet.Versioning;
+using System;
 using System.Diagnostics;
 
 namespace NuGet.VisualStudio

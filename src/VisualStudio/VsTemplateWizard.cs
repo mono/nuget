@@ -12,6 +12,7 @@ using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.TemplateWizard;
 using NuGet.VisualStudio.Resources;
 using NuGetConsole;
+using NuGet.Versioning;
 
 namespace NuGet.VisualStudio
 {

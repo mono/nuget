@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using EnvDTE;
+using NuGet.Versioning;
 
 namespace NuGet.VisualStudio
 {

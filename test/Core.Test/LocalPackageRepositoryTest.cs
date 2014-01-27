@@ -6,6 +6,7 @@ using Moq;
 using NuGet.Test.Mocks;
 using Xunit;
 using NuGet.Test.Utility;
+using NuGet.Versioning;
 
 namespace NuGet.Test
 {

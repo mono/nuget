@@ -9,6 +9,7 @@ using System.ServiceModel.Web;
 using System.Web;
 using Ninject;
 using NuGet.Server.Infrastructure;
+using NuGet.Versioning;
 
 namespace NuGet.Server.DataServices
 {
