@@ -51,7 +51,7 @@ namespace NuGet
             else
             {
                 // TODO: Clean this up
-                throw new ArgumentNullException("Version");
+                throw new ArgumentException("Unable to parse version");
             }
         }
 
