@@ -294,13 +294,12 @@ namespace NuGet.Versioning
 
         public bool Equals(ISemanticVersion other)
         {
-            return !Object.ReferenceEquals(null, other) && CompareTo(other) == 0;
+            return CompareTo(other) == 0;
         }
 
         public override bool Equals(object obj)
         {
-            SemanticVersion semVer = obj as SemanticVersion;
-            return !Object.ReferenceEquals(null, semVer) && Equals(semVer);
+            return Equals(obj as ISemanticVersion);
         }
 
         public override int CompareTo(object obj)
