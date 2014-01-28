@@ -13,9 +13,7 @@ namespace NuGet.Versioning
     /// A hybrid implementation of SemVer that supports semantic versioning as described at http://semver.org while not strictly enforcing it to 
     /// allow older 4-digit versioning schemes to continue working.
     /// </summary>
-    //[Serializable]
-    //[TypeConverter(typeof(SemanticVersionTypeConverter))]
-    public sealed class SemanticVersion : SemanticVersionStrict
+    public sealed class SemanticVersion : SemanticVersionStrict, ISemanticVersion
     {
         private const RegexOptions _flags = RegexOptions.IgnoreCase | RegexOptions.ExplicitCapture;
         private static readonly Regex _semanticVersionRegex = new Regex(@"^(?<Version>\d+(\s*\.\s*\d+){0,3})(?<Release>-[a-z][0-9a-z-]*)?$", _flags);
@@ -37,14 +35,14 @@ namespace NuGet.Versioning
         }
 
 
-        public SemanticVersion(int major, int minor, int build, int revision)
-            : this(new Version(major, minor, build, revision))
+        public SemanticVersion(int major, int minor, int patch, int revision)
+            : this(new Version(major, minor, patch, revision))
         {
 
         }
 
-        public SemanticVersion(int major, int minor, int build, string specialVersion)
-            : this(new Version(major, minor, build), specialVersion)
+        public SemanticVersion(int major, int minor, int patch, string specialVersion)
+            : this(new Version(major, minor, patch), specialVersion)
         {
         }
 
@@ -66,7 +64,7 @@ namespace NuGet.Versioning
             if (!String.IsNullOrEmpty(originalString))
                 _originalString = originalString;
             else
-                _originalString = version.ToString() + (!String.IsNullOrEmpty(specialVersion) ? "-" + specialVersion : null);
+                _originalString = GetLegacyString(version, specialVersion);
 
             _version = NormalizeVersionValue(version);
         }
@@ -91,6 +89,14 @@ namespace NuGet.Versioning
                 }
 
                 return _version;
+            }
+        }
+
+        public bool IsLegacyVersion
+        {
+            get
+            {
+                return _version != null && _version.Revision > 0;
             }
         }
 
@@ -152,6 +158,7 @@ namespace NuGet.Versioning
             {
                 throw new ArgumentException(String.Format(CultureInfo.CurrentCulture, Resources.InvalidVersionString, version), "version");
             }
+
             return semVer;
         }
 
@@ -201,62 +208,9 @@ namespace NuGet.Versioning
         /// <returns>An instance of SemanticVersion if it parses correctly, null otherwise.</returns>
         public static SemanticVersion ParseOptionalVersion(string version)
         {
-            SemanticVersion semVer;
-            TryParse(version, out semVer);
-            return semVer;
+            return Parse(version);
         }
 
-        public bool IsLegacyVersion
-        {
-            get
-            {
-                return _version != null;
-            }
-        }
-
-        public override int CompareTo(object obj)
-        {
-            if (Object.ReferenceEquals(obj, null))
-            {
-                return 1;
-            }
-            SemanticVersion other = obj as SemanticVersion;
-            if (other == null)
-            {
-                throw new ArgumentException(Resources.TypeMustBeASemanticVersion, "obj");
-            }
-            return CompareTo(other);
-        }
-
-        public int CompareTo(SemanticVersion other)
-        {
-            if (Object.ReferenceEquals(other, null))
-            {
-                return 1;
-            }
-
-            int result = 0;
-
-            // true if one has a 4th version number
-            if (IsLegacyVersion || other.IsLegacyVersion)
-            {
-                result = Version.CompareTo(other.Version);
-                if (result != 0)
-                    return result;
-            }
-
-            // compare as strict semantic versions
-            result = base.CompareTo(other);
-            if (result != 0)
-                return result;
-
-            // compare the metadata
-            result = StringComparer.OrdinalIgnoreCase.Compare(Metadata ?? string.Empty, other.Metadata ?? string.Empty);
-            if (result != 0)
-                return result;
-
-            return 0;
-        }
 
         public static bool operator ==(SemanticVersion version1, SemanticVersion version2)
         {
@@ -264,6 +218,7 @@ namespace NuGet.Versioning
             {
                 return Object.ReferenceEquals(version2, null);
             }
+
             return version1.Equals(version2);
         }
 
@@ -292,6 +247,7 @@ namespace NuGet.Versioning
             {
                 throw new ArgumentNullException("version1");
             }
+
             return version2 < version1;
         }
 
@@ -304,13 +260,39 @@ namespace NuGet.Versioning
         {
             if (_originalString == null)
             {
-                return GetLegacyString();
+                return GetLegacyString(Version, SpecialVersion);
             }
 
             return _originalString;
         }
 
-        public bool Equals(SemanticVersion other)
+        public override string ToNormalizedString()
+        {
+            if (IsLegacyVersion)
+            {
+                return GetLegacyString(Version, SpecialVersion);
+            }
+
+            return base.ToNormalizedString();
+        }
+
+        private static string GetLegacyString(Version version, string specialVersion)
+        {
+            return version.ToString() + (!String.IsNullOrEmpty(specialVersion) ? "-" + specialVersion : null);
+        }
+
+        public override int GetHashCode()
+        {
+            return ToNormalizedString().GetHashCode();
+        }
+
+        public int CompareTo(ISemanticVersion other)
+        {
+            SemanticVersionComparer comparer = new SemanticVersionComparer();
+            return comparer.Compare(this, other);
+        }
+
+        public bool Equals(ISemanticVersion other)
         {
             return !Object.ReferenceEquals(null, other) && CompareTo(other) == 0;
         }
@@ -321,43 +303,19 @@ namespace NuGet.Versioning
             return !Object.ReferenceEquals(null, semVer) && Equals(semVer);
         }
 
-        /*
-        public override int GetHashCode()
+        public override int CompareTo(object obj)
         {
-            int hashCode = Version.GetHashCode();
-            if (SpecialVersion != null)
+            if (Object.ReferenceEquals(obj, null))
             {
-                hashCode = hashCode * 4567 + SpecialVersion.GetHashCode();
+                return 1;
             }
 
-            return hashCode;
-        } */
-
-        public override string ToNormalizedString()
-        {
-            if (_version != null && _version.Revision > 0)
+            SemanticVersion other = obj as SemanticVersion;
+            if (other == null)
             {
-                return GetLegacyString();
+                throw new ArgumentException(Resources.TypeMustBeASemanticVersion, "obj");
             }
-
-            return base.ToNormalizedString();
-        }
-
-        private string GetLegacyString()
-        {
-            StringBuilder sb = new StringBuilder(Version.ToString());
-
-            //sb.AppendFormat(CultureInfo.InvariantCulture, "{0}.{1}.{2}.{3}", Major, Minor, Patch, _version == null ? 0 : _version.Revision);
-
-            if (IsPrerelease)
-                sb.AppendFormat(CultureInfo.InvariantCulture, "-{0}", SpecialVersion);
-
-            return sb.ToString();
-        }
-
-        public override int GetHashCode()
-        {
-            return ToNormalizedString().GetHashCode();
+            return CompareTo(other);
         }
     }
 }

@@ -184,8 +184,8 @@ namespace NuGet
                 // To achieve this, we would look for files named 1.2*.nupkg if both build and revision are 0 and
                 // 1.2.3*.nupkg if only the revision is set to 0.
                 string partialName = version.Version.Build < 1 ?
-                                        String.Join(".", packageId, version.Version.Major, version.Version.Minor) :
-                                        String.Join(".", packageId, version.Version.Major, version.Version.Minor, version.Version.Build);
+                                        String.Join(".", packageId, version.Major, version.Minor) :
+                                        String.Join(".", packageId, version.Major, version.Minor, version.Patch);
                 string partialManifestName = partialName + "*" + Constants.ManifestExtension;
                 partialName += "*" + Constants.PackageExtension;
 
