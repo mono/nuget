@@ -15,12 +15,12 @@ namespace NuGet.Versioning
     /// </summary>
     //[Serializable]
     //[TypeConverter(typeof(SemanticVersionTypeConverter))]
-    public sealed class SemanticVersion : IComparable, IComparable<SemanticVersion>, IEquatable<SemanticVersion>
+    public sealed class SemanticVersion : SemanticVersionStrict
     {
         private const RegexOptions _flags = RegexOptions.IgnoreCase | RegexOptions.ExplicitCapture;
         private static readonly Regex _semanticVersionRegex = new Regex(@"^(?<Version>\d+(\s*\.\s*\d+){0,3})(?<Release>-[a-z][0-9a-z-]*)?$", _flags);
-        private static readonly Regex _strictSemanticVersionRegex = new Regex(@"^(?<Version>\d+(\.\d+){2})(?<Release>-[a-z][0-9a-z-]*)?$", _flags);
         private readonly string _originalString;
+        private Version _version;
 
         public SemanticVersion(string version)
             : this(Parse(version))
@@ -30,9 +30,17 @@ namespace NuGet.Versioning
             _originalString = version;
         }
 
+        public SemanticVersion(SemanticVersionStrict strict)
+            : base(strict)
+        {
+
+        }
+
+
         public SemanticVersion(int major, int minor, int build, int revision)
             : this(new Version(major, minor, build, revision))
         {
+
         }
 
         public SemanticVersion(int major, int minor, int build, string specialVersion)
@@ -43,29 +51,31 @@ namespace NuGet.Versioning
         public SemanticVersion(Version version)
             : this(version, String.Empty)
         {
+
         }
 
         public SemanticVersion(Version version, string specialVersion)
             : this(version, specialVersion, null)
         {
+
         }
 
         private SemanticVersion(Version version, string specialVersion, string originalString)
+            : base(version, specialVersion, null)
         {
-            if (version == null)
-            {
-                throw new ArgumentNullException("version");
-            }
-            Version = NormalizeVersionValue(version);
-            SpecialVersion = specialVersion ?? String.Empty;
-            _originalString = String.IsNullOrEmpty(originalString) ? version.ToString() + (!String.IsNullOrEmpty(specialVersion) ? '-' + specialVersion : null) : originalString;
+            if (!String.IsNullOrEmpty(originalString))
+                _originalString = originalString;
+            else
+                _originalString = version.ToString() + (!String.IsNullOrEmpty(specialVersion) ? "-" + specialVersion : null);
+
+            _version = NormalizeVersionValue(version);
         }
 
         internal SemanticVersion(SemanticVersion semVer)
+            : base(semVer.Version.Major, semVer.Version.Minor, semVer.Version.Build, semVer.PrereleaseLabels, semVer.Metadata)
         {
             _originalString = semVer.ToString();
-            Version = semVer.Version;
-            SpecialVersion = semVer.SpecialVersion;
+            _version = semVer.Version;
         }
 
         /// <summary>
@@ -73,17 +83,15 @@ namespace NuGet.Versioning
         /// </summary>
         public Version Version
         {
-            get;
-            private set;
-        }
+            get
+            {
+                if (_version == null)
+                {
+                    return new Version(Major, Minor, Patch, 0);
+                }
 
-        /// <summary>
-        /// Gets the optional special version.
-        /// </summary>
-        public string SpecialVersion
-        {
-            get;
-            private set;
+                return _version;
+            }
         }
 
         public string[] GetOriginalVersionComponents()
@@ -152,7 +160,23 @@ namespace NuGet.Versioning
         /// </summary>
         public static bool TryParse(string version, out SemanticVersion value)
         {
-            return TryParseInternal(version, _semanticVersionRegex, out value);
+            value = null;
+            if (String.IsNullOrEmpty(version))
+            {
+                return false;
+            }
+
+            var match = _semanticVersionRegex.Match(version.Trim());
+            Version versionValue;
+            if (!match.Success || !Version.TryParse(match.Groups["Version"].Value, out versionValue))
+            {
+                return false;
+            }
+
+            Version ver = NormalizeVersionValue(versionValue);
+
+            value = new SemanticVersion(ver, match.Groups["Release"].Value.TrimStart('-'), version.Replace(" ", ""));
+            return true;
         }
 
         /// <summary>
@@ -160,26 +184,15 @@ namespace NuGet.Versioning
         /// </summary>
         public static bool TryParseStrict(string version, out SemanticVersion value)
         {
-            return TryParseInternal(version, _strictSemanticVersionRegex, out value);
-        }
-
-        private static bool TryParseInternal(string version, Regex regex, out SemanticVersion semVer)
-        {
-            semVer = null;
-            if (String.IsNullOrEmpty(version))
+            SemanticVersionStrict val;
+            if (SemanticVersionStrict.TryParse(version, out val))
             {
-                return false;
+                value = new SemanticVersion(val);
+                return true;
             }
 
-            var match = regex.Match(version.Trim());
-            Version versionValue;
-            if (!match.Success || !Version.TryParse(match.Groups["Version"].Value, out versionValue))
-            {
-                return false;
-            }
-
-            semVer = new SemanticVersion(NormalizeVersionValue(versionValue), match.Groups["Release"].Value.TrimStart('-'), version.Replace(" ", ""));
-            return true;
+            value = null;
+            return false;
         }
 
         /// <summary>
@@ -193,15 +206,15 @@ namespace NuGet.Versioning
             return semVer;
         }
 
-        private static Version NormalizeVersionValue(Version version)
+        public bool IsLegacyVersion
         {
-            return new Version(version.Major,
-                               version.Minor,
-                               Math.Max(version.Build, 0),
-                               Math.Max(version.Revision, 0));
+            get
+            {
+                return _version != null;
+            }
         }
 
-        public int CompareTo(object obj)
+        public override int CompareTo(object obj)
         {
             if (Object.ReferenceEquals(obj, null))
             {
@@ -222,28 +235,27 @@ namespace NuGet.Versioning
                 return 1;
             }
 
-            int result = Version.CompareTo(other.Version);
+            int result = 0;
 
+            // true if one has a 4th version number
+            if (IsLegacyVersion || other.IsLegacyVersion)
+            {
+                result = Version.CompareTo(other.Version);
+                if (result != 0)
+                    return result;
+            }
+
+            // compare as strict semantic versions
+            result = base.CompareTo(other);
             if (result != 0)
-            {
                 return result;
-            }
 
-            bool empty = String.IsNullOrEmpty(SpecialVersion);
-            bool otherEmpty = String.IsNullOrEmpty(other.SpecialVersion);
-            if (empty && otherEmpty)
-            {
-                return 0;
-            }
-            else if (empty)
-            {
-                return 1;
-            }
-            else if (otherEmpty)
-            {
-                return -1;
-            }
-            return StringComparer.OrdinalIgnoreCase.Compare(SpecialVersion, other.SpecialVersion);
+            // compare the metadata
+            result = StringComparer.OrdinalIgnoreCase.Compare(Metadata ?? string.Empty, other.Metadata ?? string.Empty);
+            if (result != 0)
+                return result;
+
+            return 0;
         }
 
         public static bool operator ==(SemanticVersion version1, SemanticVersion version2)
@@ -290,14 +302,17 @@ namespace NuGet.Versioning
 
         public override string ToString()
         {
+            if (_originalString == null)
+            {
+                return GetLegacyString();
+            }
+
             return _originalString;
         }
 
         public bool Equals(SemanticVersion other)
         {
-            return !Object.ReferenceEquals(null, other) &&
-                   Version.Equals(other.Version) &&
-                   SpecialVersion.Equals(other.SpecialVersion, StringComparison.OrdinalIgnoreCase);
+            return !Object.ReferenceEquals(null, other) && CompareTo(other) == 0;
         }
 
         public override bool Equals(object obj)
@@ -306,6 +321,7 @@ namespace NuGet.Versioning
             return !Object.ReferenceEquals(null, semVer) && Equals(semVer);
         }
 
+        /*
         public override int GetHashCode()
         {
             int hashCode = Version.GetHashCode();
@@ -315,6 +331,33 @@ namespace NuGet.Versioning
             }
 
             return hashCode;
+        } */
+
+        public override string ToNormalizedString()
+        {
+            if (_version != null && _version.Revision > 0)
+            {
+                return GetLegacyString();
+            }
+
+            return base.ToNormalizedString();
+        }
+
+        private string GetLegacyString()
+        {
+            StringBuilder sb = new StringBuilder(Version.ToString());
+
+            //sb.AppendFormat(CultureInfo.InvariantCulture, "{0}.{1}.{2}.{3}", Major, Minor, Patch, _version == null ? 0 : _version.Revision);
+
+            if (IsPrerelease)
+                sb.AppendFormat(CultureInfo.InvariantCulture, "-{0}", SpecialVersion);
+
+            return sb.ToString();
+        }
+
+        public override int GetHashCode()
+        {
+            return ToNormalizedString().GetHashCode();
         }
     }
 }
