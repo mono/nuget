@@ -141,9 +141,9 @@
       <Project>{05497432-8899-4ED4-BB97-7B5EA3E911DB}</Project>
       <Name>DialogServices</Name>
     </ProjectReference>
-    <ProjectReference Include="..\NuGet.Versioning\NuGet.Versioning.csproj">
+    <ProjectReference Include="..\Versioning\Versioning.csproj">
       <Project>{0333984f-e0a3-44fb-afe9-a1207da1e975}</Project>
-      <Name>NuGet.Versioning</Name>
+      <Name>Versioning</Name>
     </ProjectReference>
     <ProjectReference Include="..\VisualStudio\VisualStudio.csproj">
       <Project>{6146CA62-CC16-422C-A105-3E81F7452AA6}</Project>

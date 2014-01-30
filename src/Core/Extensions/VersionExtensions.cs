@@ -72,6 +72,46 @@ namespace NuGet
             return versionSpec.ToDelegate<SemanticVersion>(v => v)(version);
         }
 
+
+        public static string[] GetOriginalVersionComponents(this SemanticVersion version)
+        {
+            string originalString = version.ToString();
+
+            string original = string.Empty;
+
+            // search the start of the SpecialVersion part, if any
+            int dashIndex = originalString.IndexOfAny(new char[] { '-', '+' });
+            if (dashIndex != -1)
+            {
+                // remove the SpecialVersion part
+                original = originalString.Substring(0, dashIndex);
+            }
+            else
+            {
+                original = originalString;
+            }
+
+            return SplitAndPadVersionString(original);
+        }
+
+        private static string[] SplitAndPadVersionString(string version)
+        {
+            string[] a = version.Split('.');
+            if (a.Length == 4)
+            {
+                return a;
+            }
+            else
+            {
+                // if 'a' has less than 4 elements, we pad the '0' at the end 
+                // to make it 4.
+                var b = new string[4] { "0", "0", "0", "0" };
+                Array.Copy(a, 0, b, 0, a.Length);
+                return b;
+            }
+        }
+
+
         public static IEnumerable<string> GetComparableVersionStrings(this SemanticVersion version)
         {
             Version coreVersion = version.Version;

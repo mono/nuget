@@ -78,9 +78,9 @@
       <Project>{f879f274-efa0-4157-8404-33a19b4e6aec}</Project>
       <Name>Core</Name>
     </ProjectReference>
-    <ProjectReference Include="..\NuGet.Versioning\NuGet.Versioning.csproj">
+    <ProjectReference Include="..\Versioning\Versioning.csproj">
       <Project>{0333984f-e0a3-44fb-afe9-a1207da1e975}</Project>
-      <Name>NuGet.Versioning</Name>
+      <Name>Versioning</Name>
     </ProjectReference>
     <ProjectReference Include="..\VisualStudio\VisualStudio.csproj">
       <Project>{6146ca62-cc16-422c-a105-3e81f7452aa6}</Project>

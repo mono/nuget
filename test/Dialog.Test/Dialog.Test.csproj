@@ -111,9 +111,9 @@
       <Project>{05497432-8899-4ED4-BB97-7B5EA3E911DB}</Project>
       <Name>DialogServices</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\src\NuGet.Versioning\NuGet.Versioning.csproj">
+    <ProjectReference Include="..\..\src\Versioning\Versioning.csproj">
       <Project>{0333984f-e0a3-44fb-afe9-a1207da1e975}</Project>
-      <Name>NuGet.Versioning</Name>
+      <Name>Versioning</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\src\VsConsole\Console.Types\Console.Types.csproj">
       <Project>{6FD11460-39A3-4A10-BA63-7541B0A7D053}</Project>

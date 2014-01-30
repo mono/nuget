@@ -4,6 +4,7 @@ using Moq;
 using Xunit;
 using Xunit.Extensions;
 using NuGet.Versioning;
+using System;
 
 namespace NuGet.Test.Extensions
 {
@@ -134,6 +135,44 @@ namespace NuGet.Test.Extensions
             // Assert
             Assert.Equal(1, versions.Length);
             Assert.Equal("1.3.2.4-beta", versions[0]);
+        }
+
+        [Theory]
+        [InlineData("1.2.4.5", new string[] { "1", "2", "4", "5" })]
+        [InlineData("01.02.4.5-gamma", new string[] { "01", "02", "4", "5" })]
+        [InlineData("1.02.3", new string[] { "1", "02", "3", "0" })]
+        [InlineData("1.02.3-beta", new string[] { "1", "02", "3", "0" })]
+        [InlineData("00100.02", new string[] { "00100", "02", "0", "0" })]
+        [InlineData("00100.02-alpha", new string[] { "00100", "02", "0", "0" })]
+        public void TestGetOriginalVersionComponents(
+            string originalVersion, string[] expectedComponents)
+        {
+            // Arrange
+            var semVer = new SemanticVersion(originalVersion);
+
+            // Act
+            string[] components = semVer.GetOriginalVersionComponents();
+
+            // Assert
+            Assert.Equal(expectedComponents, components);
+        }
+
+        [Theory]
+        [InlineData("1.2.4.5", new string[] { "1", "2", "4", "5" })]
+        [InlineData("1.02.3", new string[] { "1", "2", "3", "0" })]
+        [InlineData("00100.02", new string[] { "100", "2", "0", "0" })]
+        public void TestGetOriginalVersionComponentsWhenPassingVersion(
+            string originalVersion, string[] expectedComponents)
+        {
+            // Arrange
+            var version = new Version(originalVersion);
+            var semVer = new SemanticVersion(version);
+
+            // Act
+            string[] components = semVer.GetOriginalVersionComponents();
+
+            // Assert
+            Assert.Equal(expectedComponents, components);
         }
     }
 }

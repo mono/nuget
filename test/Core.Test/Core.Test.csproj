@@ -100,7 +100,6 @@
     <Compile Include="ProjectSystemExtensionsTest.cs" />
     <Compile Include="ProxyCacheTest.cs" />
     <Compile Include="RedirectedHttpClientTest.cs" />
-    <Compile Include="SemanticVersionTest.cs" />
     <Compile Include="SettingsCredentialProviderTest.cs" />
     <Compile Include="SharedPackageRepositoryTest.cs" />
     <Compile Include="SmartDataServiceQueryTest.cs" />
@@ -138,9 +137,9 @@
       <Project>{F879F274-EFA0-4157-8404-33A19B4E6AEC}</Project>
       <Name>Core</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\src\NuGet.Versioning\NuGet.Versioning.csproj">
+    <ProjectReference Include="..\..\src\Versioning\Versioning.csproj">
       <Project>{0333984f-e0a3-44fb-afe9-a1207da1e975}</Project>
-      <Name>NuGet.Versioning</Name>
+      <Name>Versioning</Name>
     </ProjectReference>
     <ProjectReference Include="..\Test.Utility\Test.Utility.csproj">
       <Project>{F016882A-C798-4446-BB75-D3C393A38B32}</Project>

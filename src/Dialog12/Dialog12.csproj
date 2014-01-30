@@ -20,9 +20,9 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\NuGet.Versioning\NuGet.Versioning.csproj">
+    <ProjectReference Include="..\Versioning\Versioning.csproj">
       <Project>{0333984f-e0a3-44fb-afe9-a1207da1e975}</Project>
-      <Name>NuGet.Versioning</Name>
+      <Name>Versioning</Name>
     </ProjectReference>
   </ItemGroup>
   <Choose>
