@@ -552,14 +552,14 @@ namespace NuGet.Test
         public void ParseVersionSpecWithNullThrows()
         {
             // Act & Assert
-            ExceptionAssert.ThrowsArgNull(() => VersionUtility.ParseVersionSpec(null), "value");
+            ExceptionAssert.ThrowsArgNull(() => VersionSpec.ParseVersionSpec(null), "value");
         }
 
         [Fact]
         public void ParseVersionSpecSimpleVersionNoBrackets()
         {
             // Act
-            var versionInfo = VersionUtility.ParseVersionSpec("1.2");
+            var versionInfo = VersionSpec.ParseVersionSpec("1.2");
 
             // Assert
             Assert.Equal("1.2", versionInfo.MinVersion.ToString());
@@ -572,7 +572,7 @@ namespace NuGet.Test
         public void ParseVersionSpecSimpleVersionNoBracketsExtraSpaces()
         {
             // Act
-            var versionInfo = VersionUtility.ParseVersionSpec("  1  .   2  ");
+            var versionInfo = VersionSpec.ParseVersionSpec("  1  .   2  ");
 
             // Assert
             Assert.Equal("1.2", versionInfo.MinVersion.ToString());
@@ -585,7 +585,7 @@ namespace NuGet.Test
         public void ParseVersionSpecMaxOnlyInclusive()
         {
             // Act
-            var versionInfo = VersionUtility.ParseVersionSpec("(,1.2]");
+            var versionInfo = VersionSpec.ParseVersionSpec("(,1.2]");
 
             // Assert
             Assert.Equal(null, versionInfo.MinVersion);
@@ -597,7 +597,7 @@ namespace NuGet.Test
         [Fact]
         public void ParseVersionSpecMaxOnlyExclusive()
         {
-            var versionInfo = VersionUtility.ParseVersionSpec("(,1.2)");
+            var versionInfo = VersionSpec.ParseVersionSpec("(,1.2)");
             Assert.Equal(null, versionInfo.MinVersion);
             Assert.False(versionInfo.IsMinInclusive);
             Assert.Equal("1.2", versionInfo.MaxVersion.ToString());
@@ -608,7 +608,7 @@ namespace NuGet.Test
         public void ParseVersionSpecExactVersion()
         {
             // Act
-            var versionInfo = VersionUtility.ParseVersionSpec("[1.2]");
+            var versionInfo = VersionSpec.ParseVersionSpec("[1.2]");
 
             // Assert
             Assert.Equal("1.2", versionInfo.MinVersion.ToString());
@@ -621,7 +621,7 @@ namespace NuGet.Test
         public void ParseVersionSpecMinOnlyExclusive()
         {
             // Act
-            var versionInfo = VersionUtility.ParseVersionSpec("(1.2,)");
+            var versionInfo = VersionSpec.ParseVersionSpec("(1.2,)");
 
             // Assert
             Assert.Equal("1.2", versionInfo.MinVersion.ToString());
@@ -634,7 +634,7 @@ namespace NuGet.Test
         public void ParseVersionSpecRangeExclusiveExclusive()
         {
             // Act
-            var versionInfo = VersionUtility.ParseVersionSpec("(1.2,2.3)");
+            var versionInfo = VersionSpec.ParseVersionSpec("(1.2,2.3)");
 
             // Assert
             Assert.Equal("1.2", versionInfo.MinVersion.ToString());
@@ -647,7 +647,7 @@ namespace NuGet.Test
         public void ParseVersionSpecRangeExclusiveInclusive()
         {
             // Act
-            var versionInfo = VersionUtility.ParseVersionSpec("(1.2,2.3]");
+            var versionInfo = VersionSpec.ParseVersionSpec("(1.2,2.3]");
 
             // Assert
             Assert.Equal("1.2", versionInfo.MinVersion.ToString());
@@ -660,7 +660,7 @@ namespace NuGet.Test
         public void ParseVersionSpecRangeInclusiveExclusive()
         {
             // Act
-            var versionInfo = VersionUtility.ParseVersionSpec("[1.2,2.3)");
+            var versionInfo = VersionSpec.ParseVersionSpec("[1.2,2.3)");
             Assert.Equal("1.2", versionInfo.MinVersion.ToString());
             Assert.True(versionInfo.IsMinInclusive);
             Assert.Equal("2.3", versionInfo.MaxVersion.ToString());
@@ -671,7 +671,7 @@ namespace NuGet.Test
         public void ParseVersionSpecRangeInclusiveInclusive()
         {
             // Act
-            var versionInfo = VersionUtility.ParseVersionSpec("[1.2,2.3]");
+            var versionInfo = VersionSpec.ParseVersionSpec("[1.2,2.3]");
 
             // Assert
             Assert.Equal("1.2", versionInfo.MinVersion.ToString());
@@ -684,7 +684,7 @@ namespace NuGet.Test
         public void ParseVersionSpecRangeInclusiveInclusiveExtraSpaces()
         {
             // Act
-            var versionInfo = VersionUtility.ParseVersionSpec("   [  1 .2   , 2  .3   ]  ");
+            var versionInfo = VersionSpec.ParseVersionSpec("   [  1 .2   , 2  .3   ]  ");
 
             // Assert
             Assert.Equal("1.2", versionInfo.MinVersion.ToString());
@@ -707,7 +707,7 @@ namespace NuGet.Test
         public void ParseVersionSpecRangeIntegerRanges()
         {
             // Act
-            var versionInfo = VersionUtility.ParseVersionSpec("   [1, 2]  ");
+            var versionInfo = VersionSpec.ParseVersionSpec("   [1, 2]  ");
 
             // Assert
             Assert.Equal("1.0", versionInfo.MinVersion.ToString());
@@ -721,7 +721,7 @@ namespace NuGet.Test
         {
             // Act
             IVersionSpec versionInfo;
-            bool parsed = VersionUtility.TryParseVersionSpec("   [-1, 2]  ", out versionInfo);
+            bool parsed = VersionSpec.TryParseVersionSpec("   [-1, 2]  ", out versionInfo);
 
             Assert.False(parsed);
             Assert.Null(versionInfo);
@@ -1088,7 +1088,7 @@ namespace NuGet.Test
             var versionString = "(,)";
 
             // Assert
-            var exception = Assert.Throws<ArgumentException>(() => VersionUtility.ParseVersionSpec(versionString));
+            var exception = Assert.Throws<ArgumentException>(() => VersionSpec.ParseVersionSpec(versionString));
             Assert.Equal("'(,)' is not a valid version string.", exception.Message);
         }
 
@@ -1099,7 +1099,7 @@ namespace NuGet.Test
             var versionString = "[,]";
 
             // Assert
-            var exception = Assert.Throws<ArgumentException>(() => VersionUtility.ParseVersionSpec(versionString));
+            var exception = Assert.Throws<ArgumentException>(() => VersionSpec.ParseVersionSpec(versionString));
             Assert.Equal("'[,]' is not a valid version string.", exception.Message);
         }
 
@@ -1110,7 +1110,7 @@ namespace NuGet.Test
             var versionString = "[,)";
 
             // Assert
-            var exception = Assert.Throws<ArgumentException>(() => VersionUtility.ParseVersionSpec(versionString));
+            var exception = Assert.Throws<ArgumentException>(() => VersionSpec.ParseVersionSpec(versionString));
             Assert.Equal("'[,)' is not a valid version string.", exception.Message);
         }
 
@@ -1121,7 +1121,7 @@ namespace NuGet.Test
             var versionString = "(,]";
 
             // Assert
-            var exception = Assert.Throws<ArgumentException>(() => VersionUtility.ParseVersionSpec(versionString));
+            var exception = Assert.Throws<ArgumentException>(() => VersionSpec.ParseVersionSpec(versionString));
             Assert.Equal("'(,]' is not a valid version string.", exception.Message);
         }
 
@@ -1132,7 +1132,7 @@ namespace NuGet.Test
             var versionString = "(,1.3..2]";
 
             // Assert
-            var exception = Assert.Throws<ArgumentException>(() => VersionUtility.ParseVersionSpec(versionString));
+            var exception = Assert.Throws<ArgumentException>(() => VersionSpec.ParseVersionSpec(versionString));
             Assert.Equal("'(,1.3..2]' is not a valid version string.", exception.Message);
         }
 
@@ -1143,7 +1143,7 @@ namespace NuGet.Test
             var versionString = "(1.2.3.4.5,1.2]";
 
             // Assert
-            var exception = Assert.Throws<ArgumentException>(() => VersionUtility.ParseVersionSpec(versionString));
+            var exception = Assert.Throws<ArgumentException>(() => VersionSpec.ParseVersionSpec(versionString));
             Assert.Equal("'(1.2.3.4.5,1.2]' is not a valid version string.", exception.Message);
         }
 
@@ -1152,7 +1152,7 @@ namespace NuGet.Test
         public void ParseVersionParsesTokensVersionsCorrectly(string versionString, VersionSpec versionSpec)
         {
             // Act
-            var actual = VersionUtility.ParseVersionSpec(versionString);
+            var actual = VersionSpec.ParseVersionSpec(versionString);
 
             // Assert
             Assert.Equal(versionSpec.IsMinInclusive, actual.IsMinInclusive);

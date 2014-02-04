@@ -792,7 +792,7 @@ namespace NuGet.Test.NuGetCommandLine.Commands
             var packageManager = new Mock<IPackageManager>(MockBehavior.Strict);
             var package1 = PackageUtility.CreatePackage("Foo", "1.0.0");
             var package2 = PackageUtility.CreatePackage("Foo.Fr", "1.0.0", language: "fr",
-                dependencies: new[] { new PackageDependency("Foo", VersionUtility.ParseVersionSpec("[1.0.0]")) });
+                dependencies: new[] { new PackageDependency("Foo", VersionSpec.ParseVersionSpec("[1.0.0]")) });
             var repository = new MockPackageRepository { package1, package2 };
             // We *shouldn't* be testing if a sequence of operations worked rather that the outcome that satellite package was installed correctly, 
             // but doing so requires work with  nice to have a unit test that tests it. 

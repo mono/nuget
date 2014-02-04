@@ -272,8 +272,8 @@ namespace NuGet
                     where allowPrereleaseVersions || p.IsReleaseVersion()
                     let dependency = p.FindDependency(package.Id, targetFramework)
                     let otherConstaint = constraintProvider.GetConstraint(p.Id)
-                    where dependency != null &&
-                          dependency.VersionSpec.Satisfies(package.Version) &&
+                    where dependency != null && (dependency.VersionSpec == null ||
+                          dependency.VersionSpec.Satisfies(package.Version)) &&
                           (otherConstaint == null || otherConstaint.Satisfies(package.Version))
                     select p);
         }

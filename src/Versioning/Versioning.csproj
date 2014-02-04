@@ -26,6 +26,8 @@
     <Compile Include="ISemanticVersion.cs" />
     <Compile Include="IVersion.cs" />
     <Compile Include="IVersionComparer.cs" />
+    <Compile Include="IVersionSet.cs" />
+    <Compile Include="IVersionSpec.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Resources.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -36,6 +38,8 @@
     <Compile Include="VersionComparer.cs" />
     <Compile Include="VersionBase.cs" />
     <Compile Include="VersionComparison.cs" />
+    <Compile Include="VersionSet.cs" />
+    <Compile Include="VersionSpec.cs" />
   </ItemGroup>
   <ItemGroup>
     <CodeAnalysisDictionary Include="..\..\CodeAnalysisDictionary.xml">

@@ -6,6 +6,7 @@ using System.Globalization;
 using System.Linq;
 using System.Runtime.Versioning;
 using NuGet.Resources;
+using NuGet.Versioning;
 
 namespace NuGet
 {

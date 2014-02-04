@@ -199,7 +199,6 @@
     <Compile Include="Http\IHttpClient.cs" />
     <Compile Include="Utility\FrameworkNameEqualityComparer.cs" />
     <Compile Include="Utility\IProgressProvider.cs" />
-    <Compile Include="Utility\IVersionSpec.cs" />
     <Compile Include="Utility\MemoryCache.cs" />
     <Compile Include="Utility\PackageComparer.cs" />
     <Compile Include="Utility\PackageRepositoryHelper.cs" />
@@ -211,7 +210,6 @@
     <Compile Include="Utility\Token.cs" />
     <Compile Include="Utility\Tokenizer.cs" />
     <Compile Include="Utility\TokenCategory.cs" />
-    <Compile Include="Utility\VersionSpec.cs" />
     <Compile Include="Utility\WebRequestEventArgs.cs" />
     <Compile Include="FileModifiers\XdtTransformer.cs" />
     <Reference Include="Microsoft.Web.XmlTransform">

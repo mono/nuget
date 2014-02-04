@@ -833,12 +833,12 @@ namespace NuGet.VisualStudio.Test
             // A2 -> B2
             // F1 -> G1
             // G1 -> B1
-            var A10 = PackageUtility.CreatePackage("A", "1.0", new[] { "hello" }, dependencies: new[] { new PackageDependency("B", VersionUtility.ParseVersionSpec("1.0")) });
-            var A20 = PackageUtility.CreatePackage("A", "2.0", new[] { "hello" }, dependencies: new[] { new PackageDependency("B", VersionUtility.ParseVersionSpec("2.0")) });
+            var A10 = PackageUtility.CreatePackage("A", "1.0", new[] { "hello" }, dependencies: new[] { new PackageDependency("B", VersionSpec.ParseVersionSpec("1.0")) });
+            var A20 = PackageUtility.CreatePackage("A", "2.0", new[] { "hello" }, dependencies: new[] { new PackageDependency("B", VersionSpec.ParseVersionSpec("2.0")) });
             var B10 = PackageUtility.CreatePackage("B", "1.0", new[] { "hello" });
             var B20 = PackageUtility.CreatePackage("B", "2.0", new[] { "hello" });
-            var F10 = PackageUtility.CreatePackage("F", "1.0", new[] { "hello" }, dependencies: new[] { new PackageDependency("G", VersionUtility.ParseVersionSpec("1.0")) });
-            var G10 = PackageUtility.CreatePackage("G", "1.0", new[] { "hello" }, dependencies: new[] { new PackageDependency("B", VersionUtility.ParseVersionSpec("1.0")) });
+            var F10 = PackageUtility.CreatePackage("F", "1.0", new[] { "hello" }, dependencies: new[] { new PackageDependency("G", VersionSpec.ParseVersionSpec("1.0")) });
+            var G10 = PackageUtility.CreatePackage("G", "1.0", new[] { "hello" }, dependencies: new[] { new PackageDependency("B", VersionSpec.ParseVersionSpec("1.0")) });
             sourceRepository.AddPackage(A10);
             sourceRepository.AddPackage(A20);
             sourceRepository.AddPackage(B10);
@@ -880,8 +880,8 @@ namespace NuGet.VisualStudio.Test
             var pathResolver = new DefaultPackagePathResolver(fileSystem);
             // A1 -> B1
             // A2 -> B1
-            var A10 = PackageUtility.CreatePackage("A", "1.0", assemblyReferences: new[] { "A1.dll" }, dependencies: new[] { new PackageDependency("B", VersionUtility.ParseVersionSpec("1.0")) });
-            var A20 = PackageUtility.CreatePackage("A", "2.0", assemblyReferences: new[] { "A2.dll" }, dependencies: new[] { new PackageDependency("B", VersionUtility.ParseVersionSpec("1.0")) });
+            var A10 = PackageUtility.CreatePackage("A", "1.0", assemblyReferences: new[] { "A1.dll" }, dependencies: new[] { new PackageDependency("B", VersionSpec.ParseVersionSpec("1.0")) });
+            var A20 = PackageUtility.CreatePackage("A", "2.0", assemblyReferences: new[] { "A2.dll" }, dependencies: new[] { new PackageDependency("B", VersionSpec.ParseVersionSpec("1.0")) });
             var B10 = PackageUtility.CreatePackage("B", "1.0", assemblyReferences: new[] { "B1.dll" });
             sourceRepository.AddPackage(A10);
             sourceRepository.AddPackage(A20);
@@ -917,7 +917,7 @@ namespace NuGet.VisualStudio.Test
             var pathResolver = new DefaultPackagePathResolver(fileSystem);
             // A1 -> B1
             // A2
-            var A10 = PackageUtility.CreatePackage("A", "1.0", assemblyReferences: new[] { "A1.dll" }, dependencies: new[] { new PackageDependency("B", VersionUtility.ParseVersionSpec("1.0")) });
+            var A10 = PackageUtility.CreatePackage("A", "1.0", assemblyReferences: new[] { "A1.dll" }, dependencies: new[] { new PackageDependency("B", VersionSpec.ParseVersionSpec("1.0")) });
             var A20 = PackageUtility.CreatePackage("A", "2.0", assemblyReferences: new[] { "A2.dll" });
             var B10 = PackageUtility.CreatePackage("B", "1.0", assemblyReferences: new[] { "B1.dll" });
             sourceRepository.AddPackage(A10);
@@ -955,11 +955,11 @@ namespace NuGet.VisualStudio.Test
             // A1 -> B1, C1
             // A2 -> B1
             var A10 = PackageUtility.CreatePackage("A", "1.0", assemblyReferences: new[] { "A1.dll" }, dependencies: new[] { 
-                new PackageDependency("B", VersionUtility.ParseVersionSpec("1.0")),
-                new PackageDependency("C", VersionUtility.ParseVersionSpec("1.0")),
+                new PackageDependency("B", VersionSpec.ParseVersionSpec("1.0")),
+                new PackageDependency("C", VersionSpec.ParseVersionSpec("1.0")),
             });
             var A20 = PackageUtility.CreatePackage("A", "2.0", assemblyReferences: new[] { "A2.dll" }, dependencies: new[] { 
-                new PackageDependency("B", VersionUtility.ParseVersionSpec("1.0"))
+                new PackageDependency("B", VersionSpec.ParseVersionSpec("1.0"))
             });
             var B10 = PackageUtility.CreatePackage("B", "1.0", assemblyReferences: new[] { "B1.dll" });
             var C10 = PackageUtility.CreatePackage("C", "1.0", assemblyReferences: new[] { "C1.dll" });
@@ -1044,7 +1044,7 @@ namespace NuGet.VisualStudio.Test
             var package = PackageUtility.CreatePackage("foo", "1.0.0", dependencies: new[] { new PackageDependency("bar") });
             sourceRepository.AddPackage(package);
 
-            var versionSpec = VersionUtility.ParseVersionSpec("[0.6, 1.0)");
+            var versionSpec = VersionSpec.ParseVersionSpec("[0.6, 1.0)");
             var package2 = PackageUtility.CreatePackage("bar", "2.0.0", dependencies: new[] { new PackageDependency("qux", versionSpec) });
             sourceRepository.AddPackage(package2);
 
@@ -1073,7 +1073,7 @@ namespace NuGet.VisualStudio.Test
             var package = PackageUtility.CreatePackage("foo", "1.0.0", dependencies: new[] { new PackageDependency("bar") });
             sourceRepository.AddPackage(package);
 
-            var versionSpec = VersionUtility.ParseVersionSpec("[0.6, 1.0)");
+            var versionSpec = VersionSpec.ParseVersionSpec("[0.6, 1.0)");
             var package2 = PackageUtility.CreatePackage("bar", "2.0.0", dependencies: new[] { new PackageDependency("qux", versionSpec) });
             sourceRepository.AddPackage(package2);
 

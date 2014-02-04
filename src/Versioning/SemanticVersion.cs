@@ -243,6 +243,23 @@ namespace NuGet.Versioning
             return GetStrictSemVerString();
         }
 
+        /*
+        public static SemanticVersion MaxValue
+        {
+            get
+            {
+                return new SemanticVersion(Int32.MaxValue, Int32.MaxValue, Int32.MaxValue, Int32.MaxValue);
+            }
+        }
+
+        public static SemanticVersion MinValue
+        {
+            get
+            {
+                return new SemanticVersion(new Version(0, 0), "PRE");
+            }
+        } */
+
         private string GetStrictSemVerString()
         {
             StringBuilder sb = new StringBuilder();

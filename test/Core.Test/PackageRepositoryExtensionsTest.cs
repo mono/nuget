@@ -193,7 +193,7 @@ namespace NuGet.Test
                 includePrerelease: true,
                 includeAllVersions: true,
                 targetFrameworks: Enumerable.Empty<FrameworkName>(),
-                versionConstraints: new[] { VersionUtility.ParseVersionSpec("(0.0,3.0)") }
+                versionConstraints: new[] { VersionSpec.ParseVersionSpec("(0.0,3.0)") }
                 ).ToList();
 
             // Assert
@@ -231,7 +231,7 @@ namespace NuGet.Test
                 includePrerelease: true,
                 includeAllVersions: false,
                 targetFrameworks: Enumerable.Empty<FrameworkName>(),
-                versionConstraints: new[] { VersionUtility.ParseVersionSpec("(0.0,3.0)"), VersionUtility.ParseVersionSpec("(2.0,)") }
+                versionConstraints: new[] { VersionSpec.ParseVersionSpec("(0.0,3.0)"), VersionSpec.ParseVersionSpec("(2.0,)") }
                 ).ToList();
 
             // Assert
@@ -266,7 +266,7 @@ namespace NuGet.Test
                 includePrerelease: true,
                 includeAllVersions: false,
                 targetFrameworks: Enumerable.Empty<FrameworkName>(),
-                versionConstraints: new[] { VersionUtility.ParseVersionSpec("(2.0,)") }
+                versionConstraints: new[] { VersionSpec.ParseVersionSpec("(2.0,)") }
                 ));
         }
     }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using NuGet.Common;
+using NuGet.Versioning;
 
 namespace NuGet.Commands
 {

@@ -162,7 +162,7 @@ namespace NuGet.Server.DataServices
             {
                 if (!String.IsNullOrEmpty(versionConstraintValues[i]))
                 {
-                    VersionUtility.TryParseVersionSpec(versionConstraintValues[i], out versionConstraintsList[i]);
+                    VersionSpec.TryParseVersionSpec(versionConstraintValues[i], out versionConstraintsList[i]);
                 }
             }
 

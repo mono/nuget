@@ -57,7 +57,7 @@ namespace NuGet.Test.Extensions
         public void ToDelegateOutputWorksWithPlainSemVers(string verSpec, string semVer, bool expected)
         {
             // Arrange
-            IVersionSpec spec = VersionUtility.ParseVersionSpec(verSpec);
+            IVersionSpec spec = VersionSpec.ParseVersionSpec(verSpec);
             SemanticVersion ver = new SemanticVersion(semVer);
 
             // Act/Assert
@@ -69,7 +69,7 @@ namespace NuGet.Test.Extensions
         public void ToDelegateOutputWorksWithPackages(string verSpec, string semVer, bool expected)
         {
             // Arrange
-            IVersionSpec spec = VersionUtility.ParseVersionSpec(verSpec);
+            IVersionSpec spec = VersionSpec.ParseVersionSpec(verSpec);
             Mock<IPackage> mockPkg = new Mock<IPackage>();
             mockPkg.Setup(p => p.Version).Returns(new SemanticVersion(semVer));
 
@@ -82,7 +82,7 @@ namespace NuGet.Test.Extensions
         public void SatisfiesReturnsExpectedValues(string verSpec, string semVer, bool expected)
         {
             // Arrange
-            IVersionSpec spec = VersionUtility.ParseVersionSpec(verSpec);
+            IVersionSpec spec = VersionSpec.ParseVersionSpec(verSpec);
 
             // Act/Assert
             Assert.Equal(expected, spec.Satisfies(new SemanticVersion(semVer)));

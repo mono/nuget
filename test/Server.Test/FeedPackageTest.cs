@@ -6,6 +6,7 @@ using System.Runtime.Versioning;
 using NuGet;
 using NuGet.Server.Infrastructure;
 using Xunit;
+using NuGet.Versioning;
 
 namespace Server.Test
 {
@@ -51,10 +52,10 @@ namespace Server.Test
 
                     new PackageDependencySet(new FrameworkName(".NETFramework, Version=3.0"),
                                              new [] { new PackageDependency("B"), 
-                                                      new PackageDependency("C", VersionUtility.ParseVersionSpec("2.0")) }),
+                                                      new PackageDependency("C", VersionSpec.ParseVersionSpec("2.0")) }),
 
                     new PackageDependencySet((FrameworkName)null,
-                                             new [] { new PackageDependency("D", VersionUtility.ParseVersionSpec("(1.0,3.0-alpha]")) }),
+                                             new [] { new PackageDependency("D", VersionSpec.ParseVersionSpec("(1.0,3.0-alpha]")) }),
 
                     new PackageDependencySet(new FrameworkName(".NETCore, Version=4.5"),
                                              new PackageDependency[0]),

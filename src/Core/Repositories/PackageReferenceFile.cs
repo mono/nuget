@@ -123,7 +123,7 @@ namespace NuGet
                 IVersionSpec versionConstaint = null;
                 if (!String.IsNullOrEmpty(versionConstraintString))
                 {
-                    if (!VersionUtility.TryParseVersionSpec(versionConstraintString, out versionConstaint))
+                    if (!VersionSpec.TryParseVersionSpec(versionConstraintString, out versionConstaint))
                     {
                         throw new InvalidDataException(String.Format(CultureInfo.CurrentCulture, NuGetResources.ReferenceFile_InvalidVersion, versionConstraintString, _path));
                     }

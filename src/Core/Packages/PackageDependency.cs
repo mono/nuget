@@ -1,4 +1,5 @@
-﻿using System;
+﻿using NuGet.Versioning;
+using System;
 
 namespace NuGet
 {
@@ -43,7 +44,7 @@ namespace NuGet
 
         internal static PackageDependency CreateDependency(string id, string versionSpec)
         {
-            return new PackageDependency(id, VersionUtility.ParseVersionSpec(versionSpec));
+            return new PackageDependency(id, NuGet.Versioning.VersionSpec.ParseVersionSpec(versionSpec));
         }
     }
 }

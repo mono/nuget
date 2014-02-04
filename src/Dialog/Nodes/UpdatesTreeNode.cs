@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Versioning;
 using Microsoft.VisualStudio.ExtensionsExplorer;
+using NuGet.Versioning;
 
 namespace NuGet.Dialog.Providers
 {

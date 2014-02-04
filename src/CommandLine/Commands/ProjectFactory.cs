@@ -489,7 +489,7 @@ namespace NuGet.Commands
                 projectFactory.ProcessNuspec(builder, null);
                 return new PackageDependency(
                     builder.Id,
-                    VersionUtility.ParseVersionSpec(builder.Version.ToString()));
+                    VersionSpec.ParseVersionSpec(builder.Version.ToString()));
             }
             catch (Exception ex)
             {
@@ -643,7 +643,7 @@ namespace NuGet.Commands
 
         private static IVersionSpec GetVersionConstraint(IDictionary<PackageName, PackageReference> packageReferences, IPackage package)
         {
-            IVersionSpec defaultVersionConstraint = VersionUtility.ParseVersionSpec(package.Version.ToString());
+            IVersionSpec defaultVersionConstraint = VersionSpec.ParseVersionSpec(package.Version.ToString());
 
             PackageReference packageReference;
             var key = new PackageName(package.Id, package.Version);

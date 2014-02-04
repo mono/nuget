@@ -1,4 +1,5 @@
-﻿namespace NuGet
+﻿using NuGet.Versioning;
+namespace NuGet
 {
     public interface IPackageConstraintProvider
     {
