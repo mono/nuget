@@ -62,7 +62,7 @@ namespace NuGet.Server
             // (fail to parse if it's not)
             string apiKey = context.Request.Headers[ApiKeyHeader];
             string packageId = routeData.GetRequiredString("packageId");
-            var version = new SemanticVersion(routeData.GetRequiredString("version"));
+            var version = new NuGetVersion(routeData.GetRequiredString("version"));
 
             IPackage requestedPackage = _serverRepository.FindPackage(packageId, version);
 
@@ -82,7 +82,7 @@ namespace NuGet.Server
             RouteData routeData = GetRouteData(context);
             // Get the package file name from the route
             string packageId = routeData.GetRequiredString("packageId");
-            var version = new SemanticVersion(routeData.GetRequiredString("version"));
+            var version = new NuGetVersion(routeData.GetRequiredString("version"));
 
             IPackage requestedPackage = _serverRepository.FindPackage(packageId, version);
 
@@ -100,7 +100,7 @@ namespace NuGet.Server
             }
         }
 
-        private static void WritePackageNotFound(HttpContextBase context, string packageId, SemanticVersion version)
+        private static void WritePackageNotFound(HttpContextBase context, string packageId, ISemanticVersion version)
         {
             WriteStatus(context, HttpStatusCode.NotFound, String.Format("'Package {0} {1}' Not found.", packageId, version));
         }

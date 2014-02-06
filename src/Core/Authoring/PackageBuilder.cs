@@ -66,7 +66,7 @@ namespace NuGet
             set;
         }
 
-        public SemanticVersion Version
+        public ISemanticVersion Version
         {
             get;
             set;
@@ -331,7 +331,7 @@ namespace NuGet
                  file.Path.EndsWith(".uninstall.xdt", StringComparison.OrdinalIgnoreCase)));
         }
 
-        internal static void ValidateDependencySets(SemanticVersion version, IEnumerable<PackageDependencySet> dependencies)
+        internal static void ValidateDependencySets(ISemanticVersion version, IEnumerable<PackageDependencySet> dependencies)
         {
             if (version == null)
             {
@@ -554,7 +554,7 @@ namespace NuGet
             return false;
         }
 
-        private static bool ValidateSpecialVersionLength(SemanticVersion version)
+        private static bool ValidateSpecialVersionLength(ISemanticVersion version)
         {
             return version == null || version.SpecialVersion == null || version.SpecialVersion.Length <= 20;
         }

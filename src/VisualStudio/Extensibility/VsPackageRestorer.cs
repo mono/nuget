@@ -31,7 +31,7 @@ namespace NuGet.VisualStudio
         /// <param name="packageId">The package id.</param>
         /// <param name="version">The package version</param>
         /// <returns>True if the package is installed in the local repository.</returns>
-        private static bool IsPackageInstalled(IFileSystem fileSystem, string packageId, SemanticVersion version)
+        private static bool IsPackageInstalled(IFileSystem fileSystem, string packageId, ISemanticVersion version)
         {
             if (version != null)
             {

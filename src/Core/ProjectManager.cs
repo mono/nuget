@@ -126,12 +126,12 @@ namespace NuGet
             AddPackageReference(packageId, version: null, ignoreDependencies: false, allowPrereleaseVersions: false);
         }
         
-        public virtual void AddPackageReference(string packageId, SemanticVersion version)
+        public virtual void AddPackageReference(string packageId, ISemanticVersion version)
         {
             AddPackageReference(packageId, version: version, ignoreDependencies: false, allowPrereleaseVersions: false);
         }
 
-        public virtual void AddPackageReference(string packageId, SemanticVersion version, bool ignoreDependencies, bool allowPrereleaseVersions)
+        public virtual void AddPackageReference(string packageId, ISemanticVersion version, bool ignoreDependencies, bool allowPrereleaseVersions)
         {
             IPackage package = PackageRepositoryHelper.ResolvePackage(SourceRepository, LocalRepository, NullConstraintProvider.Instance, packageId, version, allowPrereleaseVersions);
             AddPackageReference(package, ignoreDependencies, allowPrereleaseVersions);
@@ -510,7 +510,7 @@ namespace NuGet
         /// <summary>
         /// Seems to be used by unit tests only. Perhaps, consumers of NuGet.Core may be using this overload
         /// </summary>
-        internal void UpdatePackageReference(string packageId, SemanticVersion version)
+        internal void UpdatePackageReference(string packageId, ISemanticVersion version)
         {
             UpdatePackageReference(packageId, version: version, updateDependencies: true, allowPrereleaseVersions: false);
         }
@@ -531,7 +531,7 @@ namespace NuGet
         /// is an aggregate of "SharedPackageRepository" and the selected repository. So, if the package is present on the repository path (by default, the packages folder)
         /// It would not result in a call to the server
         /// </summary>
-        public virtual void UpdatePackageReference(string packageId, SemanticVersion version, bool updateDependencies, bool allowPrereleaseVersions)
+        public virtual void UpdatePackageReference(string packageId, ISemanticVersion version, bool updateDependencies, bool allowPrereleaseVersions)
         {            
             UpdatePackageReference(packageId, () => SourceRepository.FindPackage(packageId, version, ConstraintProvider, allowPrereleaseVersions, allowUnlisted: false), updateDependencies, allowPrereleaseVersions, targetVersionSetExplicitly: version != null);
         }
@@ -563,7 +563,7 @@ namespace NuGet
             // without specifying a version explicitly, and the feed only has version 1.0 as the latest stable version.
             if (package != null &&
                 oldPackage.Version != package.Version &&
-                (allowPrereleaseVersions || targetVersionSetExplicitly || oldPackage.IsReleaseVersion() || !package.IsReleaseVersion() || oldPackage.Version < package.Version))
+                (allowPrereleaseVersions || targetVersionSetExplicitly || oldPackage.IsReleaseVersion() || !package.IsReleaseVersion() || oldPackage.Version.CompareTo(package.Version) < 0))
             {
                 Logger.Log(MessageLevel.Info, NuGetResources.Log_UpdatingPackages, package.Id, oldPackage.Version, package.Version, Project.ProjectName);
                 UpdatePackageReferenceCore(package, updateDependencies, allowPrereleaseVersions);

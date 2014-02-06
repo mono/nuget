@@ -180,7 +180,7 @@ namespace NuGet.Test
             context.Setup(c => c.CreateQuery<DataServicePackage>(It.IsAny<string>())).Returns(query.Object);
 
             // Act
-            bool exists = repository.Object.Exists("A", new SemanticVersion(packageVersion));
+            bool exists = repository.Object.Exists("A", new NuGetVersion(packageVersion));
 
             // Assert
             Assert.True(exists);
@@ -203,7 +203,7 @@ namespace NuGet.Test
             context.Setup(c => c.CreateQuery<DataServicePackage>(It.IsAny<string>())).Returns(query.Object);
 
             // Act
-            bool exists = repository.Object.Exists("A", new SemanticVersion(packageVersion));
+            bool exists = repository.Object.Exists("A", new NuGetVersion(packageVersion));
 
             // Assert
             Assert.False(exists);
@@ -237,7 +237,7 @@ namespace NuGet.Test
             context.Setup(c => c.CreateQuery<DataServicePackage>(It.IsAny<string>())).Returns(query.Object);
 
             // Act
-            IPackage foundPackage = repository.Object.FindPackage("A", new SemanticVersion(packageVersion));
+            IPackage foundPackage = repository.Object.FindPackage("A", new NuGetVersion(packageVersion));
 
             // Assert
             Assert.Equal(packages[0], foundPackage);
@@ -260,7 +260,7 @@ namespace NuGet.Test
             context.Setup(c => c.CreateQuery<DataServicePackage>(It.IsAny<string>())).Returns(query.Object);
 
             // Act
-            IPackage foundPackage = repository.Object.FindPackage("A", new SemanticVersion(packageVersion));
+            IPackage foundPackage = repository.Object.FindPackage("A", new NuGetVersion(packageVersion));
 
             // Assert
             Assert.Null(foundPackage);

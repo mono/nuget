@@ -27,7 +27,7 @@ namespace NuGet.Test
 
             // Assert
             Assert.Equal("Package", ozp.Id);
-            Assert.Equal(new SemanticVersion("1.0"), ozp.Version);
+            Assert.Equal(new NuGetVersion("1.0"), ozp.Version);
             Assert.Equal("This is a test package", ozp.Description);
             Assert.Equal("This is a release note.", ozp.ReleaseNotes);
             Assert.Equal("Copyright", ozp.Copyright);
@@ -351,7 +351,7 @@ namespace NuGet.Test
         {
             var builder = new PackageBuilder();
             builder.Id = "Package";
-            builder.Version = new SemanticVersion("1.0");
+            builder.Version = new NuGetVersion("1.0");
             builder.Authors.Add("dotnetjunky");
             builder.Description = "This is a test package";
             builder.ReleaseNotes = "This is a release note.";

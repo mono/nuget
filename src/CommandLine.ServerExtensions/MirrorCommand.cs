@@ -115,9 +115,9 @@ namespace NuGet.ServerExtensions
             return (timeout.Seconds <= 0) ? TimeSpan.FromMinutes(5) : timeout;
         }
 
-        private SemanticVersion GetVersion()
+        private ISemanticVersion GetVersion()
         {
-            return null == Version ? null : new SemanticVersion(Version);
+            return null == Version ? null : new NuGetVersion(Version);
         }
 
         private static PackageReferenceFile GetPackageReferenceFile(IFileSystem fileSystem, string configFilePath)
@@ -152,7 +152,7 @@ namespace NuGet.ServerExtensions
             return new[] { new PackageReference(packageId, GetVersion(), versionConstraint: null, targetFramework: null, isDevelopmentDependency: false) };
         }
 
-        private bool AllowPrereleaseVersion(SemanticVersion version, bool isUsingPackagesConfig)
+        private bool AllowPrereleaseVersion(ISemanticVersion version, bool isUsingPackagesConfig)
         {
             if (isUsingPackagesConfig && (null != version))
             {

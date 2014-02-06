@@ -22,11 +22,10 @@
       <Link>Properties\CommonAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="GlobalSuppressions.cs" />
-    <Compile Include="ISemanticVersionStrict.cs" />
     <Compile Include="ISemanticVersion.cs" />
+    <Compile Include="INuGetVersion.cs" />
     <Compile Include="IVersion.cs" />
     <Compile Include="IVersionComparer.cs" />
-    <Compile Include="IVersionSet.cs" />
     <Compile Include="IVersionSpec.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Resources.Designer.cs">
@@ -34,12 +33,13 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <Compile Include="SemanticVersion.cs" />
+    <Compile Include="NuGetVersion.cs" />
+    <Compile Include="SemanticVersionStrict.cs" />
     <Compile Include="VersionComparer.cs" />
     <Compile Include="VersionBase.cs" />
     <Compile Include="VersionComparison.cs" />
-    <Compile Include="VersionSet.cs" />
     <Compile Include="VersionSpec.cs" />
+    <Compile Include="VersionSpecBase.cs" />
   </ItemGroup>
   <ItemGroup>
     <CodeAnalysisDictionary Include="..\..\CodeAnalysisDictionary.xml">

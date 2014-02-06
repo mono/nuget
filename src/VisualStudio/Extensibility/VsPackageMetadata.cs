@@ -26,7 +26,7 @@ namespace NuGet.VisualStudio
             get { return _package.Id; }
         }
 
-        public SemanticVersion Version
+        public ISemanticVersion Version
         {
             get { return _package.Version; }
         }

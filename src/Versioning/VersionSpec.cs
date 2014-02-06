@@ -6,30 +6,91 @@ using System.Linq;
 
 namespace NuGet.Versioning
 {
-    public class VersionSpec : VersionSet, IVersionSpec
+    public class VersionSpec : IVersionSpec
     {
-        public VersionSpec()
+        private readonly ISemanticVersion _minVersion;
+        private readonly bool _isMinInclusive;
+        private readonly ISemanticVersion _maxVersion;
+        private readonly bool _isMaxInclusive;
+        private readonly IVersionComparer _comparer;
+
+        /// <summary>
+        /// A VersionSpec that matches only the given version.
+        /// </summary>
+        /// <param name="version">The minimum and maximum version requirement.</param>
+        public VersionSpec(ISemanticVersion version)
+            : this(minVersion: version, isMinInclusive: true, maxVersion: version, isMaxInclusive: true)
         {
 
         }
 
-        public VersionSpec(SemanticVersion version)
+        /// <summary>
+        /// A VersionSpec with no max version.
+        /// </summary>
+        /// <param name="minVersion">The minimum version requirement.</param>
+        /// <param name="minInclusive">True if minVersion meets the requirement.</param>
+        public VersionSpec(ISemanticVersion minVersion, bool isMinInclusive)
+            : this(minVersion: minVersion, isMinInclusive: isMinInclusive, maxVersion: null, isMaxInclusive: false)
         {
-            IsMinInclusive = true;
-            IsMaxInclusive = true;
-            MinVersion = version;
-            MaxVersion = version;
+
         }
 
-        public SemanticVersion MinVersion { get; set; }
-        public bool IsMinInclusive { get; set; }
-        public SemanticVersion MaxVersion { get; set; }
-        public bool IsMaxInclusive { get; set; }
+        public VersionSpec(ISemanticVersion minVersion=null, ISemanticVersion maxVersion=null,
+            bool isMinInclusive=false, bool isMaxInclusive=false, IVersionComparer comparer=null)
+        {
+            _minVersion = minVersion;
+            _maxVersion = maxVersion;
+            _isMinInclusive = isMinInclusive;
+            _isMaxInclusive = IsMaxInclusive;
+            _comparer = comparer ?? new VersionComparer();
+        }
+
+        public ISemanticVersion MinVersion
+        {
+            get
+            {
+                return _minVersion;
+            }
+        }
+
+        public ISemanticVersion MaxVersion
+        {
+            get
+            {
+                return _maxVersion;
+            }
+        }
+
+        public bool IsMaxInclusive
+        {
+            get
+            {
+                return _isMaxInclusive;
+            }
+        }
+
+        public bool IsMinInclusive
+        {
+            get
+            {
+                return _isMinInclusive;
+            }
+        }
 
         /// <summary>
         /// Determines if the specified version is within the version spec
         /// </summary>
-        public bool Satisfies(SemanticVersion version)
+        public bool Satisfies(ISemanticVersion version)
+        {
+            return Satisfies(version, _comparer);
+        }
+
+        public bool Satisfies(ISemanticVersion version, VersionComparison mode)
+        {
+            return Satisfies(version, new VersionComparer(mode));
+        }
+
+        public bool Satisfies(ISemanticVersion version, IVersionComparer comparer)
         {
             if (version == null)
                 throw new ArgumentNullException("version");
@@ -39,11 +100,11 @@ namespace NuGet.Versioning
             {
                 if (IsMinInclusive)
                 {
-                    condition &= version >= MinVersion;
+                    condition &= version.CompareTo(MinVersion) >= 0;
                 }
                 else
                 {
-                    condition &= version > MinVersion;
+                    condition &= version.CompareTo(MinVersion) > 0;
                 }
             }
 
@@ -51,11 +112,11 @@ namespace NuGet.Versioning
             {
                 if (IsMaxInclusive)
                 {
-                    condition &= version <= MaxVersion;
+                    condition &= version.CompareTo(MaxVersion) <= 0;
                 }
                 else
                 {
-                    condition &= version < MaxVersion;
+                    condition &= version.CompareTo(MaxVersion) < 0;
                 }
             }
 
@@ -97,15 +158,11 @@ namespace NuGet.Versioning
             value = value.Trim();
 
             // First, try to parse it as a plain version string
-            SemanticVersion version;
-            if (SemanticVersion.TryParse(value, out version))
+            NuGetVersion version;
+            if (NuGetVersion.TryParse(value, out version))
             {
                 // A plain version is treated as an inclusive minimum range
-                result = new VersionSpec
-                {
-                    MinVersion = version,
-                    IsMinInclusive = true
-                };
+                result = new VersionSpec(version, true);
 
                 return true;
             }
@@ -120,14 +177,17 @@ namespace NuGet.Versioning
                 return false;
             }
 
-            // The first character must be [ ot (
+            bool isMinInclusive, isMaxInclusive;
+            ISemanticVersion minVersion = null, maxVersion = null;
+
+            // The first character must be [ to (
             switch (value.Substring(0, 1))
             {
                 case "[":
-                    versionSpec.IsMinInclusive = true;
+                    isMinInclusive = true;
                     break;
                 case "(":
-                    versionSpec.IsMinInclusive = false;
+                    isMinInclusive = false;
                     break;
                 default:
                     return false;
@@ -137,10 +197,10 @@ namespace NuGet.Versioning
             switch (value.Substring(value.Length-1, 1))
             {
                 case "]":
-                    versionSpec.IsMaxInclusive = true;
+                    isMaxInclusive = true;
                     break;
                 case ")":
-                    versionSpec.IsMaxInclusive = false;
+                    isMaxInclusive = false;
                     break;
                 default:
                     return false;
@@ -172,7 +232,7 @@ namespace NuGet.Versioning
                 {
                     return false;
                 }
-                versionSpec.MinVersion = version;
+                minVersion = version;
             }
 
             // Same deal for max
@@ -182,11 +242,11 @@ namespace NuGet.Versioning
                 {
                     return false;
                 }
-                versionSpec.MaxVersion = version;
+                maxVersion = version;
             }
 
             // Successful parse!
-            result = versionSpec;
+            result = new VersionSpec(minVersion, maxVersion, isMinInclusive, isMaxInclusive);
             return true;
         }
 
@@ -210,22 +270,22 @@ namespace NuGet.Versioning
             return versionBuilder.ToString();
         }
 
-        public override string ToString(string format, IFormatProvider formatProvider)
+        public string ToString(string format, IFormatProvider formatProvider)
         {
             // TODO: Implement format provider
             return ToString();
         }
 
-        private static bool TryParseVersion(string versionString, out SemanticVersion version)
+        private static bool TryParseVersion(string versionString, out NuGetVersion version)
         {
             version = null;
-            if (!SemanticVersion.TryParse(versionString, out version))
+            if (!NuGetVersion.TryParse(versionString, out version))
             {
                 // Support integer version numbers (i.e. 1 -> 1.0)
                 int versionNumber;
                 if (Int32.TryParse(versionString, out versionNumber) && versionNumber > 0)
                 {
-                    version = new SemanticVersion(new Version(versionNumber, 0));
+                    version = new NuGetVersion(new Version(versionNumber, 0));
                 }
             }
             return version != null;

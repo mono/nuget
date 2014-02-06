@@ -82,7 +82,7 @@ namespace NuGet.Dialog.Providers
             return Repository.GetUpdates(packages, includePrerelease, includeAllVersions, targetFrameworks, versionConstraints);
         }
 
-        public bool TryFindLatestPackageById(string id, out SemanticVersion latestVersion)
+        public bool TryFindLatestPackageById(string id, out ISemanticVersion latestVersion)
         {
             var latestPackageLookup = Repository as ILatestPackageLookup;
             if (latestPackageLookup != null)
@@ -112,12 +112,12 @@ namespace NuGet.Dialog.Providers
             return Repository.StartOperation(operation, mainPackageId, mainPackageVersion);
         }
 
-        public bool Exists(string packageId, SemanticVersion version)
+        public bool Exists(string packageId, ISemanticVersion version)
         {
             return Repository.Exists(packageId, version);
         }
 
-        public IPackage FindPackage(string packageId, SemanticVersion version)
+        public IPackage FindPackage(string packageId, ISemanticVersion version)
         {
             return Repository.FindPackage(packageId, version);
         }

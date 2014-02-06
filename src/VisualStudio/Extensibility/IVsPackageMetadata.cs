@@ -24,7 +24,7 @@ namespace NuGet.VisualStudio
         /// Do not use this property because it will require referencing NuGet.Core.dll assembly. Use the VersionString property instead.
         /// </remarks>
         [Obsolete("Do not use this property because it will require referencing NuGet.Core.dll assembly. Use the VersionString property instead.")]
-        SemanticVersion Version { get; }
+        ISemanticVersion Version { get; }
 
         /// <summary>
         /// Title of the package.

@@ -105,7 +105,7 @@ namespace NuGet.Test
             cache.AddPackage(PackageUtility.CreatePackage("TestPackage"));
             Assert.False(cache.Exists("TestPackage"));
             Assert.False(cache.Exists(package));
-            Assert.False(cache.Exists("TestPackage", new SemanticVersion("1.0")));
+            Assert.False(cache.Exists("TestPackage", new NuGetVersion("1.0")));
             Assert.Null(cache.ResolveDependency(new PackageDependency("Bar"), false, false));
             Assert.Null(cache.FindPackage("TestPackage"));
             Assert.False(cache.FindPackages(new[] { "TestPackage", "B" }).Any());
@@ -114,7 +114,7 @@ namespace NuGet.Test
             Assert.False(cache.GetUpdates(new[] { package }, includePrerelease: true, includeAllVersions: true).Any());
             cache.RemovePackage(package);
             Assert.Equal(0, cache.Source.Length);
-            Assert.False(cache.TryFindPackage("TestPackage", new SemanticVersion("1.0"), out package));
+            Assert.False(cache.TryFindPackage("TestPackage", new NuGetVersion("1.0"), out package));
         }
 
         [Fact]
@@ -181,7 +181,7 @@ namespace NuGet.Test
             var cache = new MachineCache(NullFileSystem.Instance);
 
             // Act
-            bool usingMachineCache = cache.InvokeOnPackage("A", new SemanticVersion("2.0-alpha"), stream => { });
+            bool usingMachineCache = cache.InvokeOnPackage("A", new NuGetVersion("2.0-alpha"), stream => { });
 
             // Assert
             Assert.False(usingMachineCache);

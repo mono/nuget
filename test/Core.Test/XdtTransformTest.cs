@@ -25,7 +25,7 @@ namespace NuGet.Test
 
             var package = new Mock<IPackage>();
             package.Setup(m => m.Id).Returns("A");
-            package.Setup(m => m.Version).Returns(new SemanticVersion("1.0"));
+            package.Setup(m => m.Version).Returns(new NuGetVersion("1.0"));
             package.Setup(m => m.Listed).Returns(true);
             
             var file = new Mock<IPackageFile>();
@@ -84,7 +84,7 @@ namespace NuGet.Test
 
             var package = new Mock<IPackage>();
             package.Setup(m => m.Id).Returns("A");
-            package.Setup(m => m.Version).Returns(new SemanticVersion("1.0"));
+            package.Setup(m => m.Version).Returns(new NuGetVersion("1.0"));
             package.Setup(m => m.Listed).Returns(true);
 
             var file = new Mock<IPackageFile>();
@@ -143,7 +143,7 @@ namespace NuGet.Test
 
             var package = new Mock<IPackage>();
             package.Setup(m => m.Id).Returns("A");
-            package.Setup(m => m.Version).Returns(new SemanticVersion("1.0"));
+            package.Setup(m => m.Version).Returns(new NuGetVersion("1.0"));
             package.Setup(m => m.Listed).Returns(true);
 
             var file = new Mock<IPackageFile>();

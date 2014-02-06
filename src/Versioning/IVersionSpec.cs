@@ -2,13 +2,23 @@
 
 namespace NuGet.Versioning
 {
-    public interface IVersionSpec : IVersionSet
+    public interface IVersionSpec
     {
-        SemanticVersion MinVersion { get; }
+        ISemanticVersion MinVersion { get; }
         bool IsMinInclusive { get; }
-        SemanticVersion MaxVersion { get; }
+        ISemanticVersion MaxVersion { get; }
         bool IsMaxInclusive { get; }
 
-        bool Satisfies(SemanticVersion version);
+        bool Satisfies(ISemanticVersion version);
+    }
+
+    public interface IVersionSpec<T> where T : IVersion
+    {
+        T MinVersion { get; }
+        bool IsMinInclusive { get; }
+        T MaxVersion { get; }
+        bool IsMaxInclusive { get; }
+
+        bool Satisfies(T version);
     }
 }

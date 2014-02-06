@@ -534,10 +534,10 @@ namespace NuGet.PowerShell.Commands
             }
         }
 
-        protected static SemanticVersion GetSemanticVersion(string version)
+        protected static ISemanticVersion GetSemanticVersion(string version)
         {
-            SemanticVersion semVer = null;
-            if (SemanticVersion.TryParse(version, out semVer))
+            NuGetVersion semVer = null;
+            if (NuGetVersion.TryParse(version, out semVer))
             {
                 // TODO: find a better exception
                 //throw new PSArgumentException("Invalid version");

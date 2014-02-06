@@ -13,7 +13,7 @@ namespace NuGet.Test.Mocks
             _doDownload = doDownload;
         }
 
-        public bool InvokeOnPackage(string packageId, SemanticVersion version, Action<Stream> action)
+        public bool InvokeOnPackage(string packageId, ISemanticVersion version, Action<Stream> action)
         {
             if (_doDownload)
             {

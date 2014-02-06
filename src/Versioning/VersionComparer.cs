@@ -6,7 +6,7 @@ using System.Text;
 
 namespace NuGet.Versioning
 {
-    public sealed class VersionComparer : IVersionComparer<ISemanticVersion>
+    public sealed class VersionComparer : IVersionComparer
     {
         private VersionComparison _mode;
 
@@ -34,7 +34,7 @@ namespace NuGet.Versioning
 
         public static int Compare(ISemanticVersion version1, ISemanticVersion version2, VersionComparison versionComparison)
         {
-            IVersionComparer<ISemanticVersion> comparer = new VersionComparer(versionComparison);
+            IVersionComparer comparer = new VersionComparer(versionComparison);
             return comparer.Compare(version1, version2);
         }
 
@@ -49,15 +49,19 @@ namespace NuGet.Versioning
 
             if (_mode == VersionComparison.Strict)
             {
-                verString = String.Format(CultureInfo.InvariantCulture, "{0}-{1}", obj.Version.ToString(), obj.SpecialVersion);
+                verString = String.Format(CultureInfo.InvariantCulture, "{0}.{1}.{2}-{3}", obj.Major, obj.Minor, obj.Patch, obj.SpecialVersion);
             }
             else if (_mode == VersionComparison.IgnoreMetadata)
             {
-                verString = String.Format(CultureInfo.InvariantCulture, "{0}-{1}", obj.Version.ToString(), obj.SpecialVersion.ToUpperInvariant());
+                INuGetVersion legacy = obj as INuGetVersion;
+                verString = String.Format(CultureInfo.InvariantCulture, "{0}.{1}.{2}.{3}-{4}", obj.Major, obj.Minor, obj.Patch, 
+                                            legacy == null ? 0 : legacy.Version.Revision, obj.SpecialVersion.ToUpperInvariant());
             }
             else if (_mode == VersionComparison.Version)
             {
-                verString = obj.Version.ToString();
+                INuGetVersion legacy = obj as INuGetVersion;
+                verString = String.Format(CultureInfo.InvariantCulture, "{0}.{1}.{2}.{3}", obj.Major, obj.Minor, obj.Patch,
+                                            legacy == null ? 0 : legacy.Version.Revision);
             }
             else
             {
@@ -100,10 +104,13 @@ namespace NuGet.Versioning
 
             if (_mode != VersionComparison.Strict)
             {
+                INuGetVersion legacyX = x as INuGetVersion;
+                INuGetVersion legacyY = y as INuGetVersion;
+
                 // true if one has a 4th version number
-                if (x.IsLegacyVersion || y.IsLegacyVersion)
+                if (legacyX != null || legacyY != null)
                 {
-                    result = x.Version.CompareTo(y.Version);
+                    result = legacyX.Version.CompareTo(legacyY.Version);
                     if (result != 0)
                         return result;
                 }
@@ -137,7 +144,7 @@ namespace NuGet.Versioning
             return 0;
         }
 
-        public static IVersionComparer<ISemanticVersion> Version
+        public static IVersionComparer Version
         {
             get
             {
@@ -145,7 +152,7 @@ namespace NuGet.Versioning
             }
         }
 
-        public static IVersionComparer<ISemanticVersion> IgnoreMetadata
+        public static IVersionComparer IgnoreMetadata
         {
             get
             {
@@ -153,7 +160,7 @@ namespace NuGet.Versioning
             }
         }
 
-        public static IVersionComparer<ISemanticVersion> Strict
+        public static IVersionComparer Strict
         {
             get
             {

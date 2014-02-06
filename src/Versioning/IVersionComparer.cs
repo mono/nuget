@@ -6,7 +6,7 @@ using System.Text;
 
 namespace NuGet.Versioning
 {
-    public interface IVersionComparer<T> : IEqualityComparer<T>, IComparer<T>
+    public interface IVersionComparer : IEqualityComparer<ISemanticVersion>, IComparer<ISemanticVersion>
     {
 
     }

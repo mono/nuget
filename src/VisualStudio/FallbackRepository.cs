@@ -97,17 +97,17 @@ namespace NuGet.VisualStudio
             return _primaryRepository.GetUpdates(packages, includePrerelease, includeAllVersions, targetFrameworks, versionConstraints);
         }
 
-        public IPackage FindPackage(string packageId, SemanticVersion version)
+        public IPackage FindPackage(string packageId, ISemanticVersion version)
         {
             return _primaryRepository.FindPackage(packageId, version);
         }
 
-        public bool Exists(string packageId, SemanticVersion version)
+        public bool Exists(string packageId, ISemanticVersion version)
         {
             return _primaryRepository.Exists(packageId, version);
         }
 
-        public bool TryFindLatestPackageById(string id, out SemanticVersion latestVersion)
+        public bool TryFindLatestPackageById(string id, out ISemanticVersion latestVersion)
         {
             var latestPackageLookup = _primaryRepository as ILatestPackageLookup;
             if (latestPackageLookup != null)

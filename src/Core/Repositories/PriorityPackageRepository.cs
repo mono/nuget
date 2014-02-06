@@ -51,7 +51,7 @@ namespace NuGet
             get { return _primaryRepository.SupportsPrereleasePackages; }
         }
 
-        public bool Exists(string packageId, SemanticVersion version)
+        public bool Exists(string packageId, ISemanticVersion version)
         {
             bool packageExists = _primaryRepository.Exists(packageId, version);
             if (!packageExists)
@@ -62,7 +62,7 @@ namespace NuGet
             return packageExists;
         }
 
-        public IPackage FindPackage(string packageId, SemanticVersion version)
+        public IPackage FindPackage(string packageId, ISemanticVersion version)
         {
             return _primaryRepository.FindPackage(packageId, version) ?? _secondaryRepository.FindPackage(packageId, version);
         }

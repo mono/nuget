@@ -200,7 +200,7 @@ namespace NuGet
             }
             else 
             {
-                if (!_isDowngrade && (package.Version < conflictResult.Package.Version))
+                if (!_isDowngrade && (package.Version.CompareTo(conflictResult.Package.Version) < 0))
                 {
                     throw new InvalidOperationException(String.Format(CultureInfo.CurrentCulture,
                        NuGetResources.NewerVersionAlreadyReferenced, package.Id));
@@ -270,7 +270,7 @@ namespace NuGet
                            select new
                            {
                                OldPackage = oldPackage,
-                               NewPackage = SelectDependency(g.Where(p => p.Version > oldPackage.Version)
+                               NewPackage = SelectDependency(g.Where(p => p.Version.CompareTo(oldPackage.Version) > 0)
                                    .OrderBy(p => p.Version))
                            };
 
@@ -431,7 +431,7 @@ namespace NuGet
             {
                 //Check if the package is installed. This is necessary to know if this is a fresh-install or a downgrade operation
                 IPackage packageUnderInstallation = Repository.FindPackage(package.Id);
-                if (packageUnderInstallation != null && packageUnderInstallation.Version > package.Version)
+                if (packageUnderInstallation != null && packageUnderInstallation.Version.CompareTo(package.Version) > 0)
                 {
                     _isDowngrade = true;
                 }

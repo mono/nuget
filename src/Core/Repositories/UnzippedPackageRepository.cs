@@ -49,7 +49,7 @@ namespace NuGet
                     select new UnzippedPackage(FileSystem, packageName)).AsQueryable();
         }
 
-        public IPackage FindPackage(string packageId, SemanticVersion version)
+        public IPackage FindPackage(string packageId, ISemanticVersion version)
         {
             string packageName = GetPackageFileName(packageId, version); 
             if (Exists(packageId, version))
@@ -64,14 +64,14 @@ namespace NuGet
             return GetPackages().Where(p => p.Id.Equals(packageId, StringComparison.OrdinalIgnoreCase));
         }
 
-        public bool Exists(string packageId, SemanticVersion version)
+        public bool Exists(string packageId, ISemanticVersion version)
         {
             string packageName = GetPackageFileName(packageId, version);
             string packageFile = packageName + Constants.PackageExtension;
             return FileSystem.FileExists(packageFile) && FileSystem.DirectoryExists(packageName);
         }
 
-        private static string GetPackageFileName(string packageId, SemanticVersion version)
+        private static string GetPackageFileName(string packageId, ISemanticVersion version)
         {
             return packageId + "." + version.ToString();
         }

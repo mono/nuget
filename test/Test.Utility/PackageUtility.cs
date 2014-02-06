@@ -180,10 +180,10 @@ namespace NuGet.Test
 
             var mockPackage = new Mock<IPackage>(MockBehavior.Strict) { CallBase = true };
             mockPackage.Setup(m => m.IsAbsoluteLatestVersion).Returns(true);
-            mockPackage.Setup(m => m.IsLatestVersion).Returns(String.IsNullOrEmpty(SemanticVersion.Parse(version).SpecialVersion));
+            mockPackage.Setup(m => m.IsLatestVersion).Returns(String.IsNullOrEmpty(NuGetVersion.Parse(version).SpecialVersion));
             mockPackage.Setup(m => m.Id).Returns(id);
             mockPackage.Setup(m => m.Listed).Returns(true);
-            mockPackage.Setup(m => m.Version).Returns(new SemanticVersion(version));
+            mockPackage.Setup(m => m.Version).Returns(new NuGetVersion(version));
             mockPackage.Setup(m => m.GetFiles()).Returns(allFiles);
             mockPackage.Setup(m => m.AssemblyReferences).Returns(assemblyReferences);
             mockPackage.Setup(m => m.DependencySets).Returns(dependencySets);
@@ -314,7 +314,7 @@ namespace NuGet.Test
             var packageBuilder = new PackageBuilder
             {
                 Id = id,
-                Version = SemanticVersion.Parse(version),
+                Version = NuGetVersion.Parse(version),
                 Description = "Test description",
             };
 

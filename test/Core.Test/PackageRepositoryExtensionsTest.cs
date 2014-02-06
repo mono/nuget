@@ -35,12 +35,12 @@ namespace NuGet.Test
             var repository = new Mock<IPackageRepository>(MockBehavior.Strict);
 
             repository.As<IPackageLookup>()
-                      .Setup(p => p.Exists("A", new SemanticVersion("1.0")))
+                      .Setup(p => p.Exists("A", new NuGetVersion("1.0")))
                       .Returns(true)
                       .Verifiable();
 
             // Act
-            bool result = PackageRepositoryExtensions.Exists(repository.Object, "A", new SemanticVersion("1.0"));
+            bool result = PackageRepositoryExtensions.Exists(repository.Object, "A", new NuGetVersion("1.0"));
 
             // Assert
             Assert.True(result);
@@ -138,13 +138,13 @@ namespace NuGet.Test
             Assert.Equal(3, foundPackages.Count);
 
             Assert.Equal("A", foundPackages[0].Id);
-            Assert.Equal(new SemanticVersion("2.0"), foundPackages[0].Version);
+            Assert.Equal(new NuGetVersion("2.0"), foundPackages[0].Version);
 
             Assert.Equal("A", foundPackages[1].Id);
-            Assert.Equal(new SemanticVersion("3.0"), foundPackages[1].Version);
+            Assert.Equal(new NuGetVersion("3.0"), foundPackages[1].Version);
 
             Assert.Equal("A", foundPackages[2].Id);
-            Assert.Equal(new SemanticVersion("3.0-alpha"), foundPackages[2].Version);
+            Assert.Equal(new NuGetVersion("3.0-alpha"), foundPackages[2].Version);
         }
 
         [Fact]
@@ -168,7 +168,7 @@ namespace NuGet.Test
             Assert.Equal(1, foundPackages.Count);
 
             Assert.Equal("A", foundPackages[0].Id);
-            Assert.Equal(new SemanticVersion("2.0"), foundPackages[0].Version);
+            Assert.Equal(new NuGetVersion("2.0"), foundPackages[0].Version);
         }   
 
         [Fact]
@@ -200,10 +200,10 @@ namespace NuGet.Test
             Assert.Equal(2, foundPackages.Count);
 
             Assert.Equal("A", foundPackages[0].Id);
-            Assert.Equal(new SemanticVersion("2.0"), foundPackages[0].Version);
+            Assert.Equal(new NuGetVersion("2.0"), foundPackages[0].Version);
 
             Assert.Equal("A", foundPackages[1].Id);
-            Assert.Equal(new SemanticVersion("3.0-alpha"), foundPackages[1].Version);
+            Assert.Equal(new NuGetVersion("3.0-alpha"), foundPackages[1].Version);
         }
 
         [Fact]
@@ -238,7 +238,7 @@ namespace NuGet.Test
             Assert.Equal(1, foundPackages.Count);
 
             Assert.Equal("A", foundPackages[0].Id);
-            Assert.Equal(new SemanticVersion("3.0-alpha"), foundPackages[0].Version);
+            Assert.Equal(new NuGetVersion("3.0-alpha"), foundPackages[0].Version);
         }
 
         [Fact]

@@ -32,13 +32,13 @@ namespace NuGet.VisualStudio
             Debug.Assert(!String.IsNullOrWhiteSpace(version));
 
             Id = id;
-            Version = new SemanticVersion(version);
+            Version = new NuGetVersion(version);
             SkipAssemblyReferences = skipAssemblyReferences;
             IgnoreDependencies = ignoreDependencies;
         }
 
         public string Id { get; private set; }
-        public SemanticVersion Version { get; private set; }
+        public ISemanticVersion Version { get; private set; }
         public bool SkipAssemblyReferences { get; private set; }
         public bool IgnoreDependencies { get; private set; }
     }

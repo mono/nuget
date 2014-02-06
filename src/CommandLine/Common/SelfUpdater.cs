@@ -32,11 +32,11 @@ namespace NuGet.Common
         public void UpdateSelf()
         {
             Assembly assembly = typeof(SelfUpdater).Assembly;
-            var version = GetNuGetVersion(assembly) ?? new SemanticVersion(assembly.GetName().Version);
+            var version = GetNuGetVersion(assembly) ?? new NuGetVersion(assembly.GetName().Version);
             SelfUpdate(assembly.Location, version);
         }
 
-        internal void SelfUpdate(string exePath, SemanticVersion version)
+        internal void SelfUpdate(string exePath, ISemanticVersion version)
         {
             Console.WriteLine(LocalizedResourceManager.GetString("UpdateCommandCheckingForUpdates"), NuGetConstants.DefaultFeedUrl);
 
@@ -52,7 +52,7 @@ namespace NuGet.Common
             Console.WriteLine(LocalizedResourceManager.GetString("UpdateCommandCurrentlyRunningNuGetExe"), version);
 
             // Check to see if an update is needed
-            if (package == null || version >= package.Version)
+            if (package == null || version.CompareTo(package.Version) >= 0)
             {
                 Console.WriteLine(LocalizedResourceManager.GetString("UpdateCommandNuGetUpToDate"));
             }
@@ -82,12 +82,12 @@ namespace NuGet.Common
         }
 
         [SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "We don't want this method to throw.")]
-        internal static SemanticVersion GetNuGetVersion(ICustomAttributeProvider assembly)
+        internal static ISemanticVersion GetNuGetVersion(ICustomAttributeProvider assembly)
         {
             try
             {
                 var assemblyInformationalVersion = assembly.GetCustomAttribute<AssemblyInformationalVersionAttribute>();
-                return new SemanticVersion(assemblyInformationalVersion.InformationalVersion);
+                return new NuGetVersion(assemblyInformationalVersion.InformationalVersion);
             }
             catch
             {

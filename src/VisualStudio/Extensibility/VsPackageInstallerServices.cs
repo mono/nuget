@@ -48,12 +48,12 @@ namespace NuGet.VisualStudio
 
         public bool IsPackageInstalledEx(Project project, string packageId, string versionString)
         {
-            SemanticVersion version;
+            NuGetVersion version;
             if (versionString == null)
             {
                 version = null;
             }
-            else if (!SemanticVersion.TryParse(versionString, out version))
+            else if (!NuGetVersion.TryParse(versionString, out version))
             {
                 throw new ArgumentException(VsResources.InvalidSemanticVersionString, "versionString");
             }
@@ -61,7 +61,7 @@ namespace NuGet.VisualStudio
             return IsPackageInstalled(project, packageId, version);
         }
 
-        public bool IsPackageInstalled(Project project, string packageId, SemanticVersion version)
+        public bool IsPackageInstalled(Project project, string packageId, ISemanticVersion version)
         {
             if (project == null)
             {

@@ -46,10 +46,10 @@ namespace NuGet.Test
 
             // Assert
             Assert.Equal(4, packages.Count);
-            AssertPackage(packages[0], "A", new SemanticVersion("1.0"));
-            AssertPackage(packages[1], "B", new SemanticVersion("1.0.0-alpha"));
-            AssertPackage(packages[2], "C", new SemanticVersion("2.0.1-RC"));
-            AssertPackage(packages[3], "D", new SemanticVersion("3.0"));
+            AssertPackage(packages[0], "A", new NuGetVersion("1.0"));
+            AssertPackage(packages[1], "B", new NuGetVersion("1.0.0-alpha"));
+            AssertPackage(packages[2], "C", new NuGetVersion("2.0.1-RC"));
+            AssertPackage(packages[3], "D", new NuGetVersion("3.0"));
         }
 
         [Fact]
@@ -71,12 +71,12 @@ namespace NuGet.Test
             var repository = new UnzippedPackageRepository(pathResolver, fileSystem);
 
             // Act
-            var packageA = repository.FindPackage("A", new SemanticVersion("1.0"));
-            var packageB = repository.FindPackage("B", new SemanticVersion("1.0-alpha"));
+            var packageA = repository.FindPackage("A", new NuGetVersion("1.0"));
+            var packageB = repository.FindPackage("B", new NuGetVersion("1.0-alpha"));
 
             // Assert
-            AssertPackage(packageA, "A", new SemanticVersion("1.0"));
-            AssertPackage(packageB, "B", new SemanticVersion("1.0.0-alpha"));
+            AssertPackage(packageA, "A", new NuGetVersion("1.0"));
+            AssertPackage(packageB, "B", new NuGetVersion("1.0.0-alpha"));
         }
 
         [Fact]
@@ -98,8 +98,8 @@ namespace NuGet.Test
             var repository = new UnzippedPackageRepository(pathResolver, fileSystem);
 
             // Act
-            var packageA = repository.FindPackage("A", new SemanticVersion("2.0"));
-            var packageB = repository.FindPackage("BBB", new SemanticVersion("1.0-alpha"));
+            var packageA = repository.FindPackage("A", new NuGetVersion("2.0"));
+            var packageB = repository.FindPackage("BBB", new NuGetVersion("1.0-alpha"));
 
             // Assert
             Assert.Null(packageA);
@@ -123,7 +123,7 @@ namespace NuGet.Test
             Assert.Equal(time, packages[0].Published);
         }
 
-        private void AssertPackage(IPackage package, string id, SemanticVersion version)
+        private void AssertPackage(IPackage package, string id, ISemanticVersion version)
         {
             Assert.NotNull(package);
             Assert.Equal(id, package.Id, StringComparer.OrdinalIgnoreCase);

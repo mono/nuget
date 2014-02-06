@@ -275,7 +275,7 @@ namespace NuGet.Test
 
             // first install package A, version 1.1.2 into project
             projectManager.AddPackageReference(packageA1, ignoreDependencies: true, allowPrereleaseVersions: true);
-            Assert.True(projectManager.LocalRepository.Exists("A", new SemanticVersion("1.1.2")));
+            Assert.True(projectManager.LocalRepository.Exists("A", new NuGetVersion("1.1.2")));
 
             // Act
             // Now install B, which depends on A >= 1.1.0.
@@ -284,9 +284,9 @@ namespace NuGet.Test
             // Assert
             // NuGet should leave version 1.1.2 intact, because it already satisfies the version spec
             // It should not upgrade A to 1.1.9
-            Assert.True(projectManager.LocalRepository.Exists("A", new SemanticVersion("1.1.2")));
-            Assert.True(projectManager.LocalRepository.Exists("B", new SemanticVersion("1.0")));
-            Assert.False(projectManager.LocalRepository.Exists("A", new SemanticVersion("1.1.9")));
+            Assert.True(projectManager.LocalRepository.Exists("A", new NuGetVersion("1.1.2")));
+            Assert.True(projectManager.LocalRepository.Exists("B", new NuGetVersion("1.0")));
+            Assert.False(projectManager.LocalRepository.Exists("A", new NuGetVersion("1.1.9")));
         }
 
         [Fact]
@@ -332,9 +332,9 @@ namespace NuGet.Test
             // Assert
             // NuGet should leave version 1.1.2 intact, because it already satisfies the version spec
             // It should not upgrade A to 1.1.9
-            Assert.True(projectManager.LocalRepository.Exists("A", new SemanticVersion("2.0.0")));
-            Assert.True(projectManager.LocalRepository.Exists("B", new SemanticVersion("1.0")));
-            Assert.False(projectManager.LocalRepository.Exists("B", new SemanticVersion("1.0.2")));
+            Assert.True(projectManager.LocalRepository.Exists("A", new NuGetVersion("2.0.0")));
+            Assert.True(projectManager.LocalRepository.Exists("B", new NuGetVersion("1.0")));
+            Assert.False(projectManager.LocalRepository.Exists("B", new NuGetVersion("1.0.2")));
         }
 
         [Fact]
@@ -381,9 +381,9 @@ namespace NuGet.Test
             // Assert
             // NuGet should leave version 1.1.2 intact, because it already satisfies the version spec
             // It should not upgrade A to 1.1.9
-            Assert.True(projectManager.LocalRepository.Exists("A", new SemanticVersion("2.0.0")));
-            Assert.True(projectManager.LocalRepository.Exists("B", new SemanticVersion("1.0")));
-            Assert.False(projectManager.LocalRepository.Exists("B", new SemanticVersion("1.0.2")));
+            Assert.True(projectManager.LocalRepository.Exists("A", new NuGetVersion("2.0.0")));
+            Assert.True(projectManager.LocalRepository.Exists("B", new NuGetVersion("1.0")));
+            Assert.False(projectManager.LocalRepository.Exists("B", new NuGetVersion("1.0.2")));
         }
 
         [Fact]
@@ -904,7 +904,7 @@ namespace NuGet.Test
             sourceRepository.AddPackage(packageA10);
             
             // Act & Assert
-            projectManager.AddPackageReference("A", new SemanticVersion("1.0"));
+            projectManager.AddPackageReference("A", new NuGetVersion("1.0"));
             Assert.False(projectManager.LocalRepository.Exists(packageA20));
             Assert.True(projectManager.LocalRepository.Exists(packageA10));
         }
@@ -935,7 +935,7 @@ namespace NuGet.Test
             sourceRepository.AddPackage(packageB10);
 
             // Act & Assert
-            projectManager.AddPackageReference("A", new SemanticVersion("1.0"));
+            projectManager.AddPackageReference("A", new NuGetVersion("1.0"));
             Assert.False(projectManager.LocalRepository.Exists(packageA20));
             Assert.True(projectManager.LocalRepository.Exists(packageA10));
             Assert.False(projectManager.LocalRepository.Exists(packageB20));
@@ -1371,7 +1371,7 @@ fdsalk;fj;lkdsajfl;kdsa");
             var projectManager = new ProjectManager(mockRepository, new DefaultPackagePathResolver(new MockProjectSystem()), mockProjectSystem, new MockPackageRepository());
             var package = new Mock<IPackage>();
             package.Setup(m => m.Id).Returns("A");
-            package.Setup(m => m.Version).Returns(new SemanticVersion("1.0"));
+            package.Setup(m => m.Version).Returns(new NuGetVersion("1.0"));
             package.Setup(m => m.Listed).Returns(true);
             var file = new Mock<IPackageFile>();
             file.Setup(m => m.Path).Returns(@"content\web.config.transform");
@@ -1483,7 +1483,7 @@ fdsalk;fj;lkdsajfl;kdsa");
             var projectManager = new ProjectManager(mockRepository, new DefaultPackagePathResolver(new MockProjectSystem()), mockProjectSystem, new MockPackageRepository());
             var package = new Mock<IPackage>();
             package.Setup(m => m.Id).Returns("A");
-            package.Setup(m => m.Version).Returns(new SemanticVersion("1.0"));
+            package.Setup(m => m.Version).Returns(new NuGetVersion("1.0"));
             var file = new Mock<IPackageFile>();
             file.Setup(m => m.Path).Returns(@"content\web.config.transform");
             file.Setup(m => m.EffectivePath).Returns("web.config.transform");
@@ -1523,7 +1523,7 @@ fdsalk;fj;lkdsajfl;kdsa");
             var projectManager = new ProjectManager(mockRepository, new DefaultPackagePathResolver(new MockProjectSystem()), mockProjectSystem, localRepository);
             var package = new Mock<IPackage>();
             package.Setup(m => m.Id).Returns("A");
-            package.Setup(m => m.Version).Returns(new SemanticVersion("1.0"));
+            package.Setup(m => m.Version).Returns(new NuGetVersion("1.0"));
             var file = new Mock<IPackageFile>();
             var contentFile = new Mock<IPackageFile>();
             contentFile.Setup(m => m.Path).Returns(@"content\foo.txt");
@@ -1560,7 +1560,7 @@ fdsalk;fj;lkdsajfl;kdsa");
             var projectManager = new ProjectManager(mockRepository, new DefaultPackagePathResolver(new MockProjectSystem()), mockProjectSystem.Object, new MockPackageRepository());
             var package = new Mock<IPackage>();
             package.Setup(m => m.Id).Returns("A");
-            package.Setup(m => m.Version).Returns(new SemanticVersion("1.0"));
+            package.Setup(m => m.Version).Returns(new NuGetVersion("1.0"));
             var file = new Mock<IPackageFile>();
             file.Setup(m => m.Path).Returns(@"content\web.config.transform");
             file.Setup(m => m.EffectivePath).Returns("web.config.transform");
@@ -1744,7 +1744,7 @@ fdsalk;fj;lkdsajfl;kdsa");
             projectManager.LocalRepository.AddPackage(packageA30);
 
             // Act & Assert
-            projectManager.UpdatePackageReference("A", new SemanticVersion("2.0"));
+            projectManager.UpdatePackageReference("A", new NuGetVersion("2.0"));
             Assert.False(projectManager.LocalRepository.Exists(packageA30));
             Assert.True(projectManager.LocalRepository.Exists(packageA20));
         }
@@ -1965,8 +1965,8 @@ fdsalk;fj;lkdsajfl;kdsa");
             projectManager.UpdatePackageReference("A", version: null, updateDependencies: false, allowPrereleaseVersions: false);
 
             // Assert
-            Assert.True(projectManager.LocalRepository.Exists("A", new SemanticVersion("2.0-alpha")));
-            Assert.False(projectManager.LocalRepository.Exists("A", new SemanticVersion("1.0")));
+            Assert.True(projectManager.LocalRepository.Exists("A", new NuGetVersion("2.0-alpha")));
+            Assert.False(projectManager.LocalRepository.Exists("A", new NuGetVersion("1.0")));
         }
 
         [Fact]
@@ -1989,7 +1989,7 @@ fdsalk;fj;lkdsajfl;kdsa");
             projectManager.UpdatePackageReference("A", version: null, updateDependencies: false, allowPrereleaseVersions: true);
 
             // Assert
-            Assert.True(projectManager.LocalRepository.Exists("A", new SemanticVersion("2.0-alpha")));
+            Assert.True(projectManager.LocalRepository.Exists("A", new NuGetVersion("2.0-alpha")));
         }
 
         [Fact]
@@ -2424,7 +2424,7 @@ fdsalk;fj;lkdsajfl;kdsa");
             sourceRepository.AddPackage(package20);
 
             // Act
-            projectManager.UpdatePackageReference("NetFramework", new SemanticVersion("1.1"));
+            projectManager.UpdatePackageReference("NetFramework", new NuGetVersion("1.1"));
 
             // Assert
             Assert.False(projectManager.LocalRepository.Exists(package10));
@@ -2717,7 +2717,7 @@ fdsalk;fj;lkdsajfl;kdsa");
             mockProjectSystem.Setup(m => m.TargetFramework).Returns(new FrameworkName(".NETFramework", new Version("2.0")));
             var mockPackage = new Mock<IPackage>();
             mockPackage.Setup(m => m.Id).Returns("A");
-            mockPackage.Setup(m => m.Version).Returns(new SemanticVersion("1.0"));
+            mockPackage.Setup(m => m.Version).Returns(new NuGetVersion("1.0"));
             mockPackage.Setup(m => m.Listed).Returns(true);
             var assemblyReference = PackageUtility.CreateAssemblyReference("foo.dll", new FrameworkName(".NETFramework", new Version("5.0")));
             mockPackage.Setup(m => m.AssemblyReferences).Returns(new[] { assemblyReference });
@@ -2741,7 +2741,7 @@ fdsalk;fj;lkdsajfl;kdsa");
             mockProjectSystem.Setup(m => m.TargetFramework).Returns(VersionUtility.ParseFrameworkName("net20"));
             var mockPackage = new Mock<IPackage>();
             mockPackage.Setup(m => m.Id).Returns("A");
-            mockPackage.Setup(m => m.Version).Returns(new SemanticVersion("1.0"));
+            mockPackage.Setup(m => m.Version).Returns(new NuGetVersion("1.0"));
             mockPackage.Setup(m => m.Listed).Returns(true);
             var frameworkReference = new FrameworkAssemblyReference("System.Web", new[] { VersionUtility.ParseFrameworkName("net50") });
             mockPackage.Setup(m => m.FrameworkAssemblies).Returns(new[] { frameworkReference });
@@ -3628,7 +3628,7 @@ fdsalk;fj;lkdsajfl;kdsa");
             sourceRepository.AddPackage(packageA);
             sourceRepository.AddPackage(packageA2);
 
-            projectManager.AddPackageReference("A", new SemanticVersion("1.0"));
+            projectManager.AddPackageReference("A", new NuGetVersion("1.0"));
             
             Assert.True(projectManager.LocalRepository.Exists("A"));
             Assert.False(projectManager.LocalRepository.Exists("B"));
@@ -3637,8 +3637,8 @@ fdsalk;fj;lkdsajfl;kdsa");
             projectManager.UpdatePackageReference("A");
 
             // Assert
-            Assert.False(projectManager.LocalRepository.Exists("A", new SemanticVersion("1.0")));
-            Assert.True(projectManager.LocalRepository.Exists("A", new SemanticVersion("2.0")));
+            Assert.False(projectManager.LocalRepository.Exists("A", new NuGetVersion("1.0")));
+            Assert.True(projectManager.LocalRepository.Exists("A", new NuGetVersion("2.0")));
             Assert.True(projectManager.LocalRepository.Exists("B"));
             Assert.True(projectSystem.FileExists("a2.txt"));
             Assert.True(projectSystem.FileExists("b.txt"));
@@ -3670,7 +3670,7 @@ fdsalk;fj;lkdsajfl;kdsa");
             sourceRepository.AddPackage(packageA);
             sourceRepository.AddPackage(packageA2);
 
-            projectManager.AddPackageReference("A", new SemanticVersion("1.0"));
+            projectManager.AddPackageReference("A", new NuGetVersion("1.0"));
 
             Assert.True(projectManager.LocalRepository.Exists("A"));
             Assert.True(projectManager.LocalRepository.Exists("B"));
@@ -3679,8 +3679,8 @@ fdsalk;fj;lkdsajfl;kdsa");
             projectManager.UpdatePackageReference("A");
 
             // Assert
-            Assert.False(projectManager.LocalRepository.Exists("A", new SemanticVersion("1.0")));
-            Assert.True(projectManager.LocalRepository.Exists("A", new SemanticVersion("2.0")));
+            Assert.False(projectManager.LocalRepository.Exists("A", new NuGetVersion("1.0")));
+            Assert.True(projectManager.LocalRepository.Exists("A", new NuGetVersion("2.0")));
             Assert.False(projectManager.LocalRepository.Exists("B"));
             Assert.True(projectSystem.FileExists("a2.txt"));
             Assert.False(projectSystem.FileExists("b.txt"));
@@ -3695,12 +3695,12 @@ fdsalk;fj;lkdsajfl;kdsa");
 
             var localRepository = new Mock<IPackageReferenceRepository>();
             localRepository.Setup(p => p.AddPackage("A", 
-                                                    new SemanticVersion("1.0"),
+                                                    new NuGetVersion("1.0"),
                                                     false,
                                                     new FrameworkName(".NETFramework, Version=4.0"))).Verifiable();
 
             localRepository.Setup(p => p.AddPackage("B",
-                                                    new SemanticVersion("2.0"),
+                                                    new NuGetVersion("2.0"),
                                                     false,
                                                     new FrameworkName(".NETFramework, Version=4.0"))).Verifiable();
 

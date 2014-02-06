@@ -136,7 +136,7 @@ namespace NuGet
             }
         }
 
-        public virtual IPackage FindPackage(string packageId, SemanticVersion version)
+        public virtual IPackage FindPackage(string packageId, ISemanticVersion version)
         {
             if (String.IsNullOrEmpty(packageId))
             {
@@ -159,12 +159,12 @@ namespace NuGet
             return FindPackagesById(OpenPackage, packageId);
         }
 
-        public virtual bool Exists(string packageId, SemanticVersion version)
+        public virtual bool Exists(string packageId, ISemanticVersion version)
         {
             return FindPackage(packageId, version) != null;
         }
 
-        public virtual IEnumerable<string> GetPackageLookupPaths(string packageId, SemanticVersion version)
+        public virtual IEnumerable<string> GetPackageLookupPaths(string packageId, ISemanticVersion version)
         {
             // Files created by the path resolver. This would take into account the non-side-by-side scenario 
             // and we do not need to match this for id and version.
@@ -174,7 +174,8 @@ namespace NuGet
                 GetPackageFiles(packageFileName), 
                 GetPackageFiles(manifestFileName));
 
-            if (version != null && version.Version.Revision < 1)
+            Version legacyVersion = version.GetLegacyVersion();
+            if (version != null && legacyVersion.Revision < 1)
             {
                 // If the build or revision number is not set, we need to look for combinations of the format
                 // * Foo.1.2.nupkg
@@ -183,7 +184,7 @@ namespace NuGet
                 // * Foo.1.2.0.0.nupkg
                 // To achieve this, we would look for files named 1.2*.nupkg if both build and revision are 0 and
                 // 1.2.3*.nupkg if only the revision is set to 0.
-                string partialName = version.Version.Build < 1 ?
+                string partialName = legacyVersion.Build < 1 ?
                                         String.Join(".", packageId, version.Major, version.Minor) :
                                         String.Join(".", packageId, version.Major, version.Minor, version.Patch);
                 string partialManifestName = partialName + "*" + Constants.ManifestExtension;
@@ -199,7 +200,7 @@ namespace NuGet
             return filesMatchingFullName;
         }
 
-        internal IPackage FindPackage(Func<string, IPackage> openPackage, string packageId, SemanticVersion version)
+        internal IPackage FindPackage(Func<string, IPackage> openPackage, string packageId, ISemanticVersion version)
         {
             var lookupPackageName = new PackageName(packageId, version);
             string packagePath;
@@ -376,25 +377,25 @@ namespace NuGet
                                 PathResolver.GetPackageFileName(package));
         }
 
-        protected virtual string GetPackageFilePath(string id, SemanticVersion version)
+        protected virtual string GetPackageFilePath(string id, ISemanticVersion version)
         {
             return Path.Combine(PathResolver.GetPackageDirectory(id, version),
                                 PathResolver.GetPackageFileName(id, version));
         }
 
-        private static bool FileNameMatchesPattern(string packageId, SemanticVersion version, string path)
+        private static bool FileNameMatchesPattern(string packageId, ISemanticVersion version, string path)
         {
             var name = Path.GetFileNameWithoutExtension(path);
-            SemanticVersion parsedVersion;
+            NuGetVersion parsedVersion;
 
             // When matching by pattern, we will always have a version token. Packages without versions would be matched early on by the version-less path resolver 
             // when doing an exact match.
             return name.Length > packageId.Length &&
-                   SemanticVersion.TryParse(name.Substring(packageId.Length + 1), out parsedVersion) &&
-                   parsedVersion == version;
+                   NuGetVersion.TryParse(name.Substring(packageId.Length + 1), out parsedVersion) &&
+                   parsedVersion.Equals(version);
         }
 
-        private string GetManifestFilePath(string packageId, SemanticVersion version)
+        private string GetManifestFilePath(string packageId, ISemanticVersion version)
         {
             string packageDirectory = PathResolver.GetPackageDirectory(packageId, version);
             string manifestFileName = packageDirectory + Constants.ManifestExtension;

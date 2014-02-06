@@ -24,7 +24,7 @@ namespace NuGet.Test
             PackageBuilder builder = new PackageBuilder()
             {
                 Id = "A",
-                Version = new SemanticVersion("1.0"),
+                Version = new NuGetVersion("1.0"),
                 Description = "Description"
             };
             builder.Authors.Add("David");
@@ -55,7 +55,7 @@ namespace NuGet.Test
             PackageBuilder builder = new PackageBuilder()
             {
                 Id = "A",
-                Version = new SemanticVersion("1.0"),
+                Version = new NuGetVersion("1.0"),
                 Description = "Description",
                 ReleaseNotes = "Release Notes"
             };
@@ -88,7 +88,7 @@ namespace NuGet.Test
             PackageBuilder builder = new PackageBuilder()
             {
                 Id = "A",
-                Version = new SemanticVersion("1.0"),
+                Version = new NuGetVersion("1.0"),
                 Description = "Descriptions",
             };
             builder.Authors.Add("David");
@@ -123,7 +123,7 @@ namespace NuGet.Test
             PackageBuilder builder = new PackageBuilder()
             {
                 Id = "A",
-                Version = new SemanticVersion("1.0"),
+                Version = new NuGetVersion("1.0"),
                 Description = "Descriptions",
             };
             builder.PackageAssemblyReferences.Add(new PackageReferenceSet(null, new string[] { "foo.dll" }));
@@ -158,7 +158,7 @@ namespace NuGet.Test
             PackageBuilder builder = new PackageBuilder()
             {
                 Id = "A",
-                Version = new SemanticVersion("1.0"),
+                Version = new NuGetVersion("1.0"),
                 Description = "Descriptions",
             };
             builder.Authors.Add("Luan");
@@ -198,7 +198,7 @@ namespace NuGet.Test
             PackageBuilder builder = new PackageBuilder()
             {
                 Id = "A",
-                Version = new SemanticVersion("1.0"),
+                Version = new NuGetVersion("1.0"),
                 Description = "Descriptions",
             };
             builder.Authors.Add("Luan");
@@ -241,7 +241,7 @@ namespace NuGet.Test
             PackageBuilder builder = new PackageBuilder()
             {
                 Id = "A",
-                Version = new SemanticVersion("1.0"),
+                Version = new NuGetVersion("1.0"),
                 Description = "Descriptions",
             };
             builder.Authors.Add("Luan");
@@ -277,7 +277,7 @@ namespace NuGet.Test
             PackageBuilder builder = new PackageBuilder()
             {
                 Id = "A",
-                Version = new SemanticVersion("1.0"),
+                Version = new NuGetVersion("1.0"),
                 Description = "Descriptions",
             };
             builder.Authors.Add("Luan");
@@ -313,7 +313,7 @@ namespace NuGet.Test
             PackageBuilder builder = new PackageBuilder()
             {
                 Id = "A",
-                Version = new SemanticVersion("1.0"),
+                Version = new NuGetVersion("1.0"),
                 Description = "Descriptions",
             };
             builder.Authors.Add("Luan");
@@ -349,7 +349,7 @@ namespace NuGet.Test
             PackageBuilder builder = new PackageBuilder()
             {
                 Id = "A",
-                Version = new SemanticVersion("1.0"),
+                Version = new NuGetVersion("1.0"),
                 Description = "Descriptions",
             };
             builder.Authors.Add("Luan");
@@ -388,7 +388,7 @@ namespace NuGet.Test
             PackageBuilder builder = new PackageBuilder()
             {
                 Id = "A",
-                Version = new SemanticVersion("1.0"),
+                Version = new NuGetVersion("1.0"),
                 Description = "Descriptions",
             };
             builder.Authors.Add("Luan");
@@ -428,7 +428,7 @@ namespace NuGet.Test
             PackageBuilder builder = new PackageBuilder()
             {
                 Id = "A",
-                Version = new SemanticVersion("1.0"),
+                Version = new NuGetVersion("1.0"),
                 Description = "Descriptions",
             };
             builder.Authors.Add("Luan");
@@ -464,7 +464,7 @@ namespace NuGet.Test
             PackageBuilder builder = new PackageBuilder()
             {
                 Id = "A",
-                Version = new SemanticVersion("1.0"),
+                Version = new NuGetVersion("1.0"),
                 Description = "Descriptions",
             };
             builder.Authors.Add("Luan");
@@ -505,7 +505,7 @@ namespace NuGet.Test
             PackageBuilder builder = new PackageBuilder()
             {
                 Id = "A",
-                Version = new SemanticVersion("1.0"),
+                Version = new NuGetVersion("1.0"),
                 Description = "Descriptions",
             };
             builder.Authors.Add("Luan");
@@ -546,7 +546,7 @@ namespace NuGet.Test
             PackageBuilder builder = new PackageBuilder()
             {
                 Id = "A",
-                Version = new SemanticVersion("1.0"),
+                Version = new NuGetVersion("1.0"),
                 Description = "Descriptions",
             };
             builder.Authors.Add("Luan");
@@ -582,7 +582,7 @@ namespace NuGet.Test
             PackageBuilder builder = new PackageBuilder()
             {
                 Id = "A",
-                Version = new SemanticVersion("1.0"),
+                Version = new NuGetVersion("1.0"),
                 Description = "Descriptions",
             };
             builder.Authors.Add("Luan");
@@ -627,7 +627,7 @@ namespace NuGet.Test
             PackageBuilder builder = new PackageBuilder()
             {
                 Id = "A",
-                Version = new SemanticVersion("1.0"),
+                Version = new NuGetVersion("1.0"),
                 Description = "Descriptions",
                 DevelopmentDependency = true
             };
@@ -674,7 +674,7 @@ namespace NuGet.Test
             PackageBuilder builder = new PackageBuilder()
             {
                 Id = "A",
-                Version = new SemanticVersion("1.0"),
+                Version = new NuGetVersion("1.0"),
                 Description = "Descriptions",
             };
             builder.Authors.Add("Luan");
@@ -717,7 +717,7 @@ namespace NuGet.Test
             var builder = new PackageBuilder()
             {
                 Id = "A",
-                Version = new SemanticVersion("1.0"),
+                Version = new NuGetVersion("1.0"),
                 Description = "Descriptions",
                 MinClientVersion = new Version("2.0")
             };
@@ -754,7 +754,7 @@ namespace NuGet.Test
             PackageBuilder builder = new PackageBuilder()
             {
                 Id = "                 A                 ",
-                Version = new SemanticVersion("1.0"),
+                Version = new NuGetVersion("1.0"),
                 Description = "Descriptions                                         ",
                 Summary = "                            Summary",
                 Language = "     en-us   ",
@@ -803,24 +803,15 @@ namespace NuGet.Test
             PackageBuilder builder = new PackageBuilder()
             {
                 Id = "A",
-                Version = new SemanticVersion("1.0"),
+                Version = new NuGetVersion("1.0"),
                 Description = "Descriptions",
                 Summary = "Summary",
             };
             builder.Authors.Add("David");
 
             var dependencySet = new PackageDependencySet(null, new[] {
-                new PackageDependency("B", new VersionSpec
-                    {
-                        MinVersion = new SemanticVersion("1.0"),
-                        IsMinInclusive = true
-                    }),
-                new PackageDependency("C", new VersionSpec
-                {
-                    MinVersion = new SemanticVersion("1.0"),
-                    MaxVersion = new SemanticVersion("5.0"),
-                    IsMinInclusive = false
-                })
+                new PackageDependency("B", new VersionSpec(new NuGetVersion("1.0"), true)),
+                new PackageDependency("C", new VersionSpec(new NuGetVersion("1.0"), new NuGetVersion("5.0"), false, false))
             });
 
             builder.DependencySets.Add(dependencySet);
@@ -858,24 +849,15 @@ namespace NuGet.Test
             PackageBuilder builder = new PackageBuilder()
             {
                 Id = "A",
-                Version = new SemanticVersion("1.0"),
+                Version = new NuGetVersion("1.0"),
                 Description = "Descriptions",
                 Summary = "Summary",
             };
             builder.Authors.Add("David");
 
             var dependencySet = new PackageDependencySet(null, new[] {
-                new PackageDependency("B", new VersionSpec
-                    {
-                        MinVersion = new SemanticVersion("1.0"),
-                        IsMinInclusive = true
-                    }),
-                new PackageDependency("B", new VersionSpec
-                {
-                    MinVersion = new SemanticVersion("1.0"),
-                    MaxVersion = new SemanticVersion("5.0"),
-                    IsMinInclusive = false
-                })
+                new PackageDependency("B", new VersionSpec(minVersion: new NuGetVersion("1.0"), isMinInclusive: true)),
+                new PackageDependency("B", new VersionSpec(minVersion: new NuGetVersion("1.0"), maxVersion: new NuGetVersion("5.0"), isMinInclusive: false))
             });
 
             builder.DependencySets.Add(dependencySet);
@@ -893,7 +875,7 @@ namespace NuGet.Test
             PackageBuilder builder = new PackageBuilder()
             {
                 Id = "A",
-                Version = new SemanticVersion("1.0"),
+                Version = new NuGetVersion("1.0"),
                 Description = "Descriptions",
                 Summary = "Summary",
             };
@@ -901,10 +883,10 @@ namespace NuGet.Test
 
             var dependencySet = new PackageDependencySet(null, new[] {
                 new PackageDependency("B", new VersionSpec
-                {
-                    MinVersion = new SemanticVersion("1.0"),
-                    MaxVersion = new SemanticVersion("1.0")
-                })
+                (
+                    minVersion: new NuGetVersion("1.0"),
+                    maxVersion: new NuGetVersion("1.0")
+                ))
             });
 
             builder.DependencySets.Add(dependencySet);
@@ -922,7 +904,7 @@ namespace NuGet.Test
             var builder = new PackageBuilder
             {
                 Id = "A",
-                Version = new SemanticVersion("1.0"),
+                Version = new NuGetVersion("1.0"),
                 Description = "Test",
             };
             builder.Authors.Add("Test");
@@ -940,7 +922,7 @@ namespace NuGet.Test
             PackageBuilder builder = new PackageBuilder()
             {
                 Id = "A",
-                Version = new SemanticVersion("1.0"),
+                Version = new NuGetVersion("1.0"),
                 Description = "Descriptions",
                 Summary = "Summary",
             };
@@ -948,10 +930,10 @@ namespace NuGet.Test
 
             var dependencySet = new PackageDependencySet(null, new[] {
                 new PackageDependency("B", new VersionSpec
-                {
-                    MinVersion = new SemanticVersion("2.0"),
-                    MaxVersion = new SemanticVersion("1.0")
-                })
+                (
+                    minVersion: new NuGetVersion("2.0"),
+                    maxVersion: new NuGetVersion("1.0")
+                ))
             });
 
             builder.DependencySets.Add(dependencySet);
@@ -983,7 +965,7 @@ Description is required.");
             // Arrange
             var builder = new PackageBuilder();
             builder.Id = "A";
-            builder.Version = new SemanticVersion("1.0");
+            builder.Version = new NuGetVersion("1.0");
             builder.Description = "Description";
 
             // Act & Assert
@@ -1252,7 +1234,7 @@ Description is required.");
 
             // Assert
             Assert.Equal("Artem.XmlProviders", builder.Id);
-            Assert.Equal(new SemanticVersion(2, 5, 0, 0), builder.Version);
+            Assert.Equal(new NuGetVersion(2, 5, 0, 0), builder.Version);
             Assert.Equal("Some awesome package", builder.Title);
             Assert.Equal(1, builder.Authors.Count);
             Assert.Equal("Velio Ivanov", authors[0]);
@@ -1294,7 +1276,7 @@ Description is required.");
 
             // Assert
             Assert.Equal("Artem.XmlProviders", builder.Id);
-            Assert.Equal(new SemanticVersion(2, 5, 0, 0), builder.Version);
+            Assert.Equal(new NuGetVersion(2, 5, 0, 0), builder.Version);
             Assert.Equal("Some awesome package", builder.Title);
             Assert.Equal(1, builder.Authors.Count);
             Assert.Equal("Velio Ivanov", authors[0]);
@@ -1332,7 +1314,7 @@ Description is required.");
 
             // Assert
             Assert.Equal("Artem.XmlProviders", builder.Id);
-            Assert.Equal(new SemanticVersion(2, 5, 0, 0), builder.Version);
+            Assert.Equal(new NuGetVersion(2, 5, 0, 0), builder.Version);
             Assert.Equal("Some awesome package", builder.Title);
             Assert.Equal(1, builder.Authors.Count);
             Assert.Equal("Velio Ivanov", authors[0]);
@@ -1373,7 +1355,7 @@ Description is required.");
 
             // Assert
             Assert.Equal("Artem.XmlProviders", builder.Id);
-            Assert.Equal(new SemanticVersion(2, 5, 0, 0), builder.Version);
+            Assert.Equal(new NuGetVersion(2, 5, 0, 0), builder.Version);
             Assert.Equal("Some awesome package", builder.Title);
             Assert.Equal(1, builder.Authors.Count);
             Assert.Equal("Velio Ivanov", authors[0]);
@@ -1390,13 +1372,13 @@ Description is required.");
             // <dependency id="A" version="[1.0]" />
             Assert.True(dependencies["A"].IsMinInclusive);
             Assert.True(dependencies["A"].IsMaxInclusive);
-            Assert.Equal(new SemanticVersion("1.0"), dependencies["A"].MinVersion);
-            Assert.Equal(new SemanticVersion("1.0"), dependencies["A"].MaxVersion);
+            Assert.Equal(new NuGetVersion("1.0"), dependencies["A"].MinVersion);
+            Assert.Equal(new NuGetVersion("1.0"), dependencies["A"].MaxVersion);
             // <dependency id="B" version="[1.0, 2.5)" />
             Assert.True(dependencies["B"].IsMinInclusive);
             Assert.False(dependencies["B"].IsMaxInclusive);
-            Assert.Equal(new SemanticVersion("1.0"), dependencies["B"].MinVersion);
-            Assert.Equal(new SemanticVersion("2.5"), dependencies["B"].MaxVersion);
+            Assert.Equal(new NuGetVersion("1.0"), dependencies["B"].MinVersion);
+            Assert.Equal(new NuGetVersion("2.5"), dependencies["B"].MaxVersion);
         }
 
         [Fact]
@@ -1596,7 +1578,7 @@ Description is required.");
                 badDependency,
                 new PackageDependency("B", new VersionSpec()),
             };
-            var packageVersion = new SemanticVersion("1.0.0");
+            var packageVersion = new NuGetVersion("1.0.0");
 
             var dependencySets = new PackageDependencySet[] {
                 new PackageDependencySet(null, dependencies)
@@ -1618,7 +1600,7 @@ Description is required.");
                 new PackageDependency("A", versionSpec),
                 new PackageDependency("B", new VersionSpec()),
             };
-            var packageVersion = new SemanticVersion("1.0.0-beta");
+            var packageVersion = new NuGetVersion("1.0.0-beta");
 
             var dependencySets = new PackageDependencySet[] {
                 new PackageDependencySet(null, dependencies)
@@ -1637,10 +1619,10 @@ Description is required.");
         {
             // Arrange
             var dependencies = new[] {
-                new PackageDependency("A", new VersionSpec(new SemanticVersion("1.0.0"))),
-                new PackageDependency("B", new VersionSpec { MinVersion = new SemanticVersion("1.0.1"), MaxVersion = new SemanticVersion("1.2.3") }),
+                new PackageDependency("A", new VersionSpec(new NuGetVersion("1.0.0"))),
+                new PackageDependency("B", new VersionSpec(minVersion: new NuGetVersion("1.0.1"), maxVersion: new NuGetVersion("1.2.3"))),
             };
-            var packageVersion = new SemanticVersion("1.0.0");
+            var packageVersion = new NuGetVersion("1.0.0");
 
             var dependencySets = new PackageDependencySet[] {
                 new PackageDependencySet(null, dependencies)
@@ -1658,13 +1640,13 @@ Description is required.");
         {
             get
             {
-                var prereleaseVer = new SemanticVersion("1.0.0-a");
-                var version = new SemanticVersion("2.3.0.6232");
+                var prereleaseVer = new NuGetVersion("1.0.0-a");
+                var version = new NuGetVersion("2.3.0.6232");
 
                 yield return new object[] { new VersionSpec(prereleaseVer) };
-                yield return new object[] { new VersionSpec { MinVersion = prereleaseVer, MaxVersion = version } };
-                yield return new object[] { new VersionSpec { MinVersion = version, MaxVersion = prereleaseVer, IsMaxInclusive = true } };
-                yield return new object[] { new VersionSpec { MinVersion = prereleaseVer, MaxVersion = prereleaseVer, IsMinInclusive = true } };
+                yield return new object[] { new VersionSpec (minVersion: prereleaseVer, maxVersion: version) };
+                yield return new object[] { new VersionSpec (minVersion: version, maxVersion: prereleaseVer, isMaxInclusive: true) };
+                yield return new object[] { new VersionSpec (minVersion: prereleaseVer, maxVersion: prereleaseVer, isMinInclusive: true) };
             }
         }
 
@@ -1721,7 +1703,7 @@ Enabling license acceptance requires a license url.");
             var builder = new PackageBuilder
             {
                 Id = "  a.  b",
-                Version = new SemanticVersion("1.0"),
+                Version = new NuGetVersion("1.0"),
                 Description = "Description"
             };
             builder.Authors.Add("Me");
@@ -1737,7 +1719,7 @@ Enabling license acceptance requires a license url.");
             var builder = new PackageBuilder
             {
                 Id = new string('c', 101),
-                Version = new SemanticVersion("1.0"),
+                Version = new NuGetVersion("1.0"),
                 Description = "Description"
             };
             builder.Authors.Add("Me");
@@ -1753,7 +1735,7 @@ Enabling license acceptance requires a license url.");
             var builder = new PackageBuilder
             {
                 Id = "cool",
-                Version = new SemanticVersion("1.0-vvvvvvvvvvvvvvvvvvvvK"),
+                Version = new NuGetVersion("1.0-vvvvvvvvvvvvvvvvvvvvK"),
                 Description = "Description"
             };
             builder.Authors.Add("Me");
@@ -1774,7 +1756,7 @@ Enabling license acceptance requires a license url.");
             var builder = new PackageBuilder
             {
                 Id = "a.b",
-                Version = new SemanticVersion("1.0"),
+                Version = new NuGetVersion("1.0"),
                 Description = "Description"
             };
             builder.Authors.Add("Me");
@@ -1842,7 +1824,7 @@ Enabling license acceptance requires a license url.");
 
             // Assert
             Assert.Equal("Artem.XmlProviders", packageBuilder.Id);
-            Assert.Equal(new SemanticVersion("2.5"), packageBuilder.Version);
+            Assert.Equal(new NuGetVersion("2.5"), packageBuilder.Version);
             Assert.Equal("Velio Ivanov", packageBuilder.Authors.Single());
             Assert.Equal("Implementation of XML ASP.NET Providers (XmlRoleProvider, XmlMembershipProvider and XmlProfileProvider).", packageBuilder.Description);
             Assert.Equal("en-US", packageBuilder.Language);
@@ -1871,7 +1853,7 @@ Enabling license acceptance requires a license url.");
 
             // Assert
             Assert.Equal("Artem.XmlProviders", packageBuilder.Id);
-            Assert.Equal(new SemanticVersion("2.5"), packageBuilder.Version);
+            Assert.Equal(new NuGetVersion("2.5"), packageBuilder.Version);
             Assert.Equal("Velio Ivanov", packageBuilder.Authors.Single());
             Assert.Equal("Implementation of XML ASP.NET Providers (XmlRoleProvider, XmlMembershipProvider and XmlProfileProvider).", packageBuilder.Description);
             Assert.Equal("en-US", packageBuilder.Language);
@@ -1901,7 +1883,7 @@ Enabling license acceptance requires a license url.");
 
             // Assert
             Assert.Equal("Artem.XmlProviders", packageBuilder.Id);
-            Assert.Equal(new SemanticVersion("2.5"), packageBuilder.Version);
+            Assert.Equal(new NuGetVersion("2.5"), packageBuilder.Version);
             Assert.Equal("Velio Ivanov", packageBuilder.Authors.Single());
             Assert.Equal("Implementation of XML ASP.NET Providers (XmlRoleProvider, XmlMembershipProvider and XmlProfileProvider).", packageBuilder.Description);
             Assert.Equal("en-US", packageBuilder.Language);
@@ -1935,7 +1917,7 @@ Enabling license acceptance requires a license url.");
             };
 
             // Act
-            var builder = new PackageBuilder { Id = "test", Version = new SemanticVersion("1.0"), Description = "test" };
+            var builder = new PackageBuilder { Id = "test", Version = new NuGetVersion("1.0"), Description = "test" };
             builder.Authors.Add("test");
             foreach (var name in fileNames)
             {

@@ -79,7 +79,7 @@ namespace NuGet.Commands
             else
             {
                 string packageId = Arguments[0];
-                SemanticVersion version = Version != null ? new SemanticVersion(Version) : null;
+                ISemanticVersion version = Version != null ? new NuGetVersion(Version) : null;
                 InstallPackage(fileSystem, packageId, version);
             }
         }
@@ -206,7 +206,7 @@ namespace NuGet.Commands
         private bool RestorePackage(
             IFileSystem fileSystem,
             string packageId,
-            SemanticVersion version,
+            ISemanticVersion version,
             bool packageRestoreConsent,
             List<IPackage> satellitePackages)
         {
@@ -244,7 +244,7 @@ namespace NuGet.Commands
         private void InstallPackage(
             IFileSystem fileSystem,
             string packageId,
-            SemanticVersion version)
+            ISemanticVersion version)
         {
             var packageManager = CreatePackageManager(fileSystem, AllowMultipleVersions);
 
@@ -277,7 +277,7 @@ namespace NuGet.Commands
         private bool PackageInstallNeeded(
             IPackageManager packageManager,
             string packageId,
-            SemanticVersion version)
+            ISemanticVersion version)
         {
             if (AllowMultipleVersions)
             {
@@ -307,7 +307,7 @@ namespace NuGet.Commands
                 version = package.Version;
             }
 
-            if (installedPackage.Version >= version)
+            if (installedPackage.Version.CompareTo(version) >= 0)
             {
                 // If the installed pacakge has newer version, no install is needed.
                 return false;
@@ -345,7 +345,7 @@ namespace NuGet.Commands
         }
 
         // Do a very quick check of whether a package in installed by checking whether the nupkg file exists
-        private bool IsPackageInstalled(IPackageRepository repository, IFileSystem fileSystem, string packageId, SemanticVersion version)
+        private bool IsPackageInstalled(IPackageRepository repository, IFileSystem fileSystem, string packageId, ISemanticVersion version)
         {
             if (!AllowMultipleVersions)
             {

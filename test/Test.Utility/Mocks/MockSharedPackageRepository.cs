@@ -8,11 +8,11 @@ namespace NuGet.Test.Mocks
 {
     public class MockSharedPackageRepository : MockPackageRepository, ISharedPackageRepository
     {
-        private Dictionary<string, SemanticVersion> _references = 
-            new Dictionary<string, SemanticVersion>(StringComparer.OrdinalIgnoreCase);
+        private Dictionary<string, ISemanticVersion> _references = 
+            new Dictionary<string, ISemanticVersion>(StringComparer.OrdinalIgnoreCase);
 
-        private Dictionary<string, SemanticVersion> _solutionReferences = 
-            new Dictionary<string, SemanticVersion>(StringComparer.OrdinalIgnoreCase);
+        private Dictionary<string, ISemanticVersion> _solutionReferences = 
+            new Dictionary<string, ISemanticVersion>(StringComparer.OrdinalIgnoreCase);
 
         public MockSharedPackageRepository()
             : this("")
@@ -51,15 +51,15 @@ namespace NuGet.Test.Mocks
             }
         }
         
-        public bool IsReferenced(string packageId, SemanticVersion version)
+        public bool IsReferenced(string packageId, ISemanticVersion version)
         {
-            SemanticVersion storedVersion;
+            ISemanticVersion storedVersion;
             return _references.TryGetValue(packageId, out storedVersion) && storedVersion == version;
         }
 
-        public bool IsSolutionReferenced(string packageId, SemanticVersion version)
+        public bool IsSolutionReferenced(string packageId, ISemanticVersion version)
         {
-            SemanticVersion storedVersion;
+            ISemanticVersion storedVersion;
             return _solutionReferences.TryGetValue(packageId, out storedVersion) && storedVersion == version;
         }
 

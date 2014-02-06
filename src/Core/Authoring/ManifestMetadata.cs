@@ -193,7 +193,7 @@ namespace NuGet
         [XmlIgnore]
         public List<ManifestReferenceSet> ReferenceSets { get; set; }
 
-        SemanticVersion IPackageName.Version
+        ISemanticVersion IPackageName.Version
         {
             get
             {
@@ -201,7 +201,7 @@ namespace NuGet
                 {
                     return null;
                 }
-                return new SemanticVersion(Version);
+                return new NuGetVersion(Version);
             }
         }
 

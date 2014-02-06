@@ -43,8 +43,8 @@ namespace NuGet
                 return TargetFrameworkSupportForDependencyContentsAndToolsVersion;
             }
 
-            SemanticVersion semanticVersion;
-            if (SemanticVersion.TryParse(metadata.Version, out semanticVersion) && !String.IsNullOrEmpty(semanticVersion.SpecialVersion))
+            NuGetVersion semanticVersion;
+            if (NuGetVersion.TryParse(metadata.Version, out semanticVersion) && !String.IsNullOrEmpty(semanticVersion.SpecialVersion))
             {
                 return SemverVersion;
             }

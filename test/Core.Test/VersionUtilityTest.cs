@@ -756,13 +756,13 @@ namespace NuGet.Test
         {
             // Arrange
             var expectedVersions = new[] { 
-                new SemanticVersion("1.1"), 
-                new SemanticVersion("1.1.0"),
-                new SemanticVersion("1.1.0.0")
+                new NuGetVersion("1.1"), 
+                new NuGetVersion("1.1.0"),
+                new NuGetVersion("1.1.0.0")
             };
 
             // Act
-            var versions = VersionUtility.GetPossibleVersions(new SemanticVersion("1.1")).ToList();
+            var versions = VersionUtility.GetPossibleVersions(new NuGetVersion("1.1")).ToList();
 
             // Assert
             Assert.Equal(expectedVersions, versions);
@@ -773,13 +773,13 @@ namespace NuGet.Test
         {
             // Arrange
             var expectedVersions = new[] { 
-                new SemanticVersion("1.0"), 
-                new SemanticVersion("1.0.0"),
-                new SemanticVersion("1.0.0.0"),
+                new NuGetVersion("1.0"), 
+                new NuGetVersion("1.0.0"),
+                new NuGetVersion("1.0.0.0"),
             };
 
             // Act
-            var versions = VersionUtility.GetPossibleVersions(new SemanticVersion("1.0.0")).ToList();
+            var versions = VersionUtility.GetPossibleVersions(new NuGetVersion("1.0.0")).ToList();
 
             // Assert
             Assert.Equal(expectedVersions, versions);
@@ -790,9 +790,9 @@ namespace NuGet.Test
         {
             // Arrange
             var expectedVersions = new[] { 
-                new SemanticVersion("1.0"), 
-                new SemanticVersion("1.0.0"),
-                new SemanticVersion("1.0.0.0"),
+                new NuGetVersion("1.0"), 
+                new NuGetVersion("1.0.0"),
+                new NuGetVersion("1.0.0.0"),
             };
             var expectedVersionStrings = new[] {
                 "1.0", 
@@ -801,7 +801,7 @@ namespace NuGet.Test
             };
 
             // Act
-            var versions = VersionUtility.GetPossibleVersions(new SemanticVersion("1.0.0.0")).ToList();
+            var versions = VersionUtility.GetPossibleVersions(new NuGetVersion("1.0.0.0")).ToList();
 
             // Assert
             Assert.Equal(expectedVersions, versions);
@@ -813,8 +813,8 @@ namespace NuGet.Test
         {
             // Arrange
             var expectedVersions = new[] { 
-                new SemanticVersion("1.0.1"), 
-                new SemanticVersion("1.0.1.0")
+                new NuGetVersion("1.0.1"), 
+                new NuGetVersion("1.0.1.0")
             };
             var expectedVersionStrings = new[] 
             {
@@ -823,7 +823,7 @@ namespace NuGet.Test
             };
 
             // Act
-            var versions = VersionUtility.GetPossibleVersions(new SemanticVersion("1.0.1")).ToList();
+            var versions = VersionUtility.GetPossibleVersions(new NuGetVersion("1.0.1")).ToList();
 
             // Assert
             Assert.Equal(expectedVersions, versions);
@@ -835,9 +835,9 @@ namespace NuGet.Test
         {
             // Arrange
             var expectedVersions = new[] { 
-                new SemanticVersion("1.1"),
-                new SemanticVersion("1.1.0"),
-                new SemanticVersion("1.1.0.0"),
+                new NuGetVersion("1.1"),
+                new NuGetVersion("1.1.0"),
+                new NuGetVersion("1.1.0.0"),
             };
             var expectedVersionStrings = new[] 
             {
@@ -847,7 +847,7 @@ namespace NuGet.Test
             };
 
             // Act
-            var versions = VersionUtility.GetPossibleVersions(new SemanticVersion("1.1.0.0")).ToList();
+            var versions = VersionUtility.GetPossibleVersions(new NuGetVersion("1.1.0.0")).ToList();
 
             // Assert
             Assert.Equal(expectedVersions, versions);
@@ -858,17 +858,17 @@ namespace NuGet.Test
         public void GetSafeVersions()
         {
             // Act
-            IVersionSpec versionSpec1 = VersionUtility.GetSafeRange(new SemanticVersion("1.3"));
-            IVersionSpec versionSpec2 = VersionUtility.GetSafeRange(new SemanticVersion("0.9"));
-            IVersionSpec versionSpec3 = VersionUtility.GetSafeRange(new SemanticVersion("2.9.45.6"));
+            IVersionSpec versionSpec1 = VersionUtility.GetSafeRange(new NuGetVersion("1.3"));
+            IVersionSpec versionSpec2 = VersionUtility.GetSafeRange(new NuGetVersion("0.9"));
+            IVersionSpec versionSpec3 = VersionUtility.GetSafeRange(new NuGetVersion("2.9.45.6"));
 
             // Assert
-            AssertSafeVersion(versionSpec1, new SemanticVersion("1.3"), new SemanticVersion("1.4"));
-            AssertSafeVersion(versionSpec2, new SemanticVersion("0.9"), new SemanticVersion("0.10"));
-            AssertSafeVersion(versionSpec3, new SemanticVersion("2.9.45.6"), new SemanticVersion("2.10"));
+            AssertSafeVersion(versionSpec1, new NuGetVersion("1.3"), new NuGetVersion("1.4"));
+            AssertSafeVersion(versionSpec2, new NuGetVersion("0.9"), new NuGetVersion("0.10"));
+            AssertSafeVersion(versionSpec3, new NuGetVersion("2.9.45.6"), new NuGetVersion("2.10"));
         }
 
-        private void AssertSafeVersion(IVersionSpec versionSpec, SemanticVersion minVer, SemanticVersion maxVer)
+        private void AssertSafeVersion(IVersionSpec versionSpec, ISemanticVersion minVer, ISemanticVersion maxVer)
         {
             Assert.True(versionSpec.IsMinInclusive);
             Assert.False(versionSpec.IsMaxInclusive);
@@ -1165,14 +1165,14 @@ namespace NuGet.Test
         {
             get
             {
-                yield return new object[] { "(1.2.3.4, 3.2)", new VersionSpec { MinVersion = new SemanticVersion("1.2.3.4"), MaxVersion = new SemanticVersion("3.2"), IsMinInclusive = false, IsMaxInclusive = false } };
-                yield return new object[] { "(1.2.3.4, 3.2]", new VersionSpec { MinVersion = new SemanticVersion("1.2.3.4"), MaxVersion = new SemanticVersion("3.2"), IsMinInclusive = false, IsMaxInclusive = true } };
-                yield return new object[] { "[1.2, 3.2.5)", new VersionSpec { MinVersion = new SemanticVersion("1.2"), MaxVersion = new SemanticVersion("3.2.5"), IsMinInclusive = true, IsMaxInclusive = false } };
-                yield return new object[] { "[2.3.7, 3.2.4.5]", new VersionSpec { MinVersion = new SemanticVersion("2.3.7"), MaxVersion = new SemanticVersion("3.2.4.5"), IsMinInclusive = true, IsMaxInclusive = true } };
-                yield return new object[] { "(, 3.2.4.5]", new VersionSpec { MinVersion = null, MaxVersion = new SemanticVersion("3.2.4.5"), IsMinInclusive = false, IsMaxInclusive = true } };
-                yield return new object[] { "(1.6, ]", new VersionSpec { MinVersion = new SemanticVersion("1.6"), MaxVersion = null, IsMinInclusive = false, IsMaxInclusive = true } };
-                yield return new object[] { "(1.6)", new VersionSpec { MinVersion = new SemanticVersion("1.6"), MaxVersion = new SemanticVersion("1.6"), IsMinInclusive = false, IsMaxInclusive = false } };
-                yield return new object[] { "[2.7]", new VersionSpec { MinVersion = new SemanticVersion("2.7"), MaxVersion = new SemanticVersion("2.7"), IsMinInclusive = true, IsMaxInclusive = true } };
+                yield return new object[] { "(1.2.3.4, 3.2)", new VersionSpec(new NuGetVersion("1.2.3.4"), new NuGetVersion("3.2"), false, false) };
+                yield return new object[] { "(1.2.3.4, 3.2]", new VersionSpec(new NuGetVersion("1.2.3.4"), new NuGetVersion("3.2"), false, true) };
+                yield return new object[] { "[1.2, 3.2.5)", new VersionSpec(new NuGetVersion("1.2"), new NuGetVersion("3.2.5"), true, false) };
+                yield return new object[] { "[2.3.7, 3.2.4.5]", new VersionSpec(new NuGetVersion("2.3.7"), new NuGetVersion("3.2.4.5"), true, true) };
+                yield return new object[] { "(, 3.2.4.5]", new VersionSpec(null, new NuGetVersion("3.2.4.5"), false, true) };
+                yield return new object[] { "(1.6, ]", new VersionSpec(new NuGetVersion("1.6"), null, false, true) };
+                yield return new object[] { "(1.6)", new VersionSpec(new NuGetVersion("1.6"), new NuGetVersion("1.6"), false, false) };
+                yield return new object[] { "[2.7]", new VersionSpec(new NuGetVersion("2.7"), new NuGetVersion("2.7"), true, true) };
             }
         }
 

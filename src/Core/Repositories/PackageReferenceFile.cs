@@ -106,7 +106,7 @@ namespace NuGet
                 string targetFrameworkString = e.GetOptionalAttributeValue("targetFramework");
                 string developmentFlagString = e.GetOptionalAttributeValue("developmentDependency");
                 string requireReinstallationString = e.GetOptionalAttributeValue("requireReinstallation");
-                SemanticVersion version = null;
+                NuGetVersion version = null;
 
                 if (String.IsNullOrEmpty(id))
                 {
@@ -115,7 +115,7 @@ namespace NuGet
                 }
 
                 // If the version is invalid, raise an error unless it's both empty and not required
-                if ((requireVersion || !String.IsNullOrEmpty(versionString)) && !SemanticVersion.TryParse(versionString, out version))
+                if ((requireVersion || !String.IsNullOrEmpty(versionString)) && !NuGetVersion.TryParse(versionString, out version))
                 {
                     throw new InvalidDataException(String.Format(CultureInfo.CurrentCulture, NuGetResources.ReferenceFile_InvalidVersion, versionString, _path));
                 }
@@ -168,7 +168,7 @@ namespace NuGet
         /// <summary>
         /// Deletes an entry from the file with matching id and version. Returns true if the file was deleted.
         /// </summary>
-        public bool DeleteEntry(string id, SemanticVersion version)
+        public bool DeleteEntry(string id, ISemanticVersion version)
         {
             XDocument document = GetDocument();
 
@@ -180,7 +180,7 @@ namespace NuGet
             return DeleteEntry(document, id, version);
         }
 
-        public bool EntryExists(string packageId, SemanticVersion version)
+        public bool EntryExists(string packageId, ISemanticVersion version)
         {
             XDocument document = GetDocument();
             if (document == null)
@@ -191,24 +191,24 @@ namespace NuGet
             return FindEntry(document, packageId, version) != null;
         }
 
-        public void AddEntry(string id, SemanticVersion version)
+        public void AddEntry(string id, ISemanticVersion version)
         {
             AddEntry(id, version, developmentDependency: false);
         }
 
-        public void AddEntry(string id, SemanticVersion version, bool developmentDependency)
+        public void AddEntry(string id, ISemanticVersion version, bool developmentDependency)
         {
             AddEntry(id, version, developmentDependency, targetFramework: null);
         }
 
-        public void AddEntry(string id, SemanticVersion version, bool developmentDependency, FrameworkName targetFramework)
+        public void AddEntry(string id, ISemanticVersion version, bool developmentDependency, FrameworkName targetFramework)
         {
             XDocument document = GetDocument(createIfNotExists: true);
 
             AddEntry(document, id, version, developmentDependency, targetFramework);
         }
 
-        public void MarkEntryForReinstallation(string id, SemanticVersion version, FrameworkName targetFramework, bool requireReinstallation)
+        public void MarkEntryForReinstallation(string id, ISemanticVersion version, FrameworkName targetFramework, bool requireReinstallation)
         {
             Debug.Assert(id != null);
             Debug.Assert(version != null);
@@ -229,12 +229,12 @@ namespace NuGet
             }
         }
 
-        private void AddEntry(XDocument document, string id, SemanticVersion version, bool developmentDependency, FrameworkName targetFramework)
+        private void AddEntry(XDocument document, string id, ISemanticVersion version, bool developmentDependency, FrameworkName targetFramework)
         {
             AddEntry(document, id, version, developmentDependency, targetFramework, requireReinstallation: false);
         }
 
-        private void AddEntry(XDocument document, string id, SemanticVersion version, bool developmentDependency, FrameworkName targetFramework, bool requireReinstallation)
+        private void AddEntry(XDocument document, string id, ISemanticVersion version, bool developmentDependency, FrameworkName targetFramework, bool requireReinstallation)
         {
             XElement element = FindEntry(document, id, version);
 
@@ -279,7 +279,7 @@ namespace NuGet
             SaveDocument(document);
         }
 
-        private static XElement FindEntry(XDocument document, string id, SemanticVersion version)
+        private static XElement FindEntry(XDocument document, string id, ISemanticVersion version)
         {
             if (String.IsNullOrEmpty(id))
             {
@@ -288,7 +288,7 @@ namespace NuGet
 
             return (from e in document.Root.Elements("package")
                     let entryId = e.GetOptionalAttributeValue("id")
-                    let entryVersion = SemanticVersion.ParseOptionalVersion(e.GetOptionalAttributeValue("version"))
+                    let entryVersion = NuGetVersion.ParseOptionalVersion(e.GetOptionalAttributeValue("version"))
                     where entryId != null && entryVersion != null
                     where id.Equals(entryId, StringComparison.OrdinalIgnoreCase) && (version == null || entryVersion.Equals(version))
                     select e).FirstOrDefault();
@@ -313,7 +313,7 @@ namespace NuGet
             _fileSystem.AddFile(_path, document.Save);
         }
 
-        private bool DeleteEntry(XDocument document, string id, SemanticVersion version)
+        private bool DeleteEntry(XDocument document, string id, ISemanticVersion version)
         {
             XElement element = FindEntry(document, id, version);
 

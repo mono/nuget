@@ -108,7 +108,7 @@ namespace NuGet.Test
         public void ResolveDependenciesForInstallPackageResolvesDependencyWithConstraintsUsingDependencyResolver()
         {
             // Arrange            
-            var packageDependency = new PackageDependency("B", new VersionSpec { MinVersion = new SemanticVersion("1.1") });
+            var packageDependency = new PackageDependency("B", new VersionSpec(new NuGetVersion("1.1"), false));
             IPackage packageA = PackageUtility.CreatePackage("A", "1.0",
                                                             dependencies: new List<PackageDependency> { packageDependency });
             IPackage packageB12 = PackageUtility.CreatePackage("B", "1.2");
@@ -288,19 +288,19 @@ namespace NuGet.Test
             // Assert
             Assert.Equal(5, operations.Count);
             Assert.Equal("E", operations[0].Package.Id);
-            Assert.Equal(new SemanticVersion("2.0"), operations[0].Package.Version);
+            Assert.Equal(new NuGetVersion("2.0"), operations[0].Package.Version);
             Assert.Equal("B", operations[1].Package.Id);
             Assert.Equal("D", operations[2].Package.Id);
-            Assert.Equal(new SemanticVersion("2.0"), operations[2].Package.Version);
+            Assert.Equal(new NuGetVersion("2.0"), operations[2].Package.Version);
             Assert.Equal("C", operations[3].Package.Id);
             Assert.Equal("A", operations[4].Package.Id);
 
             Assert.Equal(5, projectOperations.Count);
             Assert.Equal("E", projectOperations[0].Package.Id);
-            Assert.Equal(new SemanticVersion("2.0"), projectOperations[0].Package.Version);
+            Assert.Equal(new NuGetVersion("2.0"), projectOperations[0].Package.Version);
             Assert.Equal("B", projectOperations[1].Package.Id);
             Assert.Equal("D", projectOperations[2].Package.Id);
-            Assert.Equal(new SemanticVersion("2.0"), projectOperations[2].Package.Version);
+            Assert.Equal(new NuGetVersion("2.0"), projectOperations[2].Package.Version);
             Assert.Equal("C", projectOperations[3].Package.Id);
             Assert.Equal("A", projectOperations[4].Package.Id);
         }
@@ -1130,13 +1130,13 @@ namespace NuGet.Test
             // Assert
             Assert.Equal(4, packages.Count);
             Assert.Equal("D", packages[0].Package.Id);
-            Assert.Equal(new SemanticVersion("2.0"), packages[0].Package.Version);
+            Assert.Equal(new NuGetVersion("2.0"), packages[0].Package.Version);
             Assert.Equal("C", packages[1].Package.Id);
-            Assert.Equal(new SemanticVersion("1.1.3"), packages[1].Package.Version);
+            Assert.Equal(new NuGetVersion("1.1.3"), packages[1].Package.Version);
             Assert.Equal("B", packages[2].Package.Id);
-            Assert.Equal(new SemanticVersion("1.0.9"), packages[2].Package.Version);
+            Assert.Equal(new NuGetVersion("1.0.9"), packages[2].Package.Version);
             Assert.Equal("A", packages[3].Package.Id);
-            Assert.Equal(new SemanticVersion("1.0"), packages[3].Package.Version);
+            Assert.Equal(new NuGetVersion("1.0"), packages[3].Package.Version);
         }
 
         // Tests that when DependencyVersion is lowest, the dependency with the lowest major minor and patch version
@@ -1183,9 +1183,9 @@ namespace NuGet.Test
             // Assert
             Assert.Equal(2, packages.Count);
             Assert.Equal("B", packages[0].Package.Id);
-            Assert.Equal(new SemanticVersion("1.0.1"), packages[0].Package.Version);
+            Assert.Equal(new NuGetVersion("1.0.1"), packages[0].Package.Version);
             Assert.Equal("A", packages[1].Package.Id);
-            Assert.Equal(new SemanticVersion("1.0"), packages[1].Package.Version);
+            Assert.Equal(new NuGetVersion("1.0"), packages[1].Package.Version);
         }
 
         // Tests that when DependencyVersion is HighestPatch, the dependency with the lowest major minor and highest patch version
@@ -1232,13 +1232,13 @@ namespace NuGet.Test
             // Assert
             Assert.Equal(4, packages.Count);
             Assert.Equal("D", packages[0].Package.Id);
-            Assert.Equal(new SemanticVersion("2.0"), packages[0].Package.Version);
+            Assert.Equal(new NuGetVersion("2.0"), packages[0].Package.Version);
             Assert.Equal("C", packages[1].Package.Id);
-            Assert.Equal(new SemanticVersion("1.1.3"), packages[1].Package.Version);
+            Assert.Equal(new NuGetVersion("1.1.3"), packages[1].Package.Version);
             Assert.Equal("B", packages[2].Package.Id);
-            Assert.Equal(new SemanticVersion("1.0.9"), packages[2].Package.Version);
+            Assert.Equal(new NuGetVersion("1.0.9"), packages[2].Package.Version);
             Assert.Equal("A", packages[3].Package.Id);
-            Assert.Equal(new SemanticVersion("1.0"), packages[3].Package.Version);
+            Assert.Equal(new NuGetVersion("1.0"), packages[3].Package.Version);
         }
 
         [Fact]
@@ -1304,7 +1304,7 @@ namespace NuGet.Test
         {
             Assert.Equal(expectedAction, operation.Action);
             Assert.Equal(expectedId, operation.Package.Id);
-            Assert.Equal(new SemanticVersion(expectedVersion), operation.Package.Version);
+            Assert.Equal(new NuGetVersion(expectedVersion), operation.Package.Version);
         }
 
         private class TestWalker : PackageWalker

@@ -5,7 +5,7 @@ namespace NuGet
 {
     public interface IPackageReferenceRepository : IPackageRepository
     {
-        void AddPackage(string packageId, SemanticVersion version, bool developmentDependency, FrameworkName targetFramework);
+        void AddPackage(string packageId, ISemanticVersion version, bool developmentDependency, FrameworkName targetFramework);
         FrameworkName GetPackageTargetFramework(string packageId);
     }
 }

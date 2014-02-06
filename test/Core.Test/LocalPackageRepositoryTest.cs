@@ -110,19 +110,19 @@ namespace NuGet.Test
             };
 
             // Act and Assert
-            IPackage result = repository.FindPackage(openPackage, "A", new SemanticVersion("1.0"));
+            IPackage result = repository.FindPackage(openPackage, "A", new NuGetVersion("1.0"));
             Assert.Null(result);
             Assert.Equal(PathFixUtility.FixPath(@"A\A.nupkg"), searchedPaths.Single());
 
             searchedPaths.Clear();
-            result = repository.FindPackage(openPackage, "A", new SemanticVersion("0.8"));
+            result = repository.FindPackage(openPackage, "A", new NuGetVersion("0.8"));
             Assert.Null(result);
             Assert.Equal(PathFixUtility.FixPath(@"A\A.nupkg"), searchedPaths.Single());
 
             searchedPaths.Clear();
-            result = repository.FindPackage(openPackage, "A", new SemanticVersion("1.1"));
+            result = repository.FindPackage(openPackage, "A", new NuGetVersion("1.1"));
             Assert.Equal("A", result.Id);
-            Assert.Equal(new SemanticVersion("1.1"), result.Version);
+            Assert.Equal(new NuGetVersion("1.1"), result.Version);
         }
 
         [Fact]
@@ -141,18 +141,18 @@ namespace NuGet.Test
             };
 
             // Act and Assert
-            IPackage result = repository.FindPackage(openPackage, "A", new SemanticVersion("1.0"));
+            IPackage result = repository.FindPackage(openPackage, "A", new NuGetVersion("1.0"));
             Assert.Null(result);
             Assert.False(searchedPaths.Any());
 
-            result = repository.FindPackage(openPackage, "A", new SemanticVersion("0.8"));
+            result = repository.FindPackage(openPackage, "A", new NuGetVersion("0.8"));
             Assert.Null(result);
             Assert.False(searchedPaths.Any());
 
-            result = repository.FindPackage(openPackage, "A", new SemanticVersion("1.1"));
+            result = repository.FindPackage(openPackage, "A", new NuGetVersion("1.1"));
             Assert.Equal(PathFixUtility.FixPath(@"A.1.1\A.1.1.nupkg"), searchedPaths.Single());
             Assert.Equal("A", result.Id);
-            Assert.Equal(new SemanticVersion("1.1"), result.Version);
+            Assert.Equal(new NuGetVersion("1.1"), result.Version);
         }
 
         [Fact]
@@ -171,16 +171,16 @@ namespace NuGet.Test
             };
 
             // Act - 1
-            IPackage result = repository.FindPackage(openPackage, "A", new SemanticVersion("1.0"));
+            IPackage result = repository.FindPackage(openPackage, "A", new NuGetVersion("1.0"));
 
             // Assert - 1
             Assert.NotNull(result);
             Assert.Equal("A", result.Id);
-            Assert.Equal(new SemanticVersion("1.0"), result.Version);
+            Assert.Equal(new NuGetVersion("1.0"), result.Version);
 
             // Act - 2
             fileSystem.DeleteFile("A.1.0.0.nupkg");
-            result = repository.FindPackage(openPackage, "A", new SemanticVersion("1.0"));
+            result = repository.FindPackage(openPackage, "A", new NuGetVersion("1.0"));
 
             // Assert - 2
             Assert.Null(result);

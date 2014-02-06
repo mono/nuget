@@ -32,7 +32,7 @@ namespace NuGet.Test
             // Arrange
             var builder = new PackageBuilder();
             builder.Id = "Package";
-            builder.Version = new SemanticVersion("1.0");
+            builder.Version = new NuGetVersion("1.0");
             builder.Authors.Add("David");
             builder.Description = "This is a test package";
             builder.ReleaseNotes = "This is a release note.";
@@ -48,7 +48,7 @@ namespace NuGet.Test
 
             // Assert
             Assert.Equal("Package", package.Id);
-            Assert.Equal(new SemanticVersion("1.0"), package.Version);
+            Assert.Equal(new NuGetVersion("1.0"), package.Version);
             Assert.Equal("David", package.Authors.First());
             Assert.Equal("Copyright", package.Copyright);
 
@@ -153,7 +153,7 @@ namespace NuGet.Test
             var packageBuilder = new PackageBuilder
             {
                 Id = "Test-Package",
-                Version = new SemanticVersion("1.0"),
+                Version = new NuGetVersion("1.0"),
                 Description = "Test descr",
             };
             packageBuilder.Authors.Add("test");

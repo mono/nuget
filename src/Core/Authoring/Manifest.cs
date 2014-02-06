@@ -370,7 +370,7 @@ namespace NuGet
                         throw new InvalidOperationException(String.Format(CultureInfo.CurrentCulture, NuGetResources.DependencyHasInvalidVersion, dependency.Id));
                     }
 
-                    if (dependency.VersionSpec.MaxVersion < dependency.VersionSpec.MinVersion)
+                    if (dependency.VersionSpec.MaxVersion.CompareTo(dependency.VersionSpec.MinVersion) < 0)
                     {
                         throw new InvalidOperationException(String.Format(CultureInfo.CurrentCulture, NuGetResources.DependencyHasInvalidVersion, dependency.Id));
                     }

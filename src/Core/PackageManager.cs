@@ -106,12 +106,12 @@ namespace NuGet
             InstallPackage(packageId, version: null, ignoreDependencies: false, allowPrereleaseVersions: false);
         }
 
-        public void InstallPackage(string packageId, SemanticVersion version)
+        public void InstallPackage(string packageId, ISemanticVersion version)
         {
             InstallPackage(packageId: packageId, version: version, ignoreDependencies: false, allowPrereleaseVersions: false);
         }
 
-        public virtual void InstallPackage(string packageId, SemanticVersion version, bool ignoreDependencies, bool allowPrereleaseVersions)
+        public virtual void InstallPackage(string packageId, ISemanticVersion version, bool ignoreDependencies, bool allowPrereleaseVersions)
         {
             IPackage package = PackageRepositoryHelper.ResolvePackage(SourceRepository, LocalRepository, packageId, version, allowPrereleaseVersions);
 
@@ -272,17 +272,17 @@ namespace NuGet
             UninstallPackage(packageId, version: null, forceRemove: false, removeDependencies: false);
         }
 
-        public void UninstallPackage(string packageId, SemanticVersion version)
+        public void UninstallPackage(string packageId, ISemanticVersion version)
         {
             UninstallPackage(packageId, version: version, forceRemove: false, removeDependencies: false);
         }
 
-        public void UninstallPackage(string packageId, SemanticVersion version, bool forceRemove)
+        public void UninstallPackage(string packageId, ISemanticVersion version, bool forceRemove)
         {
             UninstallPackage(packageId, version: version, forceRemove: forceRemove, removeDependencies: false);
         }
 
-        public virtual void UninstallPackage(string packageId, SemanticVersion version, bool forceRemove, bool removeDependencies)
+        public virtual void UninstallPackage(string packageId, ISemanticVersion version, bool forceRemove, bool removeDependencies)
         {
             if (String.IsNullOrEmpty(packageId))
             {
@@ -423,7 +423,7 @@ namespace NuGet
                 updateDependencies, allowPrereleaseVersions);
         }
 
-        public void UpdatePackage(string packageId, SemanticVersion version, bool updateDependencies, bool allowPrereleaseVersions)
+        public void UpdatePackage(string packageId, ISemanticVersion version, bool updateDependencies, bool allowPrereleaseVersions)
         {
             UpdatePackage(packageId, () => SourceRepository.FindPackage(packageId, version, allowPrereleaseVersions, allowUnlisted: false),
                 updateDependencies, allowPrereleaseVersions);

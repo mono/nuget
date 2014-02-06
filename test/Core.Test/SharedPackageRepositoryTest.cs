@@ -199,7 +199,7 @@ namespace NuGet.Test
             var repository = new SharedPackageRepository(new DefaultPackagePathResolver(fileSystem), fileSystem, configFileSystem);
 
             // Act
-            bool exists = repository.Exists(id, new SemanticVersion(version));
+            bool exists = repository.Exists(id, new NuGetVersion(version));
 
             // Assert
             Assert.True(exists);
@@ -222,7 +222,7 @@ namespace NuGet.Test
             var repository = new SharedPackageRepository(new DefaultPackagePathResolver(fileSystem), fileSystem, configFileSystem);
 
             // Act
-            bool exists = repository.Exists(id, new SemanticVersion(version));
+            bool exists = repository.Exists(id, new NuGetVersion(version));
 
             // Assert
             Assert.True(exists);
@@ -242,12 +242,12 @@ namespace NuGet.Test
             var repository = new SharedPackageRepository(new DefaultPackagePathResolver(fileSystem), fileSystem, configFileSystem);
 
             // Act
-            IPackage package = repository.FindPackage("one", new SemanticVersion("1.0.0-alpha"));
+            IPackage package = repository.FindPackage("one", new NuGetVersion("1.0.0-alpha"));
 
             // Assert
             Assert.True(package is OptimizedZipPackage);
             Assert.Equal("one", package.Id);
-            Assert.Equal(new SemanticVersion("1.0.0-alpha"), package.Version);
+            Assert.Equal(new NuGetVersion("1.0.0-alpha"), package.Version);
             Assert.Equal("Test description", package.Description);
         }
 
@@ -271,7 +271,7 @@ namespace NuGet.Test
             Assert.Equal(1, packages.Count);
             Assert.True(packages[0] is OptimizedZipPackage);
             Assert.Equal("one", packages[0].Id);
-            Assert.Equal(new SemanticVersion("1.0.0-alpha"), packages[0].Version);
+            Assert.Equal(new NuGetVersion("1.0.0-alpha"), packages[0].Version);
         }
 
         [Fact]
@@ -306,7 +306,7 @@ namespace NuGet.Test
             var package = packages[0];
             Assert.True(package is OptimizedZipPackage);
             Assert.Equal("One", package.Id);
-            Assert.Equal(new SemanticVersion("1.0.0-alpha"), package.Version);
+            Assert.Equal(new NuGetVersion("1.0.0-alpha"), package.Version);
         }
 
         [Fact]
@@ -363,7 +363,7 @@ namespace NuGet.Test
             var repository = new SharedPackageRepository(new DefaultPackagePathResolver(fileSystem.Object), fileSystem.Object, configFileSystem);
 
             // Act
-            repository.AddPackageReferenceEntry("B", new SemanticVersion("1.0"));
+            repository.AddPackageReferenceEntry("B", new NuGetVersion("1.0"));
 
             // Assert
             Assert.True(configFileSystem.FileExists("packages.config"));
@@ -695,9 +695,9 @@ namespace NuGet.Test
 
 
             // Act && Assert
-            Assert.True(repository.Object.IsReferenced("A", new SemanticVersion("1.0")));
-            Assert.True(repository.Object.IsReferenced("B", new SemanticVersion("1.0")));
-            Assert.False(repository.Object.IsReferenced("C", new SemanticVersion("1.0")));
+            Assert.True(repository.Object.IsReferenced("A", new NuGetVersion("1.0")));
+            Assert.True(repository.Object.IsReferenced("B", new NuGetVersion("1.0")));
+            Assert.False(repository.Object.IsReferenced("C", new NuGetVersion("1.0")));
         }
 
         [Theory]
@@ -712,7 +712,7 @@ namespace NuGet.Test
             var repository = new Mock<MockSharedRepository>(new DefaultPackagePathResolver(fileSystem.Object), fileSystem.Object) { CallBase = true };
 
             // Act && Assert
-            Assert.Equal(exists, repository.Object.Exists("A", new SemanticVersion("1.0.0")));
+            Assert.Equal(exists, repository.Object.Exists("A", new NuGetVersion("1.0.0")));
         }
 
         [Theory]
@@ -727,7 +727,7 @@ namespace NuGet.Test
             var repository = new Mock<MockSharedRepository>(new DefaultPackagePathResolver(fileSystem.Object), fileSystem.Object) { CallBase = true };
 
             // Act && Assert
-            Assert.Equal(exists, repository.Object.Exists("A", new SemanticVersion("1.0.0")));
+            Assert.Equal(exists, repository.Object.Exists("A", new NuGetVersion("1.0.0")));
         }
 
         [Fact]

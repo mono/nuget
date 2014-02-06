@@ -49,7 +49,7 @@ namespace NuGet.Test.Extensions
         public void ToDelegateWithExtractorRequiresNonNullParameters()
         {
             ExceptionAssert.ThrowsArgNull(() => VersionExtensions.ToDelegate<IPackage>(null, p => p.Version), "versionInfo");
-            ExceptionAssert.ThrowsArgNull(() => VersionExtensions.ToDelegate<IPackage>(new VersionSpec(new SemanticVersion(1, 0, 0, 0)), null), "extractor");
+            ExceptionAssert.ThrowsArgNull(() => VersionExtensions.ToDelegate<IPackage>(new VersionSpec(new NuGetVersion(1, 0, 0, 0)), null), "extractor");
         }
 
         [Theory]
@@ -58,10 +58,10 @@ namespace NuGet.Test.Extensions
         {
             // Arrange
             IVersionSpec spec = VersionSpec.ParseVersionSpec(verSpec);
-            SemanticVersion ver = new SemanticVersion(semVer);
+            ISemanticVersion ver = new NuGetVersion(semVer);
 
             // Act/Assert
-            Assert.Equal(expected, spec.ToDelegate<SemanticVersion>(v => v)(ver));
+            Assert.Equal(expected, spec.ToDelegate<ISemanticVersion>(v => v)(ver));
         }
 
         [Theory]
@@ -71,7 +71,7 @@ namespace NuGet.Test.Extensions
             // Arrange
             IVersionSpec spec = VersionSpec.ParseVersionSpec(verSpec);
             Mock<IPackage> mockPkg = new Mock<IPackage>();
-            mockPkg.Setup(p => p.Version).Returns(new SemanticVersion(semVer));
+            mockPkg.Setup(p => p.Version).Returns(new NuGetVersion(semVer));
 
             // Act/Assert
             Assert.Equal(expected, spec.ToDelegate()(mockPkg.Object));
@@ -85,14 +85,14 @@ namespace NuGet.Test.Extensions
             IVersionSpec spec = VersionSpec.ParseVersionSpec(verSpec);
 
             // Act/Assert
-            Assert.Equal(expected, spec.Satisfies(new SemanticVersion(semVer)));
+            Assert.Equal(expected, spec.Satisfies(new NuGetVersion(semVer)));
         }
 
         [Fact]
         public void GetComparableVersionsReturnMatchingVersionFirst()
         {
             // Act
-            var versions = VersionExtensions.GetComparableVersionStrings(new SemanticVersion("1.0.0-alpha")).ToArray();
+            var versions = VersionExtensions.GetComparableVersionStrings(new NuGetVersion("1.0.0-alpha")).ToArray();
 
             // Assert
             Assert.Equal(3, versions.Length);
@@ -105,7 +105,7 @@ namespace NuGet.Test.Extensions
         public void GetComparableVersionsReturnMatchingVersionFirst2()
         {
             // Act
-            var versions = VersionExtensions.GetComparableVersionStrings(new SemanticVersion("2.0.0.0")).ToArray();
+            var versions = VersionExtensions.GetComparableVersionStrings(new NuGetVersion("2.0.0.0")).ToArray();
 
             // Assert
             Assert.Equal(3, versions.Length);
@@ -118,7 +118,7 @@ namespace NuGet.Test.Extensions
         public void GetComparableVersionsReturnMatchingVersionFirst3()
         {
             // Act
-            var versions = VersionExtensions.GetComparableVersionStrings(new SemanticVersion("1.3.2.0-beta")).ToArray();
+            var versions = VersionExtensions.GetComparableVersionStrings(new NuGetVersion("1.3.2.0-beta")).ToArray();
 
             // Assert
             Assert.Equal(2, versions.Length);
@@ -130,7 +130,7 @@ namespace NuGet.Test.Extensions
         public void GetComparableVersionsReturnOnlyValidVersion()
         {
             // Act
-            var versions = VersionExtensions.GetComparableVersionStrings(new SemanticVersion("1.3.2.4-beta")).ToArray();
+            var versions = VersionExtensions.GetComparableVersionStrings(new NuGetVersion("1.3.2.4-beta")).ToArray();
 
             // Assert
             Assert.Equal(1, versions.Length);
@@ -148,7 +148,7 @@ namespace NuGet.Test.Extensions
             string originalVersion, string[] expectedComponents)
         {
             // Arrange
-            var semVer = new SemanticVersion(originalVersion);
+            var semVer = new NuGetVersion(originalVersion);
 
             // Act
             string[] components = semVer.GetOriginalVersionComponents();
@@ -166,7 +166,7 @@ namespace NuGet.Test.Extensions
         {
             // Arrange
             var version = new Version(originalVersion);
-            var semVer = new SemanticVersion(version);
+            var semVer = new NuGetVersion(version);
 
             // Act
             string[] components = semVer.GetOriginalVersionComponents();

@@ -257,7 +257,7 @@ namespace NuGet
             return new SmartDataServiceQuery<DataServicePackage>(Context, query);
         }
 
-        public bool Exists(string packageId, SemanticVersion version)
+        public bool Exists(string packageId, ISemanticVersion version)
         {
             IQueryable<DataServicePackage> query = Context.CreateQuery<DataServicePackage>(PackageServiceEntitySetName).AsQueryable();
 
@@ -284,7 +284,7 @@ namespace NuGet
             return false;
         }
 
-        public IPackage FindPackage(string packageId, SemanticVersion version)
+        public IPackage FindPackage(string packageId, ISemanticVersion version)
         {
             IQueryable<DataServicePackage> query = Context.CreateQuery<DataServicePackage>(PackageServiceEntitySetName).AsQueryable();
 
@@ -385,7 +385,7 @@ namespace NuGet
             });
         }
 
-        public bool TryFindLatestPackageById(string id, out SemanticVersion latestVersion)
+        public bool TryFindLatestPackageById(string id, out ISemanticVersion latestVersion)
         {
             latestVersion = null;
 
@@ -405,7 +405,7 @@ namespace NuGet
 
                 if (latestPackage != null)
                 {
-                    latestVersion = new SemanticVersion(latestPackage.Version);
+                    latestVersion = new NuGetVersion(latestPackage.Version);
                     return true;
                 }
             }

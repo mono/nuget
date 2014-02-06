@@ -104,13 +104,13 @@ namespace NuGet.Dialog.Providers
             var packageLookup = LocalRepository as ILatestPackageLookup;
             if (packageLookup != null)
             {
-                SemanticVersion localPackageVersion; 
+                ISemanticVersion localPackageVersion; 
                 return packageLookup.TryFindLatestPackageById(item.Id, out localPackageVersion) &&
-                       localPackageVersion < package.Version;
+                       localPackageVersion.CompareTo(package.Version) < 0;
             }
-            
+
             return LocalRepository.GetPackages().Any(
-                p => p.Id.Equals(package.Id, StringComparison.OrdinalIgnoreCase) && p.Version < package.Version);
+                p => p.Id.Equals(package.Id, StringComparison.OrdinalIgnoreCase) && p.Version.CompareTo(package.Version) < 0);
         }
 
         protected override void ExecuteCommand(IProjectManager projectManager, PackageItem item, IVsPackageManager activePackageManager, IList<PackageOperation> operations)

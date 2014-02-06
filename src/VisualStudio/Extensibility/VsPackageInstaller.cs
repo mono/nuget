@@ -82,7 +82,7 @@ namespace NuGet.VisualStudio
 
         public void InstallPackage(string source, Project project, string packageId, Version version, bool ignoreDependencies)
         {
-            InstallPackage(source, project, packageId, version == null ? (SemanticVersion)null : new SemanticVersion(version), ignoreDependencies);
+            InstallPackage(source, project, packageId, version == null ? (ISemanticVersion)null : new NuGetVersion(version), ignoreDependencies);
         }
 
         public void InstallPackage(string source, Project project, string packageId, string version, bool ignoreDependencies)
@@ -95,7 +95,7 @@ namespace NuGet.VisualStudio
             InstallPackage(repository, project, packageId, ToSemanticVersion(version), ignoreDependencies, skipAssemblyReferences: skipAssemblyReferences);
         }
 
-        internal void InstallPackage(string source, Project project, string packageId, SemanticVersion version, bool ignoreDependencies)
+        internal void InstallPackage(string source, Project project, string packageId, ISemanticVersion version, bool ignoreDependencies)
         {
             if (String.IsNullOrEmpty(source))
             {
@@ -108,7 +108,7 @@ namespace NuGet.VisualStudio
             InstallPackage(repository, project, packageId, version, ignoreDependencies, skipAssemblyReferences: false);
         }
 
-        internal void InstallPackage(IPackageRepository repository, Project project, string packageId, SemanticVersion version, bool ignoreDependencies, bool skipAssemblyReferences)
+        internal void InstallPackage(IPackageRepository repository, Project project, string packageId, ISemanticVersion version, bool ignoreDependencies, bool skipAssemblyReferences)
         {
             if (project == null)
             {
@@ -250,9 +250,9 @@ namespace NuGet.VisualStudio
             console.WriteLine(message);
         }
 
-        private static SemanticVersion ToSemanticVersion(string version)
+        private static ISemanticVersion ToSemanticVersion(string version)
         {
-            return version == null ? (SemanticVersion)null : new SemanticVersion(version);
+            return version == null ? (ISemanticVersion)null : new NuGetVersion(version);
         }
     }
 }

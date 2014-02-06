@@ -46,12 +46,12 @@ namespace NuGet.Test
             var repo = GetRemoteRepository();
 
             // Act
-            var package = repo.FindPackage(packageId: "A", version: SemanticVersion.Parse("1.0"));
+            var package = repo.FindPackage(packageId: "A", version: NuGetVersion.Parse("1.0"));
 
             // Assert
             Assert.NotNull(package);
             Assert.Equal("A", package.Id);
-            Assert.Equal(SemanticVersion.Parse("1.0"), package.Version);
+            Assert.Equal(NuGetVersion.Parse("1.0"), package.Version);
         }
 
         [Fact]
@@ -61,8 +61,8 @@ namespace NuGet.Test
             var repo = GetLocalRepository();
 
             // Act
-            var package1 = repo.FindPackage(packageId: "X", version: SemanticVersion.Parse("1.0"));
-            var package2 = repo.FindPackage(packageId: "A", version: SemanticVersion.Parse("1.1"));
+            var package1 = repo.FindPackage(packageId: "X", version: NuGetVersion.Parse("1.0"));
+            var package2 = repo.FindPackage(packageId: "A", version: NuGetVersion.Parse("1.1"));
 
             // Assert
             Assert.Null(package1 ?? package2);
@@ -81,7 +81,7 @@ namespace NuGet.Test
             // Assert
             Assert.NotNull(package);
             Assert.Equal("A", package.Id);
-            Assert.Equal(SemanticVersion.Parse("1.0"), package.Version);
+            Assert.Equal(NuGetVersion.Parse("1.0"), package.Version);
         }
 
         [Fact]
@@ -110,7 +110,7 @@ namespace NuGet.Test
             // Assert
             Assert.NotNull(package);
             Assert.Equal("A", package.Id);
-            Assert.Equal(SemanticVersion.Parse("1.0"), package.Version);
+            Assert.Equal(NuGetVersion.Parse("1.0"), package.Version);
         }
 
         [Fact]
@@ -149,9 +149,9 @@ namespace NuGet.Test
             Assert.Equal(packages.Count(), 2);
             packages = packages.OrderBy(p => p.Id);
             Assert.Equal(packages.ElementAt(0).Id, "B");
-            Assert.Equal(packages.ElementAt(0).Version, new SemanticVersion("1.0"));
+            Assert.Equal(packages.ElementAt(0).Version, new NuGetVersion("1.0"));
             Assert.Equal(packages.ElementAt(1).Id, "B");
-            Assert.Equal(packages.ElementAt(1).Version, new SemanticVersion("1.0-beta"));
+            Assert.Equal(packages.ElementAt(1).Version, new NuGetVersion("1.0-beta"));
         }
 
         [Fact]
@@ -231,7 +231,7 @@ namespace NuGet.Test
             // Assert
             Assert.True(packages.Any());
             Assert.Equal(packages.First().Id, "A");
-            Assert.Equal(packages.First().Version, SemanticVersion.Parse("1.2"));
+            Assert.Equal(packages.First().Version, NuGetVersion.Parse("1.2"));
         }
         
         [Fact]
@@ -282,7 +282,7 @@ namespace NuGet.Test
 
             // Assert
             Assert.Equal("B", package.Id);
-            Assert.Equal(new SemanticVersion("2.0"), package.Version);
+            Assert.Equal(new NuGetVersion("2.0"), package.Version);
         }
 
         [Fact]
@@ -295,11 +295,11 @@ namespace NuGet.Test
             };
 
             // Act
-            IPackage package = repository.FindPackage("B", new SemanticVersion("1.0"));
+            IPackage package = repository.FindPackage("B", new NuGetVersion("1.0"));
 
             // Assert
             Assert.Equal("B", package.Id);
-            Assert.Equal(new SemanticVersion("1.0.0"), package.Version);
+            Assert.Equal(new NuGetVersion("1.0.0"), package.Version);
         }
 
         // Test that when dependencyVersion is DependencyVersions.Lowest, 
@@ -350,15 +350,15 @@ namespace NuGet.Test
 
             // Assert
             Assert.Equal("B", package1.Id);
-            Assert.Equal(new SemanticVersion("1.0"), package1.Version);
+            Assert.Equal(new NuGetVersion("1.0"), package1.Version);
             Assert.Equal("B", package2.Id);
-            Assert.Equal(new SemanticVersion("1.0"), package2.Version);
+            Assert.Equal(new NuGetVersion("1.0"), package2.Version);
             Assert.Equal("B", package3.Id);
-            Assert.Equal(new SemanticVersion("1.0"), package3.Version);
+            Assert.Equal(new NuGetVersion("1.0"), package3.Version);
             Assert.Equal("B", package4.Id);
-            Assert.Equal(new SemanticVersion("1.0"), package4.Version);
+            Assert.Equal(new NuGetVersion("1.0"), package4.Version);
             Assert.Equal("B", package5.Id);
-            Assert.Equal(new SemanticVersion("1.0"), package5.Version);
+            Assert.Equal(new NuGetVersion("1.0"), package5.Version);
         }
 
         // Test that when dependencyVersion is DependencyVersions.Highest, 
@@ -410,15 +410,15 @@ namespace NuGet.Test
 
             // Assert
             Assert.Equal("B", package1.Id);
-            Assert.Equal(new SemanticVersion("3.0"), package1.Version);
+            Assert.Equal(new NuGetVersion("3.0"), package1.Version);
             Assert.Equal("B", package2.Id);
-            Assert.Equal(new SemanticVersion("3.0"), package2.Version);
+            Assert.Equal(new NuGetVersion("3.0"), package2.Version);
             Assert.Equal("B", package3.Id);
-            Assert.Equal(new SemanticVersion("3.0"), package3.Version);
+            Assert.Equal(new NuGetVersion("3.0"), package3.Version);
             Assert.Equal("B", package4.Id);
-            Assert.Equal(new SemanticVersion("1.0"), package4.Version);
+            Assert.Equal(new NuGetVersion("1.0"), package4.Version);
             Assert.Equal("B", package5.Id);
-            Assert.Equal(new SemanticVersion("2.0"), package5.Version);
+            Assert.Equal(new NuGetVersion("2.0"), package5.Version);
         }
         
         // Test that when dependencyVersion is DependencyVersions.HighestMinor, 
@@ -470,15 +470,15 @@ namespace NuGet.Test
 
             // Assert
             Assert.Equal("B", package1.Id);
-            Assert.Equal(new SemanticVersion("1.1"), package1.Version);
+            Assert.Equal(new NuGetVersion("1.1"), package1.Version);
             Assert.Equal("B", package2.Id);
-            Assert.Equal(new SemanticVersion("1.1"), package2.Version);
+            Assert.Equal(new NuGetVersion("1.1"), package2.Version);
             Assert.Equal("B", package3.Id);
-            Assert.Equal(new SemanticVersion("1.1"), package3.Version);
+            Assert.Equal(new NuGetVersion("1.1"), package3.Version);
             Assert.Equal("B", package4.Id);
-            Assert.Equal(new SemanticVersion("1.0"), package4.Version);
+            Assert.Equal(new NuGetVersion("1.0"), package4.Version);
             Assert.Equal("B", package5.Id);
-            Assert.Equal(new SemanticVersion("1.1"), package5.Version);
+            Assert.Equal(new NuGetVersion("1.1"), package5.Version);
         }
 
         [Fact]
@@ -517,15 +517,15 @@ namespace NuGet.Test
 
             // Assert
             Assert.Equal("B", package1.Id);
-            Assert.Equal(new SemanticVersion("1.0.9"), package1.Version);
+            Assert.Equal(new NuGetVersion("1.0.9"), package1.Version);
             Assert.Equal("B", package2.Id);
-            Assert.Equal(new SemanticVersion("1.0.9"), package2.Version);
+            Assert.Equal(new NuGetVersion("1.0.9"), package2.Version);
             Assert.Equal("B", package3.Id);
-            Assert.Equal(new SemanticVersion("1.0.9"), package3.Version);
+            Assert.Equal(new NuGetVersion("1.0.9"), package3.Version);
             Assert.Equal("B", package4.Id);
-            Assert.Equal(new SemanticVersion("1.0"), package4.Version);
+            Assert.Equal(new NuGetVersion("1.0"), package4.Version);
             Assert.Equal("B", package5.Id);
-            Assert.Equal(new SemanticVersion("1.0.1"), package5.Version);
+            Assert.Equal(new NuGetVersion("1.0.1"), package5.Version);
         }
 
         private static IPackageRepository GetEmptyRepository()
@@ -565,7 +565,7 @@ namespace NuGet.Test
         {
             Mock<IPackage> package = new Mock<IPackage>();
             package.SetupGet(p => p.Id).Returns(name);
-            package.SetupGet(p => p.Version).Returns(SemanticVersion.Parse(version));
+            package.SetupGet(p => p.Version).Returns(NuGetVersion.Parse(version));
             package.SetupGet(p => p.Description).Returns(desc);
             package.SetupGet(p => p.Tags).Returns(tags);
             package.SetupGet(p => p.Listed).Returns(true);

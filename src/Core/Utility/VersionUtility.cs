@@ -302,14 +302,9 @@ namespace NuGet
         /// <summary>
         /// The safe range is defined as the highest build and revision for a given major and minor version
         /// </summary>
-        public static IVersionSpec GetSafeRange(SemanticVersion version)
+        public static IVersionSpec GetSafeRange(ISemanticVersion version)
         {
-            return new VersionSpec
-            {
-                IsMinInclusive = true,
-                MinVersion = version,
-                MaxVersion = new SemanticVersion(new Version(version.Version.Major, version.Version.Minor + 1))
-            };
+            return new VersionSpec(version, new NuGetVersion(new Version(version.Major, version.Minor + 1)), true, false);
         }
 
         public static string PrettyPrint(IVersionSpec versionSpec)
@@ -599,21 +594,21 @@ namespace NuGet
         /// <summary>
         /// Returns all possible versions for a version. i.e. 1.0 would return 1.0, 1.0.0, 1.0.0.0
         /// </summary>
-        internal static IEnumerable<SemanticVersion> GetPossibleVersions(SemanticVersion semVer)
+        internal static IEnumerable<ISemanticVersion> GetPossibleVersions(ISemanticVersion semVer)
         {
             // Trim the version so things like 1.0.0.0 end up being 1.0
-            Version version = TrimVersion(semVer.Version);
+            Version version = TrimVersion(semVer.GetLegacyVersion());
 
-            yield return new SemanticVersion(version, semVer.SpecialVersion);
+            yield return new NuGetVersion(version, semVer.SpecialVersion);
 
             if (version.Build == -1 && version.Revision == -1)
             {
-                yield return new SemanticVersion(new Version(version.Major, version.Minor, 0), semVer.SpecialVersion);
-                yield return new SemanticVersion(new Version(version.Major, version.Minor, 0, 0), semVer.SpecialVersion);
+                yield return new NuGetVersion(new Version(version.Major, version.Minor, 0), semVer.SpecialVersion);
+                yield return new NuGetVersion(new Version(version.Major, version.Minor, 0, 0), semVer.SpecialVersion);
             }
             else if (version.Revision == -1)
             {
-                yield return new SemanticVersion(new Version(version.Major, version.Minor, version.Build, 0), semVer.SpecialVersion);
+                yield return new NuGetVersion(new Version(version.Major, version.Minor, version.Build, 0), semVer.SpecialVersion);
             }
         }
 

@@ -57,7 +57,7 @@ namespace NuGet.PowerShell.Commands
                 projectManager.WhatIf = WhatIf;
             }
 
-            SemanticVersion semVer = GetSemanticVersion(Version);
+            ISemanticVersion semVer = GetSemanticVersion(Version);
 
             PackageManager.UninstallPackage(projectManager, Id, semVer, Force.IsPresent, RemoveDependencies.IsPresent, this);
         }

@@ -104,13 +104,13 @@ namespace NuGet
             return filename + ".tmp";
         }
 
-        public override bool Exists(string packageId, SemanticVersion version)
+        public override bool Exists(string packageId, ISemanticVersion version)
         {
             string packagePath = GetPackageFilePath(packageId, version);
             return TryAct(() => FileSystem.FileExists(packagePath), packagePath);
         }
 
-        public bool InvokeOnPackage(string packageId, SemanticVersion version, Action<Stream> action)
+        public bool InvokeOnPackage(string packageId, ISemanticVersion version, Action<Stream> action)
         {
             if (FileSystem is NullFileSystem)
             {
@@ -164,7 +164,7 @@ namespace NuGet
             return Path.GetFileName(base.GetPackageFilePath(package));
         }
 
-        protected override string GetPackageFilePath(string id, SemanticVersion version)
+        protected override string GetPackageFilePath(string id, ISemanticVersion version)
         {
             return Path.GetFileName(base.GetPackageFilePath(id, version));
         }

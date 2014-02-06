@@ -152,12 +152,12 @@ namespace NuGet
             Completed
         }
 
-        public bool Exists(string packageId, SemanticVersion version)
+        public bool Exists(string packageId, ISemanticVersion version)
         {
             return FindPackage(packageId, version) != null;
         }
 
-        public IPackage FindPackage(string packageId, SemanticVersion version)
+        public IPackage FindPackage(string packageId, ISemanticVersion version)
         {
             return FindPackagesById(packageId).Where(p => p.Version.Equals(version)).FirstOrDefault();
         }

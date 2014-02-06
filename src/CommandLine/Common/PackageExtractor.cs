@@ -21,7 +21,7 @@ namespace NuGet.Common
         /// Additionally, it also fails if the string is longer than 256 characters. Therefore we obtain a base-64 encoded hash of the path.
         /// </summary>
         /// <seealso href="http://social.msdn.microsoft.com/forums/en-us/clr/thread/D0B3BF82-4D23-47C8-8706-CC847157AC81"/>
-        private static string GenerateUniqueToken(IPackageManager packageManager, string packageId, SemanticVersion version)
+        private static string GenerateUniqueToken(IPackageManager packageManager, string packageId, ISemanticVersion version)
         {
             var fullPath = packageManager.FileSystem.GetFullPath(packageManager.PathResolver.GetPackageFileName(packageId, version));
             return EncryptionUtility.GenerateUniqueToken(fullPath);

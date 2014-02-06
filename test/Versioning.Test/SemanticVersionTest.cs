@@ -14,7 +14,7 @@ namespace NuGet.Test
         public void StringConstructorParsesValuesCorrectly(string version, Version versionValue, string specialValue)
         {
             // Act
-            SemanticVersion semanticVersion = new SemanticVersion(version);
+            NuGetVersion semanticVersion = new NuGetVersion(version);
 
             // Assert
             Assert.Equal(versionValue, semanticVersion.Version);
@@ -35,8 +35,8 @@ namespace NuGet.Test
         [Fact]
         public void ParseThrowsIfStringIsNullOrEmpty()
         {
-            ExceptionAssert.ThrowsArgNullOrEmpty(() => SemanticVersion.Parse(version: null), "version");
-            ExceptionAssert.ThrowsArgNullOrEmpty(() => SemanticVersion.Parse(version: String.Empty), "version");
+            ExceptionAssert.ThrowsArgNullOrEmpty(() => NuGetVersion.Parse(version: null), "version");
+            ExceptionAssert.ThrowsArgNullOrEmpty(() => NuGetVersion.Parse(version: String.Empty), "version");
         }
 
         [Theory]
@@ -53,7 +53,7 @@ namespace NuGet.Test
         [InlineData("1.4.7-")]
         public void ParseThrowsIfStringIsNotAValidSemVer(string versionString)
         {
-            ExceptionAssert.ThrowsArgumentException(() => SemanticVersion.Parse(versionString),
+            ExceptionAssert.ThrowsArgumentException(() => NuGetVersion.Parse(versionString),
                 "version",
                 String.Format(CultureInfo.InvariantCulture, "'{0}' is not a valid version string.", versionString));
         }
@@ -62,18 +62,18 @@ namespace NuGet.Test
         {
             get
             {
-                yield return new object[] { "1.022", new SemanticVersion(new Version("1.22.0.0"), "") };
-                yield return new object[] { "23.2.3", new SemanticVersion(new Version("23.2.3.0"), "") };
-                yield return new object[] { "1.3.42.10133", new SemanticVersion(new Version("1.3.42.10133"), "") };
+                yield return new object[] { "1.022", new NuGetVersion(new Version("1.22.0.0"), "") };
+                yield return new object[] { "23.2.3", new NuGetVersion(new Version("23.2.3.0"), "") };
+                yield return new object[] { "1.3.42.10133", new NuGetVersion(new Version("1.3.42.10133"), "") };
             }
         }
 
         [Theory]
         [PropertyData("LegacyVersionData")]
-        public void ParseReadsLegacyStyleVersionNumbers(string versionString, SemanticVersion expected)
+        public void ParseReadsLegacyStyleVersionNumbers(string versionString, NuGetVersion expected)
         {
             // Act
-            var actual = SemanticVersion.Parse(versionString);
+            var actual = NuGetVersion.Parse(versionString);
 
             // Assert
             Assert.Equal(expected.Version, actual.Version);
@@ -84,19 +84,19 @@ namespace NuGet.Test
         {
             get
             {
-                yield return new object[] { "1.022-Beta", new SemanticVersion(new Version("1.22.0.0"), "Beta") };
-                yield return new object[] { "23.2.3-Alpha", new SemanticVersion(new Version("23.2.3.0"), "Alpha") };
-                yield return new object[] { "1.3.42.10133-PreRelease", new SemanticVersion(new Version("1.3.42.10133"), "PreRelease") };
-                yield return new object[] { "1.3.42.200930-RC-2", new SemanticVersion(new Version("1.3.42.200930"), "RC-2") };
+                yield return new object[] { "1.022-Beta", new NuGetVersion(new Version("1.22.0.0"), "Beta") };
+                yield return new object[] { "23.2.3-Alpha", new NuGetVersion(new Version("23.2.3.0"), "Alpha") };
+                yield return new object[] { "1.3.42.10133-PreRelease", new NuGetVersion(new Version("1.3.42.10133"), "PreRelease") };
+                yield return new object[] { "1.3.42.200930-RC-2", new NuGetVersion(new Version("1.3.42.200930"), "RC-2") };
             }
         }
 
         [Theory]
         [PropertyData("SemVerData")]
-        public void ParseReadsSemverAndHybridSemverVersionNumbers(string versionString, SemanticVersion expected)
+        public void ParseReadsSemverAndHybridSemverVersionNumbers(string versionString, NuGetVersion expected)
         {
             // Act
-            var actual = SemanticVersion.Parse(versionString);
+            var actual = NuGetVersion.Parse(versionString);
 
             // Assert
             Assert.Equal(expected.Version, actual.Version);
@@ -107,18 +107,18 @@ namespace NuGet.Test
         {
             get
             {
-                yield return new object[] { "  1.022-Beta", new SemanticVersion(new Version("1.22.0.0"), "Beta") };
-                yield return new object[] { "23.2.3-Alpha  ", new SemanticVersion(new Version("23.2.3.0"), "Alpha") };
-                yield return new object[] { "    1.3.42.10133-PreRelease  ", new SemanticVersion(new Version("1.3.42.10133"), "PreRelease") };
+                yield return new object[] { "  1.022-Beta", new NuGetVersion(new Version("1.22.0.0"), "Beta") };
+                yield return new object[] { "23.2.3-Alpha  ", new NuGetVersion(new Version("23.2.3.0"), "Alpha") };
+                yield return new object[] { "    1.3.42.10133-PreRelease  ", new NuGetVersion(new Version("1.3.42.10133"), "PreRelease") };
             }
         }
 
         [Theory]
         [PropertyData("SemVerWithWhiteSpace")]
-        public void ParseIgnoresLeadingAndTrailingWhitespace(string versionString, SemanticVersion expected)
+        public void ParseIgnoresLeadingAndTrailingWhitespace(string versionString, NuGetVersion expected)
         {
             // Act
-            var actual = SemanticVersion.Parse(versionString);
+            var actual = NuGetVersion.Parse(versionString);
 
             // Assert
             Assert.Equal(expected.Version, actual.Version);
@@ -138,8 +138,8 @@ namespace NuGet.Test
         public void SemVerLessThanAndGreaterThanOperatorsWorks(string versionA, string versionB)
         {
             // Arrange
-            var itemA = new SemanticVersion(versionA);
-            var itemB = new SemanticVersion(versionB);
+            var itemA = new NuGetVersion(versionA);
+            var itemB = new NuGetVersion(versionB);
             object objectB = itemB;
 
             // Act and Assert
@@ -159,7 +159,7 @@ namespace NuGet.Test
         public void EqualsReturnsFalseIfComparingANonSemVerType(object other)
         {
             // Arrange
-            var semVer = new SemanticVersion("1.0.0");
+            var semVer = new NuGetVersion("1.0.0");
 
             // Act and Assert
             Assert.False(semVer.Equals(other));
@@ -175,8 +175,8 @@ namespace NuGet.Test
         public void SemVerEqualsOperatorWorks(string versionA, string versionB)
         {
             // Arrange
-            var itemA = new SemanticVersion(versionA);
-            var itemB = new SemanticVersion(versionB);
+            var itemA = new NuGetVersion(versionA);
+            var itemB = new NuGetVersion(versionB);
             object objectB = itemB;
 
             // Act and Assert
@@ -192,8 +192,8 @@ namespace NuGet.Test
         public void SemVerEqualityComparisonsWorkForNullValues()
         {
             // Arrange
-            SemanticVersion itemA = null;
-            SemanticVersion itemB = null;
+            NuGetVersion itemA = null;
+            NuGetVersion itemB = null;
 
             // Act and Assert
             Assert.True(itemA == itemB);
@@ -215,7 +215,7 @@ namespace NuGet.Test
         public void ToStringReturnsOriginalValue(string version)
         {
             // Act
-            SemanticVersion semVer = new SemanticVersion(version);
+            NuGetVersion semVer = new NuGetVersion(version);
 
             // Assert
             Assert.Equal(version, semVer.ToString());
@@ -237,7 +237,7 @@ namespace NuGet.Test
         public void ToStringConstructedFromVersionAndSpecialVersionConstructor(Version version, string specialVersion, string expected)
         {
             // Act
-            SemanticVersion semVer = new SemanticVersion(version, specialVersion);
+            NuGetVersion semVer = new NuGetVersion(version, specialVersion);
 
             // Assert
             Assert.Equal(expected, semVer.ToString());
@@ -250,8 +250,8 @@ namespace NuGet.Test
             var versionString = "1.3.2-CTP-2-Refresh-Alpha";
 
             // Act
-            SemanticVersion version;
-            bool result = SemanticVersion.TryParseStrict(versionString, out version);
+            NuGetVersion version;
+            bool result = NuGetVersion.TryParseStrict(versionString, out version);
 
             // Assert
             Assert.True(result);
@@ -268,8 +268,8 @@ namespace NuGet.Test
         public void TryParseStrictReturnsFalseIfVersionIsNotStrictSemVer(string version)
         {
             // Act 
-            SemanticVersion semanticVersion;
-            bool result = SemanticVersion.TryParseStrict(version, out semanticVersion);
+            NuGetVersion semanticVersion;
+            bool result = NuGetVersion.TryParseStrict(version, out semanticVersion);
 
             // Assert
             Assert.False(result);

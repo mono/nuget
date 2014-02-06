@@ -101,14 +101,14 @@ namespace NuGet.VisualStudio
                                 let includeDependencies = packageElement.GetOptionalAttributeValue("includeDependencies")
                                 select new { id, version, skipAssemblyReferences, includeDependencies }).ToList();
 
-            SemanticVersion semVer;
+            NuGetVersion semVer;
             bool skipAssemblyReferencesValue;
             bool includeDependenciesValue;
             var missingOrInvalidAttributes = from declaration in declarations
                                              where
                                                  String.IsNullOrWhiteSpace(declaration.id) ||
                                                  String.IsNullOrWhiteSpace(declaration.version) ||
-                                                 !SemanticVersion.TryParse(declaration.version, out semVer) ||
+                                                 !NuGetVersion.TryParse(declaration.version, out semVer) ||
                                                  (declaration.skipAssemblyReferences != null &&
                                                   !Boolean.TryParse(declaration.skipAssemblyReferences, out skipAssemblyReferencesValue)) ||
                                                  (declaration.includeDependencies != null &&

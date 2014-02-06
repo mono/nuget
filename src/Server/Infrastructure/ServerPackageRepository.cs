@@ -51,7 +51,7 @@ namespace NuGet.Server.Infrastructure
             }
         }
 
-        public void RemovePackage(string packageId, SemanticVersion version)
+        public void RemovePackage(string packageId, ISemanticVersion version)
         {
             IPackage package = FindPackage(packageId, version);
             if (package != null)

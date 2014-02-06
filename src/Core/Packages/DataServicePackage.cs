@@ -292,13 +292,13 @@ namespace NuGet
             }
         }
 
-        SemanticVersion IPackageName.Version
+        ISemanticVersion IPackageName.Version
         {
             get
             {
                 if (Version != null)
                 {
-                    return new SemanticVersion(Version);
+                    return new NuGetVersion(Version);
                 }
                 return null;
             }

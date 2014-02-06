@@ -154,7 +154,7 @@ namespace NuGet.Server.DataServices
             var packagesToUpdate = new List<IPackageMetadata>();
             for (int i = 0; i < idValues.Length; i++)
             {
-                packagesToUpdate.Add(new PackageBuilder { Id = idValues[i], Version = new SemanticVersion(versionValues[i]) });
+                packagesToUpdate.Add(new PackageBuilder { Id = idValues[i], Version = new NuGetVersion(versionValues[i]) });
             }
 
             var versionConstraintsList = new IVersionSpec[versionConstraintValues.Length];

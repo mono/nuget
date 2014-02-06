@@ -452,8 +452,8 @@ namespace NuGet.Test
             packageManager.UpdatePackage("A", updateDependencies: true, allowPrereleaseVersions: false);
 
             // Assert
-            Assert.False(localRepository.Exists("A", new SemanticVersion("1.0")));
-            Assert.True(localRepository.Exists("A", new SemanticVersion("2.0")));
+            Assert.False(localRepository.Exists("A", new NuGetVersion("1.0")));
+            Assert.True(localRepository.Exists("A", new NuGetVersion("2.0")));
         }
 
         [Fact]
@@ -489,7 +489,7 @@ namespace NuGet.Test
             packageManager.UpdatePackage("A", updateDependencies: true, allowPrereleaseVersions: false);
 
             // Assert
-            Assert.True(localRepository.Exists("A", new SemanticVersion("1.0")));
+            Assert.True(localRepository.Exists("A", new NuGetVersion("1.0")));
         }
 
         [Fact]
@@ -645,7 +645,7 @@ namespace NuGet.Test
 
             // Act 
             // The allowPrereleaseVersions flag should be irrelevant since we specify a version.
-            packageManager.InstallPackage("B", version: new SemanticVersion("1.0.0-a"), ignoreDependencies: false, allowPrereleaseVersions: false);
+            packageManager.InstallPackage("B", version: new NuGetVersion("1.0.0-a"), ignoreDependencies: false, allowPrereleaseVersions: false);
             // Verify we actually did install B.1.0.0a
             Assert.True(localRepository.Exists(packageB_10a));
 

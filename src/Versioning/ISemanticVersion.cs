@@ -5,14 +5,20 @@ using System.Text;
 
 namespace NuGet.Versioning
 {
-    public interface ISemanticVersion : ISemanticVersionStrict, IComparable<ISemanticVersion>, IEquatable<ISemanticVersion>
+    public interface ISemanticVersion : IVersion
     {
-        Version Version { get; }
+        int Major { get; }
+        int Minor { get; }
+        int Patch { get; }
 
-        bool IsLegacyVersion { get; }
+        IEnumerable<string> ReleaseLabels { get; }
 
-        bool Equals(ISemanticVersion other, VersionComparison versionComparison);
+        string SpecialVersion { get; }
 
-        int CompareTo(ISemanticVersion other, VersionComparison versionComparison);
+        bool IsPrerelease { get; }
+
+        bool  HasMetadata { get; }
+
+        string Metadata { get; }
     }
 }

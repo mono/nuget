@@ -32,7 +32,7 @@ namespace NuGet
             return Exists(repository, packageId, version: null);
         }
 
-        public static bool Exists(this IPackageRepository repository, string packageId, SemanticVersion version)
+        public static bool Exists(this IPackageRepository repository, string packageId, ISemanticVersion version)
         {
             IPackageLookup packageLookup = repository as IPackageLookup;
             if ((packageLookup != null) && !String.IsNullOrEmpty(packageId) && (version != null))
@@ -42,7 +42,7 @@ namespace NuGet
             return repository.FindPackage(packageId, version) != null;
         }
 
-        public static bool TryFindPackage(this IPackageRepository repository, string packageId, SemanticVersion version, out IPackage package)
+        public static bool TryFindPackage(this IPackageRepository repository, string packageId, ISemanticVersion version, out IPackage package)
         {
             package = repository.FindPackage(packageId, version);
             return package != null;
@@ -53,14 +53,14 @@ namespace NuGet
             return repository.FindPackage(packageId, version: null);
         }
 
-        public static IPackage FindPackage(this IPackageRepository repository, string packageId, SemanticVersion version)
+        public static IPackage FindPackage(this IPackageRepository repository, string packageId, ISemanticVersion version)
         {
             // Default allow pre release versions to true here because the caller typically wants to find all packages in this scenario for e.g when checking if a 
             // a package is already installed in the local repository. The same applies to allowUnlisted.
             return FindPackage(repository, packageId, version, NullConstraintProvider.Instance, allowPrereleaseVersions: true, allowUnlisted: true);
         }
 
-        public static IPackage FindPackage(this IPackageRepository repository, string packageId, SemanticVersion version, bool allowPrereleaseVersions, bool allowUnlisted)
+        public static IPackage FindPackage(this IPackageRepository repository, string packageId, ISemanticVersion version, bool allowPrereleaseVersions, bool allowUnlisted)
         {
             return FindPackage(repository, packageId, version, NullConstraintProvider.Instance, allowPrereleaseVersions, allowUnlisted);
         }
@@ -68,7 +68,7 @@ namespace NuGet
         public static IPackage FindPackage(
             this IPackageRepository repository,
             string packageId,
-            SemanticVersion version,
+            ISemanticVersion version,
             IPackageConstraintProvider constraintProvider,
             bool allowPrereleaseVersions,
             bool allowUnlisted)
@@ -465,7 +465,7 @@ namespace NuGet
                 var constraint = versionConstraintList[i];
 
                 var updates = from candidate in sourcePackages[package.Id]
-                              where (candidate.Version > package.Version) &&
+                              where (candidate.Version.CompareTo(package.Version) > 0) &&
                                      SupportsTargetFrameworks(targetFramework, candidate) &&
                                      (constraint == null || constraint.Satisfies(candidate.Version))
                               select candidate;
@@ -598,7 +598,7 @@ namespace NuGet
             else if (dependencyVersion == DependencyVersion.HighestPatch)
             {
                 var groups = from p in packages
-                             group p by new { p.Version.Version.Major, p.Version.Version.Minor } into g
+                             group p by new { p.Version.Major, p.Version.Minor } into g
                              orderby g.Key.Major, g.Key.Minor
                              select g;
                 return (from p in groups.First()
@@ -608,7 +608,7 @@ namespace NuGet
             else if (dependencyVersion == DependencyVersion.HighestMinor)
             {
                 var groups = from p in packages
-                             group p by new { p.Version.Version.Major } into g
+                             group p by new { p.Version.Major } into g
                              orderby g.Key.Major
                              select g;
                 return (from p in groups.First()

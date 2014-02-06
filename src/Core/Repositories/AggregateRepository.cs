@@ -107,7 +107,7 @@ namespace NuGet
             return CreateAggregateQuery(Repositories.Select(getPackages));
         }
 
-        public IPackage FindPackage(string packageId, SemanticVersion version)
+        public IPackage FindPackage(string packageId, ISemanticVersion version)
         {
             // When we're looking for an exact package, we can optimize but searching each
             // repository one by one until we find the package that matches.
@@ -116,7 +116,7 @@ namespace NuGet
                                .FirstOrDefault(p => p != null);
         }
 
-        public bool Exists(string packageId, SemanticVersion version)
+        public bool Exists(string packageId, ISemanticVersion version)
         {
             // When we're looking for an exact package, we can optimize but searching each
             // repository one by one until we find the package that matches.

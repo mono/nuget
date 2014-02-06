@@ -223,7 +223,7 @@ namespace NuGet.Commands
         }
 
         // Do a very quick check of whether a package in installed by checking whether the nupkg file exists
-        private static bool IsPackageInstalled(IPackageRepository repository, IFileSystem packagesFolderFileSystem, string packageId, SemanticVersion version)
+        private static bool IsPackageInstalled(IPackageRepository repository, IFileSystem packagesFolderFileSystem, string packageId, ISemanticVersion version)
         {
             if (version != null)
             {
@@ -251,7 +251,7 @@ namespace NuGet.Commands
         private bool RestorePackage(
             IFileSystem packagesFolderFileSystem,
             string packageId,
-            SemanticVersion version,
+            ISemanticVersion version,
             bool packageRestoreConsent,
             ConcurrentQueue<IPackage> satellitePackages)
         {

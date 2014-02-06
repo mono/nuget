@@ -38,11 +38,11 @@ namespace NuGet
 
         void InstallPackage(IPackage package, bool ignoreDependencies, bool allowPrereleaseVersions);
         void InstallPackage(IPackage package, bool ignoreDependencies, bool allowPrereleaseVersions, bool ignoreWalkInfo);
-        void InstallPackage(string packageId, SemanticVersion version, bool ignoreDependencies, bool allowPrereleaseVersions);
+        void InstallPackage(string packageId, ISemanticVersion version, bool ignoreDependencies, bool allowPrereleaseVersions);
         void UpdatePackage(IPackage newPackage, bool updateDependencies, bool allowPrereleaseVersions);
-        void UpdatePackage(string packageId, SemanticVersion version, bool updateDependencies, bool allowPrereleaseVersions);
+        void UpdatePackage(string packageId, ISemanticVersion version, bool updateDependencies, bool allowPrereleaseVersions);
         void UpdatePackage(string packageId, IVersionSpec versionSpec, bool updateDependencies, bool allowPrereleaseVersions);
         void UninstallPackage(IPackage package, bool forceRemove, bool removeDependencies);
-        void UninstallPackage(string packageId, SemanticVersion version, bool forceRemove, bool removeDependencies);
+        void UninstallPackage(string packageId, ISemanticVersion version, bool forceRemove, bool removeDependencies);
     }
 }

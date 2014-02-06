@@ -43,8 +43,8 @@ namespace NuGet
                 builder.Authors.Add(assemblyMetadata.Company);
             }
 
-            SemanticVersion semVer = null;
-            if (SemanticVersion.TryParse(assemblyMetadata.Version, out semVer))
+            NuGetVersion semVer = null;
+            if (NuGetVersion.TryParse(assemblyMetadata.Version, out semVer))
             {
                 builder.Version = semVer;
             }
@@ -91,11 +91,11 @@ namespace NuGet
 
                     var attributes = CustomAttributeData.GetCustomAttributes(assembly);
 
-                    SemanticVersion version;
+                    NuGetVersion version;
                     string assemblyInformationalVersion = GetAttributeValueOrDefault<AssemblyInformationalVersionAttribute>(attributes);
-                    if (!SemanticVersion.TryParse(assemblyInformationalVersion, out version))
+                    if (!NuGetVersion.TryParse(assemblyInformationalVersion, out version))
                     {
-                        version = new SemanticVersion(assemblyName.Version);
+                        version = new NuGetVersion(assemblyName.Version);
                     }
 
                     return new AssemblyMetadata

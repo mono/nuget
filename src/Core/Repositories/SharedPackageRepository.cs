@@ -59,13 +59,13 @@ namespace NuGet
             DeleteEntry(path);
         }
 
-        public bool IsReferenced(string packageId, SemanticVersion version)
+        public bool IsReferenced(string packageId, ISemanticVersion version)
         {
             // See if this package exists in any other repository before we remove it
             return GetRepositories().Any(r => r.Exists(packageId, version));
         }
 
-        public override bool Exists(string packageId, SemanticVersion version)
+        public override bool Exists(string packageId, ISemanticVersion version)
         {
             if (version != null)
             {
@@ -84,7 +84,7 @@ namespace NuGet
             return FindPackage(packageId, version) != null;
         }
 
-        public override IPackage FindPackage(string packageId, SemanticVersion version)
+        public override IPackage FindPackage(string packageId, ISemanticVersion version)
         {
             var package = base.FindPackage(packageId, version);
             if (package != null)
@@ -106,7 +106,7 @@ namespace NuGet
             return null;
         }
 
-        public void AddPackageReferenceEntry(string packageId, SemanticVersion version)
+        public void AddPackageReferenceEntry(string packageId, ISemanticVersion version)
         {
             if (_packageReferenceFile != null)
             {
@@ -191,7 +191,7 @@ namespace NuGet
             }
         }
 
-        public bool IsSolutionReferenced(string packageId, SemanticVersion version)
+        public bool IsSolutionReferenced(string packageId, ISemanticVersion version)
         {
             return _packageReferenceFile != null && _packageReferenceFile.EntryExists(packageId, version);
         }
@@ -462,7 +462,7 @@ namespace NuGet
             return dependencies.Any(dependency => !solutionLevelPackages.Contains(dependency.Id));
         }
 
-        private string GetManifestFilePath(string packageId, SemanticVersion version)
+        private string GetManifestFilePath(string packageId, ISemanticVersion version)
         {
             string packageDirectory = PathResolver.GetPackageDirectory(packageId, version);
             string manifestFileName = packageDirectory + Constants.ManifestExtension;

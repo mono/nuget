@@ -53,12 +53,12 @@ namespace NuGet.Test
             Assert.Equal(2, dependencies.Count);
             Assert.Equal("A", dependencies[0].Id);
             Assert.True(dependencies[0].VersionSpec.IsMinInclusive);
-            Assert.Equal(new SemanticVersion("1.3"), dependencies[0].VersionSpec.MinVersion);
+            Assert.Equal(new NuGetVersion("1.3"), dependencies[0].VersionSpec.MinVersion);
             Assert.Equal("B", dependencies[1].Id);
             Assert.True(dependencies[1].VersionSpec.IsMinInclusive);
-            Assert.Equal(new SemanticVersion("2.4"), dependencies[1].VersionSpec.MinVersion);
+            Assert.Equal(new NuGetVersion("2.4"), dependencies[1].VersionSpec.MinVersion);
             Assert.False(dependencies[1].VersionSpec.IsMaxInclusive);
-            Assert.Equal(new SemanticVersion("5.0"), dependencies[1].VersionSpec.MaxVersion);
+            Assert.Equal(new NuGetVersion("5.0"), dependencies[1].VersionSpec.MaxVersion);
         }
 
         [Fact]
@@ -167,7 +167,7 @@ namespace NuGet.Test
             // Arrange
             var uri = new Uri("http://nuget.org");
             var mockRepository = new Mock<MockPackageRepository>().As<IPackageCacheRepository>();
-            mockRepository.Setup(s => s.InvokeOnPackage(It.IsAny<string>(), It.IsAny<SemanticVersion>(), It.IsAny<Action<Stream>>())).Returns(false);
+            mockRepository.Setup(s => s.InvokeOnPackage(It.IsAny<string>(), It.IsAny<ISemanticVersion>(), It.IsAny<Action<Stream>>())).Returns(false);
 
             var packageDownloader = new Mock<PackageDownloader>();
             packageDownloader.Setup(d => d.DownloadPackage(uri, It.IsAny<IPackageMetadata>(), It.IsAny<Stream>()))
@@ -284,9 +284,9 @@ namespace NuGet.Test
 
             var mockRepository = new Mock<IPackageCacheRepository>(MockBehavior.Strict);
             var lookup = mockRepository.As<IPackageLookup>();
-            lookup.Setup(s => s.FindPackage("A", new SemanticVersion("1.2")))
+            lookup.Setup(s => s.FindPackage("A", new NuGetVersion("1.2")))
                   .Returns(zipPackage1);
-            lookup.Setup(s => s.Exists("A", new SemanticVersion("1.2")))
+            lookup.Setup(s => s.Exists("A", new NuGetVersion("1.2")))
                   .Returns(true);
 
             var uri = new Uri("http://nuget.org");
@@ -294,7 +294,7 @@ namespace NuGet.Test
             packageDownloader.Setup(d => d.DownloadPackage(uri, It.IsAny<IPackageMetadata>(), It.IsAny<Stream>()))
                              .Callback(() =>
                                 {
-                                    lookup.Setup(s => s.FindPackage("A", new SemanticVersion("1.2")))
+                                    lookup.Setup(s => s.FindPackage("A", new NuGetVersion("1.2")))
                                            .Returns(zipPackage2);
                                 })
                              .Verifiable();
@@ -313,7 +313,7 @@ namespace NuGet.Test
                 Context = context.Object
             };
 
-            mockRepository.Setup(s => s.InvokeOnPackage("A", new SemanticVersion("1.2"), It.IsAny<Action<Stream>>()))
+            mockRepository.Setup(s => s.InvokeOnPackage("A", new NuGetVersion("1.2"), It.IsAny<Action<Stream>>()))
                 .Callback(() =>
                 {
                     using (var stream = new MemoryStream())

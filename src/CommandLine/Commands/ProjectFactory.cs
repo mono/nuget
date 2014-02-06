@@ -334,8 +334,8 @@ namespace NuGet.Commands
 
             string version = _project.GetPropertyValue("Version");
             builder.Version = builder.Version ??
-                              SemanticVersion.ParseOptionalVersion(version) ??
-                              new SemanticVersion("1.0");
+                              NuGetVersion.ParseOptionalVersion(version) ??
+                              new NuGetVersion("1.0");
         }
 
         private static IEnumerable<string> GetFiles(string path, string fileNameWithoutExtension, HashSet<string> allowedExtensions)

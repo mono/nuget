@@ -51,7 +51,7 @@ namespace NuGet.Test
 
             // Assert
             Assert.Equal("Jumpo", package.Id);
-            Assert.Equal(new SemanticVersion("1.0.0"), package.Version);
+            Assert.Equal(new NuGetVersion("1.0.0"), package.Version);
             Assert.Equal(1, package.Authors.Count());
             Assert.Equal("dotnetjunky", package.Authors.ElementAt(0));
             Assert.Equal(1, package.Owners.Count());
@@ -61,7 +61,7 @@ namespace NuGet.Test
             Assert.Equal("http://www.outercurve.com/", package.IconUrl.ToString());
             Assert.Equal(1, package.DependencySets.Count());
             Assert.Equal("bing", package.DependencySets.ElementAt(0).Dependencies.ElementAt(0).Id);
-            Assert.Equal(new SemanticVersion("1.0-RC"), package.DependencySets.ElementAt(0).Dependencies.ElementAt(0).VersionSpec.MinVersion);
+            Assert.Equal(new NuGetVersion("1.0-RC"), package.DependencySets.ElementAt(0).Dependencies.ElementAt(0).VersionSpec.MinVersion);
             Assert.True(package.DependencySets.ElementAt(0).Dependencies.ElementAt(0).VersionSpec.IsMinInclusive);
             Assert.Equal(null, package.DependencySets.ElementAt(0).Dependencies.ElementAt(0).VersionSpec.MaxVersion);
             Assert.False(package.DependencySets.ElementAt(0).Dependencies.ElementAt(0).VersionSpec.IsMaxInclusive);

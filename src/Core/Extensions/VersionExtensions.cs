@@ -16,7 +16,7 @@ namespace NuGet
             return versionInfo.ToDelegate<IPackage>(p => p.Version);
         }
 
-        public static Func<T, bool> ToDelegate<T>(this IVersionSpec versionInfo, Func<T, SemanticVersion> extractor)
+        public static Func<T, bool> ToDelegate<T>(this IVersionSpec versionInfo, Func<T, ISemanticVersion> extractor)
         {
             if (versionInfo == null)
             {
@@ -29,17 +29,17 @@ namespace NuGet
 
             return p =>
             {
-                SemanticVersion version = extractor(p);
+                ISemanticVersion version = extractor(p);
                 bool condition = true;
                 if (versionInfo.MinVersion != null)
                 {
                     if (versionInfo.IsMinInclusive)
                     {
-                        condition = condition && version >= versionInfo.MinVersion;
+                        condition = condition && version.CompareTo(versionInfo.MinVersion) >= 0;
                     }
                     else
                     {
-                        condition = condition && version > versionInfo.MinVersion;
+                        condition = condition && version.CompareTo(versionInfo.MinVersion) > 0;
                     }
                 }
 
@@ -47,11 +47,11 @@ namespace NuGet
                 {
                     if (versionInfo.IsMaxInclusive)
                     {
-                        condition = condition && version <= versionInfo.MaxVersion;
+                        condition = condition && version.CompareTo(versionInfo.MaxVersion) <= 0;
                     }
                     else
                     {
-                        condition = condition && version < versionInfo.MaxVersion;
+                        condition = condition && version.CompareTo(versionInfo.MaxVersion) < 0;
                     }
                 }
 
@@ -59,7 +59,7 @@ namespace NuGet
             };
         }
 
-        public static string[] GetOriginalVersionComponents(this SemanticVersion version)
+        public static string[] GetOriginalVersionComponents(this ISemanticVersion version)
         {
             string originalString = version.ToString();
 
@@ -97,10 +97,21 @@ namespace NuGet
             }
         }
 
-
-        public static IEnumerable<string> GetComparableVersionStrings(this SemanticVersion version)
+        public static Version GetLegacyVersion(this ISemanticVersion version)
         {
-            Version coreVersion = version.Version;
+            INuGetVersion legacyVersion = version as INuGetVersion;
+            if (legacyVersion != null)
+            {
+                return legacyVersion.Version;
+            }
+
+            return new Version(version.Major, version.Minor, version.Patch);
+        }
+
+
+        public static IEnumerable<string> GetComparableVersionStrings(this ISemanticVersion version)
+        {
+            Version coreVersion = version.GetLegacyVersion();
             string specialVersion = String.IsNullOrEmpty(version.SpecialVersion) ? String.Empty : "-" + version.SpecialVersion;
 
             string originalVersion = version.ToString();

@@ -124,7 +124,7 @@ namespace NuGet
             }
         }
 
-        public IPackage FindPackage(string packageId, SemanticVersion version)
+        public IPackage FindPackage(string packageId, ISemanticVersion version)
         {
             if (!_packageReferenceFile.EntryExists(packageId, version))
             {
@@ -140,7 +140,7 @@ namespace NuGet
                                                   .Where(p => p != null);
         }
 
-        public bool Exists(string packageId, SemanticVersion version)
+        public bool Exists(string packageId, ISemanticVersion version)
         {
             return _packageReferenceFile.EntryExists(packageId, version);
         }
@@ -164,7 +164,7 @@ namespace NuGet
             return null;
         }
 
-        public bool TryFindLatestPackageById(string id, out SemanticVersion latestVersion)
+        public bool TryFindLatestPackageById(string id, out ISemanticVersion latestVersion)
         {
             PackageReference reference = GetPackageReferences(id).OrderByDescending(r => r.Version)
                                                                  .FirstOrDefault();
@@ -202,7 +202,7 @@ namespace NuGet
             }
         }
 
-        public void AddPackage(string packageId, SemanticVersion version, bool developmentDependency, FrameworkName targetFramework)
+        public void AddPackage(string packageId, ISemanticVersion version, bool developmentDependency, FrameworkName targetFramework)
         {
             _packageReferenceFile.AddEntry(packageId, version, developmentDependency, targetFramework);
 
