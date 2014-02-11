@@ -6,6 +6,7 @@ using System.Linq;
 using System.Xml.Linq;
 using Microsoft.CSharp;
 using NuGet;
+using NuGet.Versioning;
 
 namespace GenerateTestPackages
 {
@@ -149,7 +150,7 @@ namespace GenerateTestPackages
 
             return new DependencyInfo(
                 new FullPackageName(linkTag.Attribute("Target").Value),
-                label != null ? VersionUtility.ParseVersionSpec(label.Value) : null);
+                label != null ? VersionSpec.Parse(label.Value) : null);
         }
 
         static void EnsurePackageProcessed(string fullName)
@@ -273,7 +274,7 @@ namespace GenerateTestPackages
 
         public FullPackageName FullName { get; private set; }
         public string Id { get { return FullName.Id; } }
-        public SemanticVersion Version { get { return FullName.Version; } }
+        public NuGetVersion Version { get { return FullName.Version; } }
         public IEnumerable<DependencyInfo> Dependencies { get; private set; }
         public bool Processed { get; set; }
 
@@ -291,7 +292,7 @@ namespace GenerateTestPackages
             FullName = fullName;
 
             // Default to the simple version (which means min-version)
-            VersionSpec = versionSpec ?? VersionUtility.ParseVersionSpec(FullName.Version.ToString());
+            VersionSpec = versionSpec ?? NuGet.Versioning.VersionSpec.Parse(FullName.Version.ToString());
         }
 
         public FullPackageName FullName { get; private set; }
@@ -305,11 +306,11 @@ namespace GenerateTestPackages
         {
             var parts = nameAndVersion.Split(':');
             Id = parts[0];
-            Version = new SemanticVersion(parts[1]);
+            Version = new NuGetVersion(parts[1]);
         }
 
         public string Id { get; private set; }
-        public SemanticVersion Version { get; private set; }
+        public NuGetVersion Version { get; private set; }
 
         public override string ToString()
         {

@@ -11,7 +11,7 @@ function Get-SolutionPackage {
     $packages = Get-Package | ?{ $_.Id -eq $Id }
     
     if($Version) {
-        $actualVersion = [NuGet.SemanticVersion]::Parse($Version)
+        $actualVersion = [NuGet.Versioning.NuGetVersion]::Parse($Version)
         $packages = $packages | ?{ $_.Version -eq $actualVersion }
     }
     
@@ -64,7 +64,7 @@ function Get-ProjectPackage {
     $packages = $repository.GetPackages() | ?{ $_.Id -eq $Id }    
     
     if($Version) {
-        $actualVersion = [NuGet.SemanticVersion]::Parse($Version)
+        $actualVersion = [NuGet.Versioning.NuGetVersion]::Parse($Version)
         $packages = $packages | ?{ $_.Version -eq $actualVersion }
     }
     
@@ -121,7 +121,7 @@ function Assert-Package {
     Assert-NotNull $repository "Unable to find the project repository"
     
     if($Version) {
-        $actualVersion = [NuGet.SemanticVersion]::Parse($Version)
+        $actualVersion = [NuGet.Versioning.NuGetVersion]::Parse($Version)
     }
     
     Assert-NotNull ([NuGet.PackageRepositoryExtensions]::Exists($repository, $Id, $actualVersion)) "Package $Id $Version is not referenced in $projectName"
@@ -152,7 +152,7 @@ function Assert-NoPackage {
     }
     
     if($Version) {
-        $actualVersion = [NuGet.SemanticVersion]::Parse($Version)
+        $actualVersion = [NuGet.Versioning.NuGetVersion]::Parse($Version)
     }
     
     Assert-False ([NuGet.PackageRepositoryExtensions]::Exists($repository, $Id, $actualVersion)) "Package $Id $Version is referenced in $($Project.Name)"

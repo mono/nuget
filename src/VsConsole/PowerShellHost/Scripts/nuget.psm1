@@ -207,7 +207,7 @@ function GetRemotePackageVersions($context) {
     }
 
     try {
-	    return Get-RemotePackageVersion @parameters | %{ [NuGet.SemanticVersion]::Parse($_) } | Sort-Object -Descending
+	    return Get-RemotePackageVersion @parameters | %{ [NuGet.Versioning.NuGetVersion]::Parse($_) } | Sort-Object -Descending
     }
     catch {
 	    # If the server doesn't have the JSON API endpoints, get the remote package versions the old way.
@@ -226,7 +226,7 @@ function GetRemotePackageVersions($context) {
 function GetAndSortVersions($packages) {
     $packages | Select -Unique -ExpandProperty Version | %{
         if($_ -is [string]) { 
-            [NuGet.SemanticVersion]::Parse($_) 
+            [NuGet.Versioning.NuGetVersion]::Parse($_) 
         } else { 
             $_ 
         }  

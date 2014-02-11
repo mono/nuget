@@ -1,2 +1,2 @@
-param($installPath, $toolsPath, $package)
+uparam($installPath, $toolsPath, $package)
 
