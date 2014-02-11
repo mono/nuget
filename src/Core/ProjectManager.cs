@@ -573,7 +573,7 @@ namespace NuGet
                 IVersionSpec constraint = ConstraintProvider.GetConstraint(packageId);
                 if (constraint != null)
                 {
-                    Logger.Log(MessageLevel.Info, NuGetResources.Log_ApplyingConstraints, packageId, VersionUtility.PrettyPrint(constraint), ConstraintProvider.Source);
+                    Logger.Log(MessageLevel.Info, NuGetResources.Log_ApplyingConstraints, packageId, constraint.PrettyPrint(), ConstraintProvider.Source);
                 }
 
                 Logger.Log(MessageLevel.Info, NuGetResources.Log_NoUpdatesAvailableForProject, packageId, Project.ProjectName);

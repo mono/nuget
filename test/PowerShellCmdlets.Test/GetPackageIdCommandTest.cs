@@ -261,7 +261,7 @@ namespace NuGet.PowerShell.Commands.Test
         {
             var stubPackage = new Mock<IPackage>();
             stubPackage.Setup(stub => stub.Id).Returns(id);
-            stubPackage.Setup(stub => stub.Version).Returns(new SemanticVersion(version));
+            stubPackage.Setup(stub => stub.Version).Returns(new NuGetVersion(version));
             return stubPackage.Object;
         }
 

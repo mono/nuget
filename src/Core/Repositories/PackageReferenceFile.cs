@@ -123,7 +123,7 @@ namespace NuGet
                 IVersionSpec versionConstaint = null;
                 if (!String.IsNullOrEmpty(versionConstraintString))
                 {
-                    if (!VersionSpec.TryParseVersionSpec(versionConstraintString, out versionConstaint))
+                    if (!VersionSpec.TryParse(versionConstraintString, out versionConstaint))
                     {
                         throw new InvalidDataException(String.Format(CultureInfo.CurrentCulture, NuGetResources.ReferenceFile_InvalidVersion, versionConstraintString, _path));
                     }
@@ -288,7 +288,7 @@ namespace NuGet
 
             return (from e in document.Root.Elements("package")
                     let entryId = e.GetOptionalAttributeValue("id")
-                    let entryVersion = NuGetVersion.ParseOptionalVersion(e.GetOptionalAttributeValue("version"))
+                    let entryVersion = NuGetVersion.Parse(e.GetOptionalAttributeValue("version"))
                     where entryId != null && entryVersion != null
                     where id.Equals(entryId, StringComparison.OrdinalIgnoreCase) && (version == null || entryVersion.Equals(version))
                     select e).FirstOrDefault();

@@ -111,10 +111,10 @@ namespace NuGet.Dialog.Test
             // Assert
             Assert.Equal(2, packages.Count);
             Assert.Equal("TestPackage", packages[0].Id);
-            Assert.Equal(new SemanticVersion("1.0"), packages[0].Version);
+            Assert.Equal(new NuGetVersion("1.0"), packages[0].Version);
 
             Assert.Equal("TestPackage", packages[1].Id);
-            Assert.Equal(new SemanticVersion("2.0"), packages[1].Version);
+            Assert.Equal(new NuGetVersion("2.0"), packages[1].Version);
         }
 
         [Fact]
@@ -145,10 +145,10 @@ namespace NuGet.Dialog.Test
             // Assert
             Assert.Equal(2, packages.Count);
             Assert.Equal("Azo", packages[0].Id);
-            Assert.Equal(new SemanticVersion("1.0"), packages[0].Version);
+            Assert.Equal(new NuGetVersion("1.0"), packages[0].Version);
 
             Assert.Equal("Azo", packages[1].Id);
-            Assert.Equal(new SemanticVersion("2.0"), packages[1].Version);
+            Assert.Equal(new NuGetVersion("2.0"), packages[1].Version);
         }
 
         [Fact]
@@ -188,7 +188,7 @@ namespace NuGet.Dialog.Test
             // Assert
             Assert.Equal(1, packages.Count);
             Assert.Equal("B1", packages[0].Id);
-            Assert.Equal(new SemanticVersion("2.0"), packages[0].Version);
+            Assert.Equal(new NuGetVersion("2.0"), packages[0].Version);
         }
 
         [Fact]
@@ -216,10 +216,10 @@ namespace NuGet.Dialog.Test
             // Assert
             Assert.Equal(2, packages.Count);
             Assert.Equal("Azo1", packages[0].Id);
-            Assert.Equal(new SemanticVersion("2.0"), packages[0].Version);
+            Assert.Equal(new NuGetVersion("2.0"), packages[0].Version);
 
             Assert.Equal("Azo2", packages[1].Id);
-            Assert.Equal(new SemanticVersion("3.0-alpha"), packages[1].Version);
+            Assert.Equal(new NuGetVersion("3.0-alpha"), packages[1].Version);
         }
 
         [Fact]
@@ -244,7 +244,7 @@ namespace NuGet.Dialog.Test
             // Assert
             Assert.Equal(1, packages.Count);
             Assert.Equal("Azo1", packages[0].Id);
-            Assert.Equal(new SemanticVersion("2.0"), packages[0].Version);
+            Assert.Equal(new NuGetVersion("2.0"), packages[0].Version);
         }
 
         private static PackagesSearchNode CreatePackagesSearchNode(string searchTerm, int numberOfPackages = 1, bool collapseVersions = true, PackagesTreeNodeBase baseNode = null)

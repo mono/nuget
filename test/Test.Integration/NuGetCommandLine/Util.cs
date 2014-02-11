@@ -20,7 +20,7 @@ namespace NuGet.Test.Integration.NuGetCommandLine
             var packageBuilder = new PackageBuilder
             {
                 Id = packageId,
-                Version = new SemanticVersion(version),
+                Version = new NuGetVersion(version),
                 Description = "Test desc"
             };
 

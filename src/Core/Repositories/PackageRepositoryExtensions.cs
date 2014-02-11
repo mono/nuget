@@ -123,7 +123,7 @@ namespace NuGet
 
             if (version != null)
             {
-                packages = packages.Where(p => p.Version == version);
+                packages = packages.Where(p => p.Version.Equals(version));
             }
             else if (constraintProvider != null)
             {

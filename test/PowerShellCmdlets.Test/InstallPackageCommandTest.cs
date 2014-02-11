@@ -83,7 +83,7 @@ namespace NuGet.PowerShell.Commands.Test
 
             // Assert
             Assert.Equal("my-id", vsPackageManager.PackageId);
-            Assert.Equal(new SemanticVersion("2.8"), vsPackageManager.Version);
+            Assert.Equal(new NuGetVersion("2.8"), vsPackageManager.Version);
         }
 
         [Fact]
@@ -112,7 +112,7 @@ namespace NuGet.PowerShell.Commands.Test
 
             // Assert
             Assert.Equal("my-id", vsPackageManager.PackageId);
-            Assert.Equal(new SemanticVersion("2.8"), vsPackageManager.Version);
+            Assert.Equal(new NuGetVersion("2.8"), vsPackageManager.Version);
             Assert.True(vsPackageManager.IgnoreDependencies);
         }
 
@@ -408,7 +408,7 @@ Mock<IVsShellInfo>().Object);
             sharedRepository.SetupSet(s => s.PackageSaveMode = PackageSaveModes.Nupkg);
             sharedRepository.Setup(s => s.GetPackages()).Returns(Enumerable.Empty<IPackage>().AsQueryable());
             sharedRepository.Setup(s => s.AddPackage(packageA)).Verifiable();
-            sharedRepository.Setup(s => s.IsReferenced("A", new SemanticVersion("1.0.0-a"))).Returns(true);
+            sharedRepository.Setup(s => s.IsReferenced("A", new NuGetVersion("1.0.0-a"))).Returns(true);
             var packageRepository = new MockPackageRepository { packageA };
             var packageManager = new VsPackageManager(TestUtils.GetSolutionManagerWithProjects("foo"), packageRepository, new Mock<IFileSystemProvider>().Object, new MockFileSystem(), sharedRepository.Object, new Mock<IDeleteOnRestartManager>().Object, new VsPackageInstallerEvents());
             var packageManagerFactory = new Mock<IVsPackageManagerFactory>(MockBehavior.Strict);
@@ -444,7 +444,7 @@ Mock<IVsShellInfo>().Object);
             sharedRepository.SetupSet(s => s.PackageSaveMode = PackageSaveModes.Nupkg);
             sharedRepository.Setup(s => s.GetPackages()).Returns(Enumerable.Empty<IPackage>().AsQueryable());
             sharedRepository.Setup(s => s.AddPackage(packageA1));
-            sharedRepository.Setup(s => s.IsReferenced("A", new SemanticVersion("1.0.0"))).Returns(true);
+            sharedRepository.Setup(s => s.IsReferenced("A", new NuGetVersion("1.0.0"))).Returns(true);
 
             var packageRepository = new MockPackageRepository { packageA1, packageA2 };
             var packageManager = new VsPackageManager(TestUtils.GetSolutionManagerWithProjects("foo"), packageRepository, new Mock<IFileSystemProvider>().Object, new MockFileSystem(), sharedRepository.Object, new Mock<IDeleteOnRestartManager>().Object, new VsPackageInstallerEvents());
@@ -471,7 +471,7 @@ Mock<IVsShellInfo>().Object);
             sharedRepository.SetupSet(s => s.PackageSaveMode = PackageSaveModes.Nupkg);
             sharedRepository.Setup(s => s.GetPackages()).Returns(Enumerable.Empty<IPackage>().AsQueryable());
             sharedRepository.Setup(s => s.AddPackage(packageA1));
-            sharedRepository.Setup(s => s.IsReferenced("A", new SemanticVersion("1.0.0"))).Returns(true);
+            sharedRepository.Setup(s => s.IsReferenced("A", new NuGetVersion("1.0.0"))).Returns(true);
 
             var packageRepository = new MockPackageRepository { packageA1, packageA2 };
             var packageManager = new VsPackageManager(TestUtils.GetSolutionManagerWithProjects("foo"), packageRepository, new Mock<IFileSystemProvider>().Object, new MockFileSystem(), sharedRepository.Object, new Mock<IDeleteOnRestartManager>().Object, new VsPackageInstallerEvents());
@@ -501,7 +501,7 @@ Mock<IVsShellInfo>().Object);
             sharedRepository.SetupSet(s => s.PackageSaveMode = PackageSaveModes.Nupkg);
             sharedRepository.Setup(s => s.GetPackages()).Returns(Enumerable.Empty<IPackage>().AsQueryable());
             sharedRepository.Setup(s => s.AddPackage(packageA2));
-            sharedRepository.Setup(s => s.IsReferenced("A", new SemanticVersion("2.0.0"))).Returns(true);
+            sharedRepository.Setup(s => s.IsReferenced("A", new NuGetVersion("2.0.0"))).Returns(true);
 
             var packageRepository = new MockPackageRepository { packageA1, packageA2 };
             var packageManager = new VsPackageManager(TestUtils.GetSolutionManagerWithProjects("foo"), packageRepository, new Mock<IFileSystemProvider>().Object, new MockFileSystem(), sharedRepository.Object, new Mock<IDeleteOnRestartManager>().Object, new VsPackageInstallerEvents());
@@ -529,7 +529,7 @@ Mock<IVsShellInfo>().Object);
             sharedRepository.SetupSet(s => s.PackageSaveMode = PackageSaveModes.Nupkg);
             sharedRepository.Setup(s => s.GetPackages()).Returns(Enumerable.Empty<IPackage>().AsQueryable());
             sharedRepository.Setup(s => s.AddPackage(packageA2));
-            sharedRepository.Setup(s => s.IsReferenced("A", new SemanticVersion("1.0.0-ReleaseCandidate"))).Returns(true);
+            sharedRepository.Setup(s => s.IsReferenced("A", new NuGetVersion("1.0.0-ReleaseCandidate"))).Returns(true);
 
             var packageRepository = new MockPackageRepository { packageA1, packageA2 };
             var packageManager = new VsPackageManager(TestUtils.GetSolutionManagerWithProjects("foo"), packageRepository, new Mock<IFileSystemProvider>().Object, new MockFileSystem(), sharedRepository.Object, new Mock<IDeleteOnRestartManager>().Object, new VsPackageInstallerEvents());
@@ -559,8 +559,8 @@ Mock<IVsShellInfo>().Object);
             sharedRepository.Setup(s => s.GetPackages()).Returns(Enumerable.Empty<IPackage>().AsQueryable());
             sharedRepository.Setup(s => s.AddPackage(packageA)).Verifiable();
             sharedRepository.Setup(s => s.AddPackage(packageB)).Verifiable();
-            sharedRepository.Setup(s => s.IsReferenced("A", new SemanticVersion("1.0.0"))).Returns(true);
-            sharedRepository.Setup(s => s.IsReferenced("B", new SemanticVersion("1.0.0"))).Returns(true);
+            sharedRepository.Setup(s => s.IsReferenced("A", new NuGetVersion("1.0.0"))).Returns(true);
+            sharedRepository.Setup(s => s.IsReferenced("B", new NuGetVersion("1.0.0"))).Returns(true);
 
             var packageRepository = new MockPackageRepository { packageA, packageB };
             var packageManager = new VsPackageManager(TestUtils.GetSolutionManagerWithProjects("foo"), packageRepository, new Mock<IFileSystemProvider>().Object, new MockFileSystem(), sharedRepository.Object, new Mock<IDeleteOnRestartManager>().Object, new VsPackageInstallerEvents());
@@ -591,8 +591,8 @@ Mock<IVsShellInfo>().Object);
             sharedRepository.Setup(s => s.GetPackages()).Returns(Enumerable.Empty<IPackage>().AsQueryable());
             sharedRepository.Setup(s => s.AddPackage(packageA)).Verifiable();
             sharedRepository.Setup(s => s.AddPackage(packageB)).Verifiable();
-            sharedRepository.Setup(s => s.IsReferenced("A", new SemanticVersion(versionA))).Returns(true);
-            sharedRepository.Setup(s => s.IsReferenced("B", new SemanticVersion(versionB))).Returns(true);
+            sharedRepository.Setup(s => s.IsReferenced("A", new NuGetVersion(versionA))).Returns(true);
+            sharedRepository.Setup(s => s.IsReferenced("B", new NuGetVersion(versionB))).Returns(true);
 
             var packageRepository = new MockPackageRepository { packageA, packageB };
             var packageManager = new VsPackageManager(TestUtils.GetSolutionManagerWithProjects("foo"), packageRepository, new Mock<IFileSystemProvider>().Object, new MockFileSystem(), sharedRepository.Object, new Mock<IDeleteOnRestartManager>().Object, new VsPackageInstallerEvents());
@@ -658,7 +658,7 @@ Mock<IVsShellInfo>().Object);
         public void InstallPackageShouldPickListedPackagesOverUnlistedOnesAsDependency()
         {
             // Arrange
-            var packageA = PackageUtility.CreatePackage("A", "1.0", dependencies: new[] { new PackageDependency("B", new VersionSpec { MinVersion = new SemanticVersion("0.5")})});
+            var packageA = PackageUtility.CreatePackage("A", "1.0", dependencies: new[] { new PackageDependency("B", new VersionSpec(minVersion: new NuGetVersion("0.5")))});
             var packageB1 = PackageUtility.CreatePackage("B", "1.0.0", listed: true);
             var packageB2 = PackageUtility.CreatePackage("B", "1.0.2", listed: false);
             var sharedRepository = new Mock<ISharedPackageRepository>();
@@ -685,7 +685,7 @@ Mock<IVsShellInfo>().Object);
         public void InstallPackageShouldPickListedPackagesOverUnlistedOnesAsDependency2()
         {
             // Arrange
-            var packageA = PackageUtility.CreatePackage("A", "1.0", dependencies: new[] { new PackageDependency("B", new VersionSpec { MinVersion = new SemanticVersion("0.5") }) });
+            var packageA = PackageUtility.CreatePackage("A", "1.0", dependencies: new[] { new PackageDependency("B", new VersionSpec(minVersion: new NuGetVersion("0.5"))) });
             var packageB1 = PackageUtility.CreatePackage("B", "1.0.0", listed: true);
             var packageB2 = PackageUtility.CreatePackage("B", "1.0.2-alpha", listed: true);
             var packageB3 = PackageUtility.CreatePackage("B", "1.0.2", listed: false);
@@ -716,7 +716,7 @@ Mock<IVsShellInfo>().Object);
         public void InstallPackageShouldPickUnListedPackagesIfItSatisfiesContrainsAndOthersAreNot()
         {
             // Arrange
-            var packageA = PackageUtility.CreatePackage("A", "1.0", dependencies: new[] { new PackageDependency("B", new VersionSpec { MinVersion = new SemanticVersion("1.0"), IsMinInclusive = true }) });
+            var packageA = PackageUtility.CreatePackage("A", "1.0", dependencies: new[] { new PackageDependency("B", new VersionSpec(minVersion: new NuGetVersion("1.0"), isMinInclusive: true)) });
             var packageB1 = PackageUtility.CreatePackage("B", "0.0.9", listed: true);
             var packageB2 = PackageUtility.CreatePackage("B", "1.0.0", listed: false);
             var sharedRepository = new Mock<ISharedPackageRepository>();
@@ -743,7 +743,7 @@ Mock<IVsShellInfo>().Object);
         public void InstallPackageShouldPickUnListedPrereleasePackagesIfItSatisfiesContrainsAndOthersAreNot()
         {
             // Arrange
-            var packageA = PackageUtility.CreatePackage("A", "1.0", dependencies: new[] { new PackageDependency("B", new VersionSpec { MinVersion = new SemanticVersion("1.0"), IsMinInclusive = true }) });
+            var packageA = PackageUtility.CreatePackage("A", "1.0", dependencies: new[] { new PackageDependency("B", new VersionSpec(minVersion: new NuGetVersion("1.0"), isMinInclusive: true)) });
             var packageB1 = PackageUtility.CreatePackage("B", "0.0.9", listed: true);
             var packageB2 = PackageUtility.CreatePackage("B", "1.0.1-a", listed: false);
             var sharedRepository = new Mock<ISharedPackageRepository>();
@@ -773,7 +773,7 @@ Mock<IVsShellInfo>().Object);
             // Arrange
             var packageA = new Mock<IPackage>();
             packageA.Setup(p => p.Id).Returns("A");
-            packageA.Setup(p => p.Version).Returns(new SemanticVersion("1.0"));
+            packageA.Setup(p => p.Version).Returns(new NuGetVersion("1.0"));
             packageA.Setup(p => p.Listed).Returns(true);
             var readme = new Mock<IPackageFile>();
             readme.Setup(f => f.Path).Returns("readMe.txt");
@@ -784,7 +784,7 @@ Mock<IVsShellInfo>().Object);
             sharedRepository.SetupSet(s => s.PackageSaveMode = PackageSaveModes.Nupkg);
             sharedRepository.Setup(s => s.GetPackages()).Returns(Enumerable.Empty<IPackage>().AsQueryable());
             sharedRepository.Setup(s => s.AddPackage(packageA.Object)).Verifiable();
-            sharedRepository.Setup(s => s.IsReferenced("A", new SemanticVersion("1.0"))).Returns(true);
+            sharedRepository.Setup(s => s.IsReferenced("A", new NuGetVersion("1.0"))).Returns(true);
 
             var packageRepository = new MockPackageRepository { packageA.Object };
             var packageManager = new VsPackageManager(TestUtils.GetSolutionManagerWithProjects("foo"), packageRepository, new Mock<IFileSystemProvider>().Object, new MockFileSystem(), sharedRepository.Object,
@@ -819,7 +819,7 @@ Mock<IVsShellInfo>().Object);
             // A --> B
             var packageA = new Mock<IPackage>();
             packageA.Setup(p => p.Id).Returns("A");
-            packageA.Setup(p => p.Version).Returns(new SemanticVersion("1.0"));
+            packageA.Setup(p => p.Version).Returns(new NuGetVersion("1.0"));
             var depSet = new PackageDependencySet(null, new[] { new PackageDependency("B") });
             packageA.Setup(p => p.DependencySets).Returns(new[] { depSet });
             packageA.Setup(p => p.Listed).Returns(true);
@@ -830,7 +830,7 @@ Mock<IVsShellInfo>().Object);
 
             var packageB = new Mock<IPackage>();
             packageB.Setup(p => p.Id).Returns("B");
-            packageB.Setup(p => p.Version).Returns(new SemanticVersion("1.0"));
+            packageB.Setup(p => p.Version).Returns(new NuGetVersion("1.0"));
             var readmeB = new Mock<IPackageFile>();
             readmeB.Setup(f => f.Path).Returns("readMe.txt");
             readmeB.Setup(f => f.GetStream()).Returns(new MemoryStream());
@@ -841,8 +841,8 @@ Mock<IVsShellInfo>().Object);
             sharedRepository.Setup(s => s.GetPackages()).Returns(Enumerable.Empty<IPackage>().AsQueryable());
             sharedRepository.Setup(s => s.AddPackage(packageA.Object));
             sharedRepository.Setup(s => s.AddPackage(packageB.Object));
-            sharedRepository.Setup(s => s.IsReferenced("A", new SemanticVersion("1.0"))).Returns(true);
-            sharedRepository.Setup(s => s.IsReferenced("B", new SemanticVersion("1.0"))).Returns(true);
+            sharedRepository.Setup(s => s.IsReferenced("A", new NuGetVersion("1.0"))).Returns(true);
+            sharedRepository.Setup(s => s.IsReferenced("B", new NuGetVersion("1.0"))).Returns(true);
 
             var packageRepository = new MockPackageRepository { packageA.Object, packageB.Object };
             var packageManager = new VsPackageManager(
@@ -900,11 +900,11 @@ Mock<IVsShellInfo>().Object);
 
             public string PackageId { get; set; }
 
-            public SemanticVersion Version { get; set; }
+            public ISemanticVersion Version { get; set; }
 
             public bool IgnoreDependencies { get; set; }
 
-            public override void InstallPackage(IProjectManager projectManager, string packageId, SemanticVersion version, bool ignoreDependencies, bool allowPreReleaseVersions, ILogger logger)
+            public override void InstallPackage(IProjectManager projectManager, string packageId, ISemanticVersion version, bool ignoreDependencies, bool allowPreReleaseVersions, ILogger logger)
             {
                 ProjectManager = projectManager;
                 PackageId = packageId;

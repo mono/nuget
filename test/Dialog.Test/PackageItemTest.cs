@@ -120,7 +120,7 @@ namespace NuGet.Dialog.Test
 
             var package = new Mock<IPackage>();
             package.Setup(p => p.Id).Returns("P");
-            package.Setup(p => p.Version).Returns(new SemanticVersion("1.0"));
+            package.Setup(p => p.Version).Returns(new NuGetVersion("1.0"));
             package.Setup(p => p.DependencySets).Returns(dependencySets);
 
             var item = CreatePackageItem(package.Object);
@@ -156,7 +156,7 @@ namespace NuGet.Dialog.Test
 
             var package = new Mock<IPackage>();
             package.Setup(p => p.Id).Returns("P");
-            package.Setup(p => p.Version).Returns(new SemanticVersion("1.0"));
+            package.Setup(p => p.Version).Returns(new NuGetVersion("1.0"));
             package.Setup(p => p.DependencySets).Returns(dependencySets);
 
             var item = CreatePackageItem(package.Object);
@@ -192,7 +192,7 @@ namespace NuGet.Dialog.Test
 
             var package = new Mock<IPackage>();
             package.Setup(p => p.Id).Returns("P");
-            package.Setup(p => p.Version).Returns(new SemanticVersion("1.0"));
+            package.Setup(p => p.Version).Returns(new NuGetVersion("1.0"));
             package.Setup(p => p.DependencySets).Returns(dependencySets);
 
             var item = CreatePackageItem(package.Object);
@@ -226,7 +226,7 @@ namespace NuGet.Dialog.Test
 
             var package = new Mock<IPackage>();
             package.Setup(p => p.Id).Returns("P");
-            package.Setup(p => p.Version).Returns(new SemanticVersion("1.0"));
+            package.Setup(p => p.Version).Returns(new NuGetVersion("1.0"));
             package.Setup(p => p.DependencySets).Returns(dependencySets);
 
             var item = CreatePackageItem(package.Object);
@@ -260,7 +260,7 @@ namespace NuGet.Dialog.Test
 
             var package = new Mock<IPackage>();
             package.Setup(p => p.Id).Returns("P");
-            package.Setup(p => p.Version).Returns(new SemanticVersion("1.0"));
+            package.Setup(p => p.Version).Returns(new NuGetVersion("1.0"));
             package.Setup(p => p.DependencySets).Returns(dependencySets);
 
             var item = CreatePackageItem(package.Object);
@@ -300,7 +300,7 @@ namespace NuGet.Dialog.Test
 
             var package = new Mock<IPackage>();
             package.Setup(p => p.Id).Returns("P");
-            package.Setup(p => p.Version).Returns(new SemanticVersion("1.0"));
+            package.Setup(p => p.Version).Returns(new NuGetVersion("1.0"));
             package.Setup(p => p.DependencySets).Returns(dependencySets);
 
             var item = CreatePackageItem(package.Object);

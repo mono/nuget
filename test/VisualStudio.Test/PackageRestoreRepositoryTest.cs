@@ -203,7 +203,7 @@ namespace NuGet.VisualStudio.Test
 
             // Act
             var packageRestoreRepository = mockSourceProvider.Object.CreatePriorityPackageRepository(mockRepositoryFactory.Object, mockRepository1);
-            var package = packageRestoreRepository.FindPackage("A", new SemanticVersion("1.0"));
+            var package = packageRestoreRepository.FindPackage("A", new NuGetVersion("1.0"));
 
             Assert.NotNull(package);
             Assert.Equal("A", package.Id);
@@ -242,7 +242,7 @@ namespace NuGet.VisualStudio.Test
 
             // Act
             var packageRestoreRepository = mockSourceProvider.Object.CreatePriorityPackageRepository(mockRepositoryFactory.Object, mockRepository1);
-            var package = packageRestoreRepository.FindPackage("B", new SemanticVersion("1.3"));
+            var package = packageRestoreRepository.FindPackage("B", new NuGetVersion("1.3"));
 
             Assert.NotNull(package);
             Assert.Equal("B", package.Id);
@@ -281,7 +281,7 @@ namespace NuGet.VisualStudio.Test
 
             // Act
             var packageRestoreRepository = mockSourceProvider.Object.CreatePriorityPackageRepository(mockRepositoryFactory.Object, mockRepository1);
-            var package = packageRestoreRepository.FindPackage("D", new SemanticVersion("1.0"));
+            var package = packageRestoreRepository.FindPackage("D", new NuGetVersion("1.0"));
 
             Assert.Null(package);
         }
@@ -319,7 +319,7 @@ namespace NuGet.VisualStudio.Test
 
             // Act
             var packageRestoreRepository = mockSourceProvider.Object.CreatePriorityPackageRepository(mockRepositoryFactory.Object, mockRepository1);
-            Assert.True(packageRestoreRepository.Exists("A", new SemanticVersion("1.0")));
+            Assert.True(packageRestoreRepository.Exists("A", new NuGetVersion("1.0")));
         }
 
         [Fact]
@@ -355,7 +355,7 @@ namespace NuGet.VisualStudio.Test
 
             // Act
             var packageRestoreRepository = mockSourceProvider.Object.CreatePriorityPackageRepository(mockRepositoryFactory.Object, mockRepository1);
-            Assert.True(packageRestoreRepository.Exists("B", new SemanticVersion("2.0")));
+            Assert.True(packageRestoreRepository.Exists("B", new NuGetVersion("2.0")));
         }
 
         [Fact]
@@ -391,7 +391,7 @@ namespace NuGet.VisualStudio.Test
 
             // Act
             var packageRestoreRepository = mockSourceProvider.Object.CreatePriorityPackageRepository(mockRepositoryFactory.Object, mockRepository1);
-            Assert.False(packageRestoreRepository.Exists("D", new SemanticVersion("1.0")));
+            Assert.False(packageRestoreRepository.Exists("D", new NuGetVersion("1.0")));
         }
 
         [Fact]
@@ -432,9 +432,9 @@ namespace NuGet.VisualStudio.Test
 
             Assert.Equal(2, packages.Count);
             Assert.Equal("A", packages[0].Id);
-            Assert.Equal(new SemanticVersion("1.0"), packages[0].Version);
+            Assert.Equal(new NuGetVersion("1.0"), packages[0].Version);
             Assert.Equal("A", packages[1].Id);
-            Assert.Equal(new SemanticVersion("2.0"), packages[1].Version);
+            Assert.Equal(new NuGetVersion("2.0"), packages[1].Version);
         }
 
         [Fact]
@@ -474,9 +474,9 @@ namespace NuGet.VisualStudio.Test
 
             Assert.Equal(2, packages.Count);
             Assert.Equal("B", packages[0].Id);
-            Assert.Equal(new SemanticVersion("1.0"), packages[0].Version);
+            Assert.Equal(new NuGetVersion("1.0"), packages[0].Version);
             Assert.Equal("B", packages[1].Id);
-            Assert.Equal(new SemanticVersion("2.0"), packages[1].Version);
+            Assert.Equal(new NuGetVersion("2.0"), packages[1].Version);
         }
 
         [Fact]
@@ -519,7 +519,7 @@ namespace NuGet.VisualStudio.Test
 
             Assert.Equal(1, packages.Count);
             Assert.Equal("B", packages[0].Id);
-            Assert.Equal(new SemanticVersion("2.5"), packages[0].Version);
+            Assert.Equal(new NuGetVersion("2.5"), packages[0].Version);
         }
 
         [Fact]

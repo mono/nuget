@@ -36,10 +36,8 @@
     <Compile Include="NuGetVersion.cs" />
     <Compile Include="SemanticVersionStrict.cs" />
     <Compile Include="VersionComparer.cs" />
-    <Compile Include="VersionBase.cs" />
     <Compile Include="VersionComparison.cs" />
     <Compile Include="VersionSpec.cs" />
-    <Compile Include="VersionSpecBase.cs" />
   </ItemGroup>
   <ItemGroup>
     <CodeAnalysisDictionary Include="..\..\CodeAnalysisDictionary.xml">

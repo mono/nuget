@@ -31,7 +31,7 @@ namespace NuGet.Test.Integration.Core
             var repository = new LocalPackageRepository(repositoryRoot);
 
             // Act
-            var findPackage = repository.FindPackage(id, new SemanticVersion(version));
+            var findPackage = repository.FindPackage(id, new NuGetVersion(version));
 
             // Assert
             Assert.True(findPackage is OptimizedZipPackage);
@@ -50,7 +50,7 @@ namespace NuGet.Test.Integration.Core
             var repository = new LocalPackageRepository(pathResolver, fileSystem);
 
             // Act
-            var findPackage = repository.FindPackage(id, new SemanticVersion(version));
+            var findPackage = repository.FindPackage(id, new NuGetVersion(version));
             
             // Assert
             Assert.True(findPackage is OptimizedZipPackage);
@@ -75,7 +75,7 @@ namespace NuGet.Test.Integration.Core
             var repository = new LocalPackageRepository(repositoryRoot);
 
             // Act
-            var findPackage = repository.FindPackage(id, new SemanticVersion(version));
+            var findPackage = repository.FindPackage(id, new NuGetVersion(version));
 
             // Assert
             AssertPackage(id, version, findPackage);
@@ -99,7 +99,7 @@ namespace NuGet.Test.Integration.Core
             var repository = new LocalPackageRepository(repositoryRoot);
 
             // Act
-            var findPackage = repository.FindPackage(id, new SemanticVersion(version));
+            var findPackage = repository.FindPackage(id, new NuGetVersion(version));
 
             // Assert
             Assert.True(findPackage is OptimizedZipPackage);
@@ -118,8 +118,8 @@ namespace NuGet.Test.Integration.Core
             var repository = new LocalPackageRepository(repositoryRoot);
 
             // Act
-            var result1 = repository.FindPackage("test.extensions", new SemanticVersion("1.0"));
-            var result2 = repository.FindPackage("test.extensions", new SemanticVersion("1.3-alpha"));
+            var result1 = repository.FindPackage("test.extensions", new NuGetVersion("1.0"));
+            var result2 = repository.FindPackage("test.extensions", new NuGetVersion("1.3-alpha"));
 
             // Assert
             Assert.True(result1 is OptimizedZipPackage);
@@ -146,7 +146,7 @@ namespace NuGet.Test.Integration.Core
             var repository = new LocalPackageRepository(repositoryRoot);
 
             // Act
-            var findPackage = repository.FindPackage(id, new SemanticVersion("1.5"));
+            var findPackage = repository.FindPackage(id, new NuGetVersion("1.5"));
 
             // Assert
             Assert.Null(findPackage);
@@ -283,7 +283,7 @@ namespace NuGet.Test.Integration.Core
             var packageBuilder = new PackageBuilder
             {
                 Id = id,
-                Version = new SemanticVersion(version),
+                Version = new NuGetVersion(version),
                 Description = "Test desc"
             };
 

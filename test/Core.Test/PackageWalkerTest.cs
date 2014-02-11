@@ -500,7 +500,7 @@ namespace NuGet.Test
             var localRepository = new MockPackageRepository();
             var sourceRepository = new MockPackageRepository();
             var constraintProvider = new Mock<IPackageConstraintProvider>();
-            constraintProvider.Setup(m => m.GetConstraint("B")).Returns(VersionSpec.ParseVersionSpec("[1.4]"));
+            constraintProvider.Setup(m => m.GetConstraint("B")).Returns(VersionSpec.Parse("[1.4]"));
             constraintProvider.Setup(m => m.Source).Returns("foo");
 
             IPackage A10 = PackageUtility.CreatePackage("A", "1.0",

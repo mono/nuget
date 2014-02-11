@@ -266,7 +266,7 @@ namespace NuGet.Test
             IPackage packageB = PackageUtility.CreatePackage(
                "B",
                "1.0",
-               dependencies: new [] { new PackageDependency("A", VersionSpec.ParseVersionSpec("1.1.0")) },
+               dependencies: new [] { new PackageDependency("A", VersionSpec.Parse("1.1.0")) },
                assemblyReferences: new[] { "lib\\b.dll" });
 
             sourceRepository.AddPackage(packageA1);
@@ -304,7 +304,7 @@ namespace NuGet.Test
             IPackage packageA2 = PackageUtility.CreatePackage(
                 "A",
                 "2.0.0",
-                dependencies: new[] { new PackageDependency("B", VersionSpec.ParseVersionSpec("1.0.0")) },
+                dependencies: new[] { new PackageDependency("B", VersionSpec.Parse("1.0.0")) },
                 assemblyReferences: new[] { "lib\\a2.dll" });
 
             IPackage packageB1 = PackageUtility.CreatePackage(
@@ -347,13 +347,13 @@ namespace NuGet.Test
             IPackage packageA1 = PackageUtility.CreatePackage(
                 "A",
                 "1.0.0",
-                dependencies: new[] { new PackageDependency("B", VersionSpec.ParseVersionSpec("1.0.0")) },
+                dependencies: new[] { new PackageDependency("B", VersionSpec.Parse("1.0.0")) },
                 assemblyReferences: new[] { "lib\\a1.dll" });
 
             IPackage packageA2 = PackageUtility.CreatePackage(
                 "A",
                 "2.0.0",
-                dependencies: new[] { new PackageDependency("B", VersionSpec.ParseVersionSpec("1.0.0")) },
+                dependencies: new[] { new PackageDependency("B", VersionSpec.Parse("1.0.0")) },
                 assemblyReferences: new[] { "lib\\a2.dll" });
 
             IPackage packageB1 = PackageUtility.CreatePackage(
@@ -918,11 +918,11 @@ namespace NuGet.Test
             var projectManager = new ProjectManager(sourceRepository, new DefaultPackagePathResolver(projectSystem), projectSystem, new MockPackageRepository());
             IPackage packageA10 = PackageUtility.CreatePackage("A", "1.0",
                                                                 dependencies: new List<PackageDependency> { 
-                                                                    new PackageDependency("B", VersionSpec.ParseVersionSpec("1.0"))
+                                                                    new PackageDependency("B", VersionSpec.Parse("1.0"))
                                                                 }, content: new[] { "foo" });
             IPackage packageA20 = PackageUtility.CreatePackage("A", "2.0",
                                                                 dependencies: new List<PackageDependency> { 
-                                                                    new PackageDependency("B", VersionSpec.ParseVersionSpec("2.0"))
+                                                                    new PackageDependency("B", VersionSpec.Parse("2.0"))
                                                                 }, content: new[] { "foo" });
             IPackage packageB10 = PackageUtility.CreatePackage("B", "1.0", content: new[] { "foo" });
             IPackage packageB20 = PackageUtility.CreatePackage("B", "2.0", content: new[] { "foo" });
@@ -1880,7 +1880,7 @@ fdsalk;fj;lkdsajfl;kdsa");
             var projectSystem = new MockProjectSystem();
             var projectManager = new ProjectManager(sourceRepository, new DefaultPackagePathResolver(projectSystem), projectSystem, new MockPackageRepository());
             var constraintProvider = new Mock<IPackageConstraintProvider>();
-            constraintProvider.Setup(m => m.GetConstraint("A")).Returns(VersionSpec.ParseVersionSpec("[1.0, 2.0)"));
+            constraintProvider.Setup(m => m.GetConstraint("A")).Returns(VersionSpec.Parse("[1.0, 2.0)"));
             constraintProvider.Setup(m => m.Source).Returns("foo");
             projectManager.ConstraintProvider = constraintProvider.Object;
             IPackage packageA10 = PackageUtility.CreatePackage("A", "1.0");

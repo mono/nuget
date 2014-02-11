@@ -33,7 +33,7 @@ namespace NuGet.VisualStudio.Test
             sourceRepository.AddPackage(package);
 
             // Act
-            packageManager.InstallPackage(projectManager, "foo", new SemanticVersion("1.0"), ignoreDependencies: false, allowPrereleaseVersions: false, logger: NullLogger.Instance);
+            packageManager.InstallPackage(projectManager, "foo", new NuGetVersion("1.0"), ignoreDependencies: false, allowPrereleaseVersions: false, logger: NullLogger.Instance);
 
             // Assert
             Assert.True(packageManager.LocalRepository.Exists(package));
@@ -57,7 +57,7 @@ namespace NuGet.VisualStudio.Test
             sourceRepository.AddPackage(packageB);
 
             // Act
-            packageManager.InstallPackage(projectManager, "A", new SemanticVersion("1.0"), ignoreDependencies: false, allowPrereleaseVersions: false, logger: NullLogger.Instance);
+            packageManager.InstallPackage(projectManager, "A", new NuGetVersion("1.0"), ignoreDependencies: false, allowPrereleaseVersions: false, logger: NullLogger.Instance);
 
             // Assert
             Assert.True(packageManager.LocalRepository.Exists(packageA));
@@ -87,7 +87,7 @@ namespace NuGet.VisualStudio.Test
             sourceRepository.AddPackage(packageB);
 
             // Act
-            packageManager.InstallPackage(projectManager, "A", new SemanticVersion("1.0"), ignoreDependencies: false, allowPrereleaseVersions: false, logger: NullLogger.Instance);
+            packageManager.InstallPackage(projectManager, "A", new NuGetVersion("1.0"), ignoreDependencies: false, allowPrereleaseVersions: false, logger: NullLogger.Instance);
 
             // Assert
             Assert.True(packageManager.LocalRepository.Exists(packageA));
@@ -119,7 +119,7 @@ namespace NuGet.VisualStudio.Test
 
             // Act & Assert
             ExceptionAssert.Throws<NuGetVersionNotSatisfiedException>(
-                () => packageManager.InstallPackage(projectManager, "foo", new SemanticVersion("1.0"), ignoreDependencies: false, allowPrereleaseVersions: false, logger: NullLogger.Instance),
+                () => packageManager.InstallPackage(projectManager, "foo", new NuGetVersion("1.0"), ignoreDependencies: false, allowPrereleaseVersions: false, logger: NullLogger.Instance),
                 expectedErrorMessage);
         }
 
@@ -164,7 +164,7 @@ namespace NuGet.VisualStudio.Test
             sourceRepository.AddPackage(packageC);
 
             // Act
-            packageManager.InstallPackage(projectManager, "foo", new SemanticVersion("1.0"), ignoreDependencies: false, allowPrereleaseVersions: false, logger: NullLogger.Instance);
+            packageManager.InstallPackage(projectManager, "foo", new NuGetVersion("1.0"), ignoreDependencies: false, allowPrereleaseVersions: false, logger: NullLogger.Instance);
 
             // Assert
             Assert.True(packageManager.LocalRepository.Exists(package));
@@ -222,7 +222,7 @@ namespace NuGet.VisualStudio.Test
             packageManager.InstallPackage(
                 projectManager, 
                 "foo", 
-                new SemanticVersion("1.0"), 
+                new NuGetVersion("1.0"), 
                 ignoreDependencies: false, 
                 allowPrereleaseVersions: false,
                 skipAssemblyReferences: false,
@@ -251,7 +251,7 @@ namespace NuGet.VisualStudio.Test
             sourceRepository.AddPackage(package);
 
             // Act
-            packageManager.InstallPackage(projectManager, "foo", new SemanticVersion("1.0"), ignoreDependencies: false, allowPrereleaseVersions: false, skipAssemblyReferences: true, logger: NullLogger.Instance);
+            packageManager.InstallPackage(projectManager, "foo", new NuGetVersion("1.0"), ignoreDependencies: false, allowPrereleaseVersions: false, skipAssemblyReferences: true, logger: NullLogger.Instance);
 
             // Assert
             Assert.True(packageManager.LocalRepository.Exists(package));
@@ -274,7 +274,7 @@ namespace NuGet.VisualStudio.Test
             sourceRepository.AddPackage(package);
 
             // Act
-            packageManager.InstallPackage(projectManager, "foo", new SemanticVersion("1.0"), ignoreDependencies: false, allowPrereleaseVersions: false, skipAssemblyReferences: false, logger: NullLogger.Instance);
+            packageManager.InstallPackage(projectManager, "foo", new NuGetVersion("1.0"), ignoreDependencies: false, allowPrereleaseVersions: false, skipAssemblyReferences: false, logger: NullLogger.Instance);
 
             // Assert
             Assert.True(packageManager.LocalRepository.Exists(package));
@@ -367,7 +367,7 @@ namespace NuGet.VisualStudio.Test
             sourceRepository.AddPackage(package);
 
             // Act
-            packageManager.InstallPackage((IProjectManager)null, "foo", new SemanticVersion("1.0"), ignoreDependencies: false, allowPrereleaseVersions: false, logger: NullLogger.Instance);
+            packageManager.InstallPackage((IProjectManager)null, "foo", new NuGetVersion("1.0"), ignoreDependencies: false, allowPrereleaseVersions: false, logger: NullLogger.Instance);
 
             // Assert
             Assert.True(packageManager.LocalRepository.Exists(package));
@@ -386,7 +386,7 @@ namespace NuGet.VisualStudio.Test
                 deleteOnRestartManager.Object, new Mock<VsPackageInstallerEvents>().Object);
 
             // Act
-            packageManager.InstallPackage(null, "A", new SemanticVersion("1.0"), ignoreDependencies: false, allowPrereleaseVersions: false, logger: NullLogger.Instance);
+            packageManager.InstallPackage(null, "A", new NuGetVersion("1.0"), ignoreDependencies: false, allowPrereleaseVersions: false, logger: NullLogger.Instance);
 
             // Assert
             deleteOnRestartManager.Verify();
@@ -432,8 +432,8 @@ namespace NuGet.VisualStudio.Test
                 ignoreDependencies: false, allowPrereleaseVersions: false, logger: NullLogger.Instance);
 
             // Assert
-            Assert.True(localRepository.IsSolutionReferenced("bar1", new SemanticVersion("2.0")));
-            Assert.True(localRepository.IsSolutionReferenced("bar2", new SemanticVersion("2.0")));
+            Assert.True(localRepository.IsSolutionReferenced("bar1", new NuGetVersion("2.0")));
+            Assert.True(localRepository.IsSolutionReferenced("bar2", new NuGetVersion("2.0")));
 
             Assert.True(packageManager.LocalRepository.Exists(packageFoo));
             Assert.True(projectManager.LocalRepository.Exists(packageFoo));
@@ -474,8 +474,8 @@ namespace NuGet.VisualStudio.Test
                 ignoreDependencies: false, allowPrereleaseVersions: false, logger: NullLogger.Instance);
 
             // Assert
-            Assert.True(localRepository.IsSolutionReferenced("bar1", new SemanticVersion("2.0")));
-            Assert.True(localRepository.IsSolutionReferenced("bar2", new SemanticVersion("2.0")));
+            Assert.True(localRepository.IsSolutionReferenced("bar1", new NuGetVersion("2.0")));
+            Assert.True(localRepository.IsSolutionReferenced("bar2", new NuGetVersion("2.0")));
         }
 
         /// <summary>
@@ -516,8 +516,8 @@ namespace NuGet.VisualStudio.Test
                 ignoreDependencies: false, allowPrereleaseVersions: false, logger: NullLogger.Instance);
 
             // Assert
-            Assert.False(localRepository.IsReferenced("bar1", new SemanticVersion("2.0")));
-            Assert.False(localRepository.IsReferenced("bar2", new SemanticVersion("2.0")));
+            Assert.False(localRepository.IsReferenced("bar1", new NuGetVersion("2.0")));
+            Assert.False(localRepository.IsReferenced("bar2", new NuGetVersion("2.0")));
 
             Assert.True(packageManager.LocalRepository.Exists(packageFoo));
             Assert.True(projectManager.LocalRepository.Exists(packageFoo));
@@ -528,7 +528,7 @@ namespace NuGet.VisualStudio.Test
         {
             // Arrange            
             var localRepository = new Mock<MockPackageRepository>() { CallBase = true }.As<ISharedPackageRepository>();
-            localRepository.Setup(m => m.IsReferenced("foo", It.IsAny<SemanticVersion>())).Returns(true);
+            localRepository.Setup(m => m.IsReferenced("foo", It.IsAny<ISemanticVersion>())).Returns(true);
             var sourceRepository = new MockPackageRepository();
             var fileSystem = new MockFileSystem();
             var pathResolver = new DefaultPackagePathResolver(fileSystem);
@@ -548,7 +548,7 @@ namespace NuGet.VisualStudio.Test
         {
             // Arrange            
             var localRepository = new Mock<MockPackageRepository>() { CallBase = true }.As<ISharedPackageRepository>();
-            localRepository.Setup(m => m.IsReferenced("foo", It.IsAny<SemanticVersion>())).Returns(true);
+            localRepository.Setup(m => m.IsReferenced("foo", It.IsAny<ISemanticVersion>())).Returns(true);
             var sourceRepository = new MockPackageRepository();
             var fileSystem = new MockFileSystem();
             var pathResolver = new DefaultPackagePathResolver(fileSystem);
@@ -566,7 +566,7 @@ namespace NuGet.VisualStudio.Test
         {
             // Arrange            
             var localRepository = new Mock<MockPackageRepository>() { CallBase = true }.As<ISharedPackageRepository>();
-            localRepository.Setup(m => m.IsReferenced("foo", It.IsAny<SemanticVersion>())).Returns(false);
+            localRepository.Setup(m => m.IsReferenced("foo", It.IsAny<ISemanticVersion>())).Returns(false);
             var sourceRepository = new MockPackageRepository();
             var fileSystem = new MockFileSystem();
             var pathResolver = new DefaultPackagePathResolver(fileSystem);
@@ -608,7 +608,7 @@ namespace NuGet.VisualStudio.Test
         {
             // Arrange            
             var localRepository = new Mock<MockPackageRepository>() { CallBase = true }.As<ISharedPackageRepository>();
-            localRepository.Setup(m => m.IsReferenced("A", new SemanticVersion("1.0"))).Returns(false);
+            localRepository.Setup(m => m.IsReferenced("A", new NuGetVersion("1.0"))).Returns(false);
             var projectRepository = new MockProjectPackageRepository(localRepository.Object);
             var sourceRepository = new MockPackageRepository();
             var fileSystem = new MockFileSystem();
@@ -638,7 +638,7 @@ namespace NuGet.VisualStudio.Test
             Version requiredVersion = new Version(nugetVersion.Major, nugetVersion.Minor, nugetVersion.Build, nugetVersion.Revision + 1);
 
             var localRepository = new Mock<MockPackageRepository>() { CallBase = true }.As<ISharedPackageRepository>();
-            localRepository.Setup(m => m.IsReferenced("A", new SemanticVersion("1.0"))).Returns(false);
+            localRepository.Setup(m => m.IsReferenced("A", new NuGetVersion("1.0"))).Returns(false);
             var projectRepository = new MockProjectPackageRepository(localRepository.Object);
             var sourceRepository = new MockPackageRepository();
             var fileSystem = new MockFileSystem();
@@ -667,7 +667,7 @@ namespace NuGet.VisualStudio.Test
         {
             // Arrange            
             var localRepository = new Mock<MockPackageRepository>() { CallBase = true }.As<ISharedPackageRepository>();
-            localRepository.Setup(m => m.IsReferenced("A", new SemanticVersion("1.0"))).Returns(true);
+            localRepository.Setup(m => m.IsReferenced("A", new NuGetVersion("1.0"))).Returns(true);
             var projectRepository = new MockProjectPackageRepository(localRepository.Object);
             var sourceRepository = new MockPackageRepository();
             var fileSystem = new MockFileSystem();
@@ -729,15 +729,15 @@ namespace NuGet.VisualStudio.Test
             packageManager.UpdatePackages(projectManager, new[] { A3, B2 }, operations, updateDependencies: true, allowPrereleaseVersions: true, logger: NullLogger.Instance);
 
             // Assert
-            Assert.True(localRepository.Exists("A", new SemanticVersion("3.0")));
-            Assert.False(localRepository.Exists("A", new SemanticVersion("2.0")));
-            Assert.False(localRepository.Exists("A", new SemanticVersion("1.0")));
+            Assert.True(localRepository.Exists("A", new NuGetVersion("3.0")));
+            Assert.False(localRepository.Exists("A", new NuGetVersion("2.0")));
+            Assert.False(localRepository.Exists("A", new NuGetVersion("1.0")));
 
-            Assert.True(localRepository.Exists("B", new SemanticVersion("2.0")));
-            Assert.False(localRepository.Exists("B", new SemanticVersion("1.0")));
+            Assert.True(localRepository.Exists("B", new NuGetVersion("2.0")));
+            Assert.False(localRepository.Exists("B", new NuGetVersion("1.0")));
 
-            Assert.True(projectRepository.Exists("A", new SemanticVersion("3.0")));
-            Assert.True(projectRepository.Exists("B", new SemanticVersion("2.0")));
+            Assert.True(projectRepository.Exists("A", new NuGetVersion("3.0")));
+            Assert.True(projectRepository.Exists("B", new NuGetVersion("2.0")));
         }
 
         [Fact]
@@ -806,18 +806,18 @@ namespace NuGet.VisualStudio.Test
             Assert.True(updatePackagesByDependencyOrder[1] == A2);
             Assert.True(updatePackagesByDependencyOrder[2] == B2);
 
-            Assert.True(localRepository.Exists("A", new SemanticVersion("2.0")));
-            Assert.False(localRepository.Exists("A", new SemanticVersion("1.0")));
+            Assert.True(localRepository.Exists("A", new NuGetVersion("2.0")));
+            Assert.False(localRepository.Exists("A", new NuGetVersion("1.0")));
 
-            Assert.True(localRepository.Exists("B", new SemanticVersion("2.0")));
-            Assert.False(localRepository.Exists("B", new SemanticVersion("1.0")));
+            Assert.True(localRepository.Exists("B", new NuGetVersion("2.0")));
+            Assert.False(localRepository.Exists("B", new NuGetVersion("1.0")));
 
-            Assert.True(localRepository.Exists("C", new SemanticVersion("2.0")));
-            Assert.False(localRepository.Exists("C", new SemanticVersion("1.0")));
+            Assert.True(localRepository.Exists("C", new NuGetVersion("2.0")));
+            Assert.False(localRepository.Exists("C", new NuGetVersion("1.0")));
 
-            Assert.True(projectRepository.Exists("A", new SemanticVersion("2.0")));
-            Assert.True(projectRepository.Exists("B", new SemanticVersion("2.0")));
-            Assert.True(projectRepository.Exists("C", new SemanticVersion("2.0")));
+            Assert.True(projectRepository.Exists("A", new NuGetVersion("2.0")));
+            Assert.True(projectRepository.Exists("B", new NuGetVersion("2.0")));
+            Assert.True(projectRepository.Exists("C", new NuGetVersion("2.0")));
         }
 
         [Fact]
@@ -833,12 +833,12 @@ namespace NuGet.VisualStudio.Test
             // A2 -> B2
             // F1 -> G1
             // G1 -> B1
-            var A10 = PackageUtility.CreatePackage("A", "1.0", new[] { "hello" }, dependencies: new[] { new PackageDependency("B", VersionSpec.ParseVersionSpec("1.0")) });
-            var A20 = PackageUtility.CreatePackage("A", "2.0", new[] { "hello" }, dependencies: new[] { new PackageDependency("B", VersionSpec.ParseVersionSpec("2.0")) });
+            var A10 = PackageUtility.CreatePackage("A", "1.0", new[] { "hello" }, dependencies: new[] { new PackageDependency("B", VersionSpec.Parse("1.0")) });
+            var A20 = PackageUtility.CreatePackage("A", "2.0", new[] { "hello" }, dependencies: new[] { new PackageDependency("B", VersionSpec.Parse("2.0")) });
             var B10 = PackageUtility.CreatePackage("B", "1.0", new[] { "hello" });
             var B20 = PackageUtility.CreatePackage("B", "2.0", new[] { "hello" });
-            var F10 = PackageUtility.CreatePackage("F", "1.0", new[] { "hello" }, dependencies: new[] { new PackageDependency("G", VersionSpec.ParseVersionSpec("1.0")) });
-            var G10 = PackageUtility.CreatePackage("G", "1.0", new[] { "hello" }, dependencies: new[] { new PackageDependency("B", VersionSpec.ParseVersionSpec("1.0")) });
+            var F10 = PackageUtility.CreatePackage("F", "1.0", new[] { "hello" }, dependencies: new[] { new PackageDependency("G", VersionSpec.Parse("1.0")) });
+            var G10 = PackageUtility.CreatePackage("G", "1.0", new[] { "hello" }, dependencies: new[] { new PackageDependency("B", VersionSpec.Parse("1.0")) });
             sourceRepository.AddPackage(A10);
             sourceRepository.AddPackage(A20);
             sourceRepository.AddPackage(B10);
@@ -880,8 +880,8 @@ namespace NuGet.VisualStudio.Test
             var pathResolver = new DefaultPackagePathResolver(fileSystem);
             // A1 -> B1
             // A2 -> B1
-            var A10 = PackageUtility.CreatePackage("A", "1.0", assemblyReferences: new[] { "A1.dll" }, dependencies: new[] { new PackageDependency("B", VersionSpec.ParseVersionSpec("1.0")) });
-            var A20 = PackageUtility.CreatePackage("A", "2.0", assemblyReferences: new[] { "A2.dll" }, dependencies: new[] { new PackageDependency("B", VersionSpec.ParseVersionSpec("1.0")) });
+            var A10 = PackageUtility.CreatePackage("A", "1.0", assemblyReferences: new[] { "A1.dll" }, dependencies: new[] { new PackageDependency("B", VersionSpec.Parse("1.0")) });
+            var A20 = PackageUtility.CreatePackage("A", "2.0", assemblyReferences: new[] { "A2.dll" }, dependencies: new[] { new PackageDependency("B", VersionSpec.Parse("1.0")) });
             var B10 = PackageUtility.CreatePackage("B", "1.0", assemblyReferences: new[] { "B1.dll" });
             sourceRepository.AddPackage(A10);
             sourceRepository.AddPackage(A20);
@@ -891,7 +891,7 @@ namespace NuGet.VisualStudio.Test
             localRepository.Object.AddPackage(B10);
             var packageManager = new VsPackageManager(TestUtils.GetSolutionManager(), sourceRepository, new Mock<IFileSystemProvider>().Object, fileSystem, localRepository.Object, new Mock<IDeleteOnRestartManager>().Object, new Mock<VsPackageInstallerEvents>().Object);
             var projectManager = new ProjectManager(localRepository.Object, pathResolver, projectSystem, projectRepository);
-            projectManager.AddPackageReference("A", new SemanticVersion("1.0"));
+            projectManager.AddPackageReference("A", new NuGetVersion("1.0"));
 
             // Act
             packageManager.UpdatePackage(projectManager, "A", version: null, updateDependencies: true, allowPrereleaseVersions: false, logger: NullLogger.Instance);
@@ -917,7 +917,7 @@ namespace NuGet.VisualStudio.Test
             var pathResolver = new DefaultPackagePathResolver(fileSystem);
             // A1 -> B1
             // A2
-            var A10 = PackageUtility.CreatePackage("A", "1.0", assemblyReferences: new[] { "A1.dll" }, dependencies: new[] { new PackageDependency("B", VersionSpec.ParseVersionSpec("1.0")) });
+            var A10 = PackageUtility.CreatePackage("A", "1.0", assemblyReferences: new[] { "A1.dll" }, dependencies: new[] { new PackageDependency("B", VersionSpec.Parse("1.0")) });
             var A20 = PackageUtility.CreatePackage("A", "2.0", assemblyReferences: new[] { "A2.dll" });
             var B10 = PackageUtility.CreatePackage("B", "1.0", assemblyReferences: new[] { "B1.dll" });
             sourceRepository.AddPackage(A10);
@@ -928,7 +928,7 @@ namespace NuGet.VisualStudio.Test
             localRepository.Object.AddPackage(B10);
             var packageManager = new VsPackageManager(TestUtils.GetSolutionManager(), sourceRepository, new Mock<IFileSystemProvider>().Object, fileSystem, localRepository.Object, new Mock<IDeleteOnRestartManager>().Object, new Mock<VsPackageInstallerEvents>().Object);
             var projectManager = new ProjectManager(localRepository.Object, pathResolver, projectSystem, projectRepository);
-            projectManager.AddPackageReference("A", new SemanticVersion("1.0"));
+            projectManager.AddPackageReference("A", new NuGetVersion("1.0"));
 
             // Act
             packageManager.UpdatePackage(projectManager, "A", version: null, updateDependencies: true, allowPrereleaseVersions: false, logger: NullLogger.Instance);
@@ -955,11 +955,11 @@ namespace NuGet.VisualStudio.Test
             // A1 -> B1, C1
             // A2 -> B1
             var A10 = PackageUtility.CreatePackage("A", "1.0", assemblyReferences: new[] { "A1.dll" }, dependencies: new[] { 
-                new PackageDependency("B", VersionSpec.ParseVersionSpec("1.0")),
-                new PackageDependency("C", VersionSpec.ParseVersionSpec("1.0")),
+                new PackageDependency("B", VersionSpec.Parse("1.0")),
+                new PackageDependency("C", VersionSpec.Parse("1.0")),
             });
             var A20 = PackageUtility.CreatePackage("A", "2.0", assemblyReferences: new[] { "A2.dll" }, dependencies: new[] { 
-                new PackageDependency("B", VersionSpec.ParseVersionSpec("1.0"))
+                new PackageDependency("B", VersionSpec.Parse("1.0"))
             });
             var B10 = PackageUtility.CreatePackage("B", "1.0", assemblyReferences: new[] { "B1.dll" });
             var C10 = PackageUtility.CreatePackage("C", "1.0", assemblyReferences: new[] { "C1.dll" });
@@ -973,7 +973,7 @@ namespace NuGet.VisualStudio.Test
             localRepository.Object.AddPackage(C10);
             var packageManager = new VsPackageManager(TestUtils.GetSolutionManager(), sourceRepository, new Mock<IFileSystemProvider>().Object, fileSystem, localRepository.Object, new Mock<IDeleteOnRestartManager>().Object, new Mock<VsPackageInstallerEvents>().Object);
             var projectManager = new ProjectManager(localRepository.Object, pathResolver, projectSystem, projectRepository);
-            projectManager.AddPackageReference("A", new SemanticVersion("1.0"));
+            projectManager.AddPackageReference("A", new NuGetVersion("1.0"));
 
             // Act
             packageManager.UpdatePackage(projectManager, "A", version: null, updateDependencies: true, allowPrereleaseVersions: false, logger: NullLogger.Instance);
@@ -1044,7 +1044,7 @@ namespace NuGet.VisualStudio.Test
             var package = PackageUtility.CreatePackage("foo", "1.0.0", dependencies: new[] { new PackageDependency("bar") });
             sourceRepository.AddPackage(package);
 
-            var versionSpec = VersionSpec.ParseVersionSpec("[0.6, 1.0)");
+            var versionSpec = VersionSpec.Parse("[0.6, 1.0)");
             var package2 = PackageUtility.CreatePackage("bar", "2.0.0", dependencies: new[] { new PackageDependency("qux", versionSpec) });
             sourceRepository.AddPackage(package2);
 
@@ -1073,7 +1073,7 @@ namespace NuGet.VisualStudio.Test
             var package = PackageUtility.CreatePackage("foo", "1.0.0", dependencies: new[] { new PackageDependency("bar") });
             sourceRepository.AddPackage(package);
 
-            var versionSpec = VersionSpec.ParseVersionSpec("[0.6, 1.0)");
+            var versionSpec = VersionSpec.Parse("[0.6, 1.0)");
             var package2 = PackageUtility.CreatePackage("bar", "2.0.0", dependencies: new[] { new PackageDependency("qux", versionSpec) });
             sourceRepository.AddPackage(package2);
 
@@ -1218,7 +1218,7 @@ namespace NuGet.VisualStudio.Test
         {
             // Arrange
             var localRepository = new Mock<MockPackageRepository>() { CallBase = true }.As<ISharedPackageRepository>();
-            localRepository.Setup(m => m.IsReferenced("A", new SemanticVersion("2.0"))).Returns(true);
+            localRepository.Setup(m => m.IsReferenced("A", new NuGetVersion("2.0"))).Returns(true);
             var sourceRepository = new MockPackageRepository();
             var projectSystem = new MockProjectSystem();
             var pathResolver = new DefaultPackagePathResolver(projectSystem);
@@ -1265,7 +1265,7 @@ namespace NuGet.VisualStudio.Test
         {
             // Arrange
             var localRepository = new Mock<MockPackageRepository>() { CallBase = true }.As<ISharedPackageRepository>();
-            localRepository.Setup(m => m.IsReferenced("A", new SemanticVersion("2.0"))).Returns(true);
+            localRepository.Setup(m => m.IsReferenced("A", new NuGetVersion("2.0"))).Returns(true);
             var sourceRepository = new MockPackageRepository();
             var projectSystem = new MockProjectSystem();
             var pathResolver = new DefaultPackagePathResolver(projectSystem);
@@ -1294,7 +1294,7 @@ namespace NuGet.VisualStudio.Test
 
             bool appliesToProject;
             IPackage package = packageManager.FindLocalPackage("A", out appliesToProject);
-            Assert.True(package.Version.Version.Major == 2);
+            Assert.True(package.Version.Major == 2);
             Assert.True(appliesToProject);
         }
 
@@ -1364,26 +1364,26 @@ namespace NuGet.VisualStudio.Test
             var projectRepository = new MockProjectPackageRepository(localRepository.Object);
             var projectManager = new ProjectManager(localRepository.Object, pathResolver, projectSystem, projectRepository);
 
-            localRepository.Setup(r => r.IsReferenced(It.IsAny<string>(), It.IsAny<SemanticVersion>())).
-                Returns((string id, SemanticVersion version) => projectRepository.Exists(id, version));
+            localRepository.Setup(r => r.IsReferenced(It.IsAny<string>(), It.IsAny<ISemanticVersion>())).
+                Returns((string id, ISemanticVersion version) => projectRepository.Exists(id, version));
 
             // Act
             packageManager.InstallPackage(
                 projectManager, 
                 "A", 
-                new SemanticVersion("2.0"), 
+                new NuGetVersion("2.0"), 
                 ignoreDependencies: false, 
                 allowPrereleaseVersions: allowPrerelease, 
                 logger: null);
 
             // Assert
-            Assert.True(projectRepository.Exists("A", new SemanticVersion("2.0")));
-            Assert.True(projectRepository.Exists("B", new SemanticVersion("1.0")));
+            Assert.True(projectRepository.Exists("A", new NuGetVersion("2.0")));
+            Assert.True(projectRepository.Exists("B", new NuGetVersion("1.0")));
 
             
             // assert that packages.config for solution-level is not created.
-            Assert.False(localRepository.Object.IsSolutionReferenced("A", new SemanticVersion("2.0")));
-            Assert.False(localRepository.Object.IsSolutionReferenced("B", new SemanticVersion("1.0")));
+            Assert.False(localRepository.Object.IsSolutionReferenced("A", new NuGetVersion("2.0")));
+            Assert.False(localRepository.Object.IsSolutionReferenced("B", new NuGetVersion("1.0")));
         }
 
         [Theory]
@@ -1417,26 +1417,26 @@ namespace NuGet.VisualStudio.Test
             var projectRepository = new MockProjectPackageRepository(localRepository.Object);
             var projectManager = new ProjectManager(localRepository.Object, pathResolver, projectSystem, projectRepository);
 
-            localRepository.Setup(r => r.IsReferenced(It.IsAny<string>(), It.IsAny<SemanticVersion>())).
-                Returns((string id, SemanticVersion version) => projectRepository.Exists(id, version));
+            localRepository.Setup(r => r.IsReferenced(It.IsAny<string>(), It.IsAny<ISemanticVersion>())).
+                Returns((string id, ISemanticVersion version) => projectRepository.Exists(id, version));
 
             // Act
             packageManager.InstallPackage(
                 projectManager, 
                 "A", 
-                new SemanticVersion("2.0"), 
+                new NuGetVersion("2.0"), 
                 ignoreDependencies: false, 
                 allowPrereleaseVersions: true, 
                 skipAssemblyReferences: skipAssemblyReferences, 
                 logger: null);
 
             // Assert
-            Assert.True(projectRepository.Exists("A", new SemanticVersion("2.0")));
-            Assert.True(projectRepository.Exists("B", new SemanticVersion("1.0")));
+            Assert.True(projectRepository.Exists("A", new NuGetVersion("2.0")));
+            Assert.True(projectRepository.Exists("B", new NuGetVersion("1.0")));
 
             // assert that packages.config for solution-level is not created.
-            Assert.False(localRepository.Object.IsSolutionReferenced("A", new SemanticVersion("2.0")));
-            Assert.False(localRepository.Object.IsSolutionReferenced("B", new SemanticVersion("1.0")));
+            Assert.False(localRepository.Object.IsSolutionReferenced("A", new NuGetVersion("2.0")));
+            Assert.False(localRepository.Object.IsSolutionReferenced("B", new NuGetVersion("1.0")));
         }
 
         [Theory]
@@ -1472,16 +1472,16 @@ namespace NuGet.VisualStudio.Test
             packageManager.InstallPackage(
                 projectManager,
                 "A",
-                new SemanticVersion("2.0"),
+                new NuGetVersion("2.0"),
                 ignoreDependencies: false,
                 allowPrereleaseVersions: allowPrerelease,
                 logger: null);
 
             // Assert
-            Assert.True(!projectRepository.Exists("A", new SemanticVersion("2.0")));
+            Assert.True(!projectRepository.Exists("A", new NuGetVersion("2.0")));
 
             // assert that packages.config for solution-level is created.
-            Assert.True(localRepository.IsSolutionReferenced("A", new SemanticVersion("2.0")));
+            Assert.True(localRepository.IsSolutionReferenced("A", new NuGetVersion("2.0")));
         }
 
         [Theory]
@@ -1517,17 +1517,17 @@ namespace NuGet.VisualStudio.Test
             packageManager.InstallPackage(
                 projectManager,
                 "A",
-                new SemanticVersion("2.0"),
+                new NuGetVersion("2.0"),
                 ignoreDependencies: false,
                 allowPrereleaseVersions: true,
                 skipAssemblyReferences: skipAssemblyReferences,
                 logger: null);
 
             // Assert
-            Assert.True(!projectRepository.Exists("A", new SemanticVersion("2.0")));
+            Assert.True(!projectRepository.Exists("A", new NuGetVersion("2.0")));
 
             // assert that packages.config for solution-level is created.
-            Assert.True(localRepository.IsSolutionReferenced("A", new SemanticVersion("2.0")));
+            Assert.True(localRepository.IsSolutionReferenced("A", new NuGetVersion("2.0")));
         }
 
         // This repository better simulates what happens when we're running the package manager in vs

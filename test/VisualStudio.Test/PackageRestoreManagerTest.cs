@@ -517,9 +517,9 @@ namespace NuGet.VisualStudio.Test
                     try
                     {
                         // Assert
-                        packageManager.Verify(p => p.InstallPackage("A", new SemanticVersion("1.0.0.0"), true, true), Times.Never());
-                        packageManager.Verify(p => p.InstallPackage("B", new SemanticVersion("1.2-alpha"), true, true), Times.Once());
-                        packageManager.Verify(p => p.InstallPackage("C", new SemanticVersion("2.0-RC1"), true, true), Times.Once());
+                        packageManager.Verify(p => p.InstallPackage("A", new NuGetVersion("1.0.0.0"), true, true), Times.Never());
+                        packageManager.Verify(p => p.InstallPackage("B", new NuGetVersion("1.2-alpha"), true, true), Times.Once());
+                        packageManager.Verify(p => p.InstallPackage("C", new NuGetVersion("2.0-RC1"), true, true), Times.Once());
                     }
                     catch (Exception testException)
                     {
@@ -607,9 +607,9 @@ namespace NuGet.VisualStudio.Test
             var cachePackages = localCache.GetPackages().ToList();
             Assert.Equal(2, cachePackages.Count);
             Assert.Equal("NuGet.Build", cachePackages[0].Id);
-            Assert.Equal(new SemanticVersion("1.0"), cachePackages[0].Version);
+            Assert.Equal(new NuGetVersion("1.0"), cachePackages[0].Version);
             Assert.Equal("NuGet.CommandLine", cachePackages[1].Id);
-            Assert.Equal(new SemanticVersion("2.0"), cachePackages[1].Version);
+            Assert.Equal(new NuGetVersion("2.0"), cachePackages[1].Version);
         }
 
         [Fact]
@@ -650,13 +650,13 @@ namespace NuGet.VisualStudio.Test
             var packageRepository = new MockPackageRepository();
             var packageA = new Mock<IPackage>(MockBehavior.Strict);
             packageA.Setup(p => p.Id).Returns("NuGet.Build");
-            packageA.Setup(p => p.Version).Returns(new SemanticVersion("1.0"));
+            packageA.Setup(p => p.Version).Returns(new NuGetVersion("1.0"));
             packageA.Setup(p => p.IsLatestVersion).Returns(true);
             packageA.Setup(p => p.Listed).Returns(true);
 
             var packageB = new Mock<IPackage>(MockBehavior.Strict);
             packageB.Setup(p => p.Id).Returns("NuGet.CommandLine");
-            packageB.Setup(p => p.Version).Returns(new SemanticVersion("2.0"));
+            packageB.Setup(p => p.Version).Returns(new NuGetVersion("2.0"));
             packageB.Setup(p => p.IsLatestVersion).Returns(true);
             packageB.Setup(p => p.Listed).Returns(true);
 

@@ -5,6 +5,9 @@ using System.Text;
 
 namespace NuGet.Versioning
 {
+    /// <summary>
+    /// Version comparison modes.
+    /// </summary>
     public enum VersionComparison
     {
         /// <summary>

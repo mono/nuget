@@ -450,7 +450,7 @@ namespace NuGet
             if (tokens.Length > 1)
             {
                 // Attempt to parse the version
-                VersionSpec.TryParseVersionSpec(tokens[1], out versionSpec);
+                VersionSpec.TryParse(tokens[1], out versionSpec);
             }
 
             var targetFramework = (tokens.Length > 2 && !String.IsNullOrEmpty(tokens[2]))

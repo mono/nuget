@@ -76,7 +76,7 @@ namespace NuGet.PowerShell.Commands.Test
 
             // Assert
             Assert.Equal("my-id", vsPackageManager.PackageId);
-            Assert.Equal(new SemanticVersion("2.8"), vsPackageManager.Version);
+            Assert.Equal(new NuGetVersion("2.8"), vsPackageManager.Version);
         }
 
         [Fact]
@@ -100,7 +100,7 @@ namespace NuGet.PowerShell.Commands.Test
 
             // Assert
             Assert.Equal("my-id", vsPackageManager.PackageId);
-            Assert.Equal(new SemanticVersion("2.8"), vsPackageManager.Version);
+            Assert.Equal(new NuGetVersion("2.8"), vsPackageManager.Version);
             Assert.True(vsPackageManager.UpdateDependencies);
         }
 
@@ -126,7 +126,7 @@ namespace NuGet.PowerShell.Commands.Test
 
             // Assert
             Assert.Equal("my-id", vsPackageManager.PackageId);
-            Assert.Equal(new SemanticVersion("2.8"), vsPackageManager.Version);
+            Assert.Equal(new NuGetVersion("2.8"), vsPackageManager.Version);
             Assert.False(vsPackageManager.UpdateDependencies);
         }
 
@@ -416,11 +416,11 @@ namespace NuGet.PowerShell.Commands.Test
 
             public string PackageId { get; set; }
 
-            public SemanticVersion Version { get; set; }
+            public ISemanticVersion Version { get; set; }
 
             public bool UpdateDependencies { get; set; }
 
-            public override void UpdatePackage(IProjectManager projectManager, string packageId, SemanticVersion version, bool updateDependencies, bool allowPreReleaseVersions, ILogger logger)
+            public override void UpdatePackage(IProjectManager projectManager, string packageId, ISemanticVersion version, bool updateDependencies, bool allowPreReleaseVersions, ILogger logger)
             {
                 ProjectManager = projectManager;
                 PackageId = packageId;

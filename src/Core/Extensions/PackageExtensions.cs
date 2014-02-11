@@ -40,8 +40,8 @@ namespace NuGet
                 string corePackageId = package.Id.Substring(0, package.Id.Length - package.Language.Length - 1);
                 return package.DependencySets.SelectMany(s => s.Dependencies).Any(
                        d => d.Id.Equals(corePackageId, StringComparison.OrdinalIgnoreCase) &&
-                       d.VersionSpec != null &&
-                       d.VersionSpec.MaxVersion == d.VersionSpec.MinVersion && d.VersionSpec.IsMaxInclusive && d.VersionSpec.IsMinInclusive);
+                       d.VersionSpec != null && VersionComparer.Default.Compare(d.VersionSpec.MaxVersion, d.VersionSpec.MinVersion) == 0 &&
+                       d.VersionSpec.IsMaxInclusive && d.VersionSpec.IsMinInclusive);
             }
             return false;
         }
@@ -59,7 +59,9 @@ namespace NuGet
                 throw new ArgumentNullException("versionSpec");
             }
 
-            return source.Where(versionSpec.ToDelegate());
+            //return source.Where(versionSpec.ToDelegate());
+
+            return source.Where(p => versionSpec.Satisfies(p.Version));
         }
 
         public static IEnumerable<IPackageFile> GetFiles(this IPackage package, string directory)

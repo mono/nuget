@@ -49,7 +49,7 @@ namespace NuGet.Test
         public void ToStringMaxVersionInclusive()
         {
             // Arrange
-            var spec = new VersionSpec(new NuGetVersion("1.0"), true);
+            var spec = new VersionSpec(null, new NuGetVersion("1.0"), false, true);
 
             // Act
             string value = spec.ToString();
@@ -62,7 +62,7 @@ namespace NuGet.Test
         public void ToStringMaxVersionExclusive()
         {
             // Arrange
-            var spec = new VersionSpec(new NuGetVersion("1.0"), false);
+            var spec = new VersionSpec(null, new NuGetVersion("1.0"), false, false);
 
             // Act
             string value = spec.ToString();
@@ -101,7 +101,7 @@ namespace NuGet.Test
         public void ToStringMinVersionInclusiveMaxInclusive()
         {
             // Arrange
-            var spec = new VersionSpec(new NuGetVersion("1.0"), new NuGetVersion("5.0"), true, false);
+            var spec = new VersionSpec(new NuGetVersion("1.0"), new NuGetVersion("5.0"), true, true);
 
             // Act
             string value = spec.ToString();

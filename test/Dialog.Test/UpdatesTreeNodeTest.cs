@@ -84,7 +84,7 @@ namespace NuGet.Dialog.Test
             localRepository.Setup(l => l.GetPackages()).Returns(new IPackage[] { PackageUtility.CreatePackage("A", "1.0") }.AsQueryable());
 
             Mock<IPackageConstraintProvider> constraintProvider = localRepository.As<IPackageConstraintProvider>();
-            constraintProvider.Setup(c => c.GetConstraint("A")).Returns(VersionSpec.ParseVersionSpec("(1.0,2.0]"));
+            constraintProvider.Setup(c => c.GetConstraint("A")).Returns(VersionSpec.Parse("(1.0,2.0]"));
 
             MockPackageRepository sourceRepository = new MockPackageRepository();
             sourceRepository.AddPackage(PackageUtility.CreatePackage("A", "1.5"));
@@ -506,7 +506,7 @@ namespace NuGet.Dialog.Test
             Assert.Equal(id, package.Id);
             if (version != null)
             {
-                Assert.Equal(new SemanticVersion(version), package.Version);
+                Assert.Equal(new NuGetVersion(version), package.Version);
             }
         }
 

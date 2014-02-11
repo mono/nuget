@@ -7,8 +7,30 @@ using Xunit.Extensions;
 
 namespace NuGet.Test
 {
-    public class SemanticVersionTest
+    public class NuGetVersionTest
     {
+        [Theory]
+        [InlineData("1.0.0")]
+        [InlineData("0.0.1")]
+        [InlineData("1.2.3")]
+        [InlineData("1.2.3-alpha")]
+        [InlineData("1.2.3-X.y.3+Meta-2")]
+        [InlineData("1.2.3-X.yZ.3.234.243.3242342+METADATA")]
+        [InlineData("1.2.3-X.y3+0")]
+        [InlineData("1.2.3-X+0")]
+        [InlineData("1.2.3+0")]
+        [InlineData("1.2.3-0")]
+        public void NuGetVersionParseStrict(string versionString)
+        {
+            // Arrange
+            NuGetVersion semVer = null;
+            NuGetVersion.TryParseStrict(versionString, out semVer);
+
+            // Assert
+            Assert.Equal<string>(versionString, semVer.ToNormalizedString());
+            Assert.Equal<string>(versionString, semVer.ToString());
+        }
+
         [Theory]
         [PropertyData("ConstructorData")]
         public void StringConstructorParsesValuesCorrectly(string version, Version versionValue, string specialValue)
@@ -126,15 +148,15 @@ namespace NuGet.Test
         }
 
         [Theory]
-        //[InlineData("1.0", "1.0.1")]
-        //[InlineData("1.23", "1.231")]
-        //[InlineData("1.4.5.6", "1.45.6")]
-        //[InlineData("1.4.5.6", "1.4.5.60")]
-        //[InlineData("1.01", "1.10")]
-        //[InlineData("1.01-alpha", "1.10-beta")]
-        //[InlineData("1.01.0-RC-1", "1.10.0-rc-2")]
+        [InlineData("1.0", "1.0.1")]
+        [InlineData("1.23", "1.231")]
+        [InlineData("1.4.5.6", "1.45.6")]
+        [InlineData("1.4.5.6", "1.4.5.60")]
+        [InlineData("1.01", "1.10")]
+        [InlineData("1.01-alpha", "1.10-beta")]
+        [InlineData("1.01.0-RC-1", "1.10.0-rc-2")]
         [InlineData("1.01-RC-1", "1.01")]
-        //[InlineData("1.01", "1.2-preview")]
+        [InlineData("1.01", "1.2-preview")]
         public void SemVerLessThanAndGreaterThanOperatorsWorks(string versionA, string versionB)
         {
             // Arrange
@@ -255,27 +277,9 @@ namespace NuGet.Test
 
             // Assert
             Assert.True(result);
-            Assert.Equal(new Version("1.3.2.0"), version.Version);
+            Assert.Equal(new Version("1.3.2"), version.Version);
             Assert.Equal("CTP-2-Refresh-Alpha", version.SpecialVersion);
         }
-
-        [Theory]
-        [InlineData("2.7")]
-        [InlineData("1.3.4.5")]
-        [InlineData("1.3-alpha")]
-        [InlineData("1.3 .4")]
-        [InlineData("2.3.18.2-a")]
-        public void TryParseStrictReturnsFalseIfVersionIsNotStrictSemVer(string version)
-        {
-            // Act 
-            NuGetVersion semanticVersion;
-            bool result = NuGetVersion.TryParseStrict(version, out semanticVersion);
-
-            // Assert
-            Assert.False(result);
-            Assert.Null(semanticVersion);
-        }
-
 
     }
 }

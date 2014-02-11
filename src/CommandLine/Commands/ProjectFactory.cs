@@ -334,7 +334,7 @@ namespace NuGet.Commands
 
             string version = _project.GetPropertyValue("Version");
             builder.Version = builder.Version ??
-                              NuGetVersion.ParseOptionalVersion(version) ??
+                              NuGetVersion.Parse(version) ??
                               new NuGetVersion("1.0");
         }
 
@@ -489,7 +489,7 @@ namespace NuGet.Commands
                 projectFactory.ProcessNuspec(builder, null);
                 return new PackageDependency(
                     builder.Id,
-                    VersionSpec.ParseVersionSpec(builder.Version.ToString()));
+                    VersionSpec.Parse(builder.Version.ToString()));
             }
             catch (Exception ex)
             {
@@ -643,7 +643,7 @@ namespace NuGet.Commands
 
         private static IVersionSpec GetVersionConstraint(IDictionary<PackageName, PackageReference> packageReferences, IPackage package)
         {
-            IVersionSpec defaultVersionConstraint = VersionSpec.ParseVersionSpec(package.Version.ToString());
+            IVersionSpec defaultVersionConstraint = VersionSpec.Parse(package.Version.ToString());
 
             PackageReference packageReference;
             var key = new PackageName(package.Id, package.Version);

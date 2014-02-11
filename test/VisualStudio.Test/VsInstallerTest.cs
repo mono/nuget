@@ -99,7 +99,7 @@ namespace NuGet.VisualStudio.Test
             installer.InstallPackage(source, project, "foo", new Version("1.0"), ignoreDependencies: false);
 
             // Assert
-            Assert.True(packageManager.Object.LocalRepository.Exists("foo", new SemanticVersion("1.0")));
+            Assert.True(packageManager.Object.LocalRepository.Exists("foo", new NuGetVersion("1.0")));
         }
 
         [Theory]
@@ -143,7 +143,7 @@ namespace NuGet.VisualStudio.Test
             installer.InstallPackage(source, project, "foo", "1.0", ignoreDependencies: false);
 
             // Assert
-            Assert.True(packageManager.Object.LocalRepository.Exists("foo", new SemanticVersion("1.0")));
+            Assert.True(packageManager.Object.LocalRepository.Exists("foo", new NuGetVersion("1.0")));
         }
 
         [Fact]
@@ -219,7 +219,7 @@ namespace NuGet.VisualStudio.Test
             var installer = new VsPackageInstaller(packageManagerFactory.Object, scriptExecutor.Object, new Mock<IPackageRepositoryFactory>().Object, new Mock<IOutputConsoleProvider>().Object, new Mock<IVsCommonOperations>().Object, new Mock<ISolutionManager>().Object, null, null);
 
             // Act
-            installer.InstallPackage(sourceRepository, project, "foo", new SemanticVersion("1.0"), ignoreDependencies: false, skipAssemblyReferences: false);
+            installer.InstallPackage(sourceRepository, project, "foo", new NuGetVersion("1.0"), ignoreDependencies: false, skipAssemblyReferences: false);
 
             // Assert
             scriptExecutor.Verify(e => e.Execute(It.IsAny<string>(), PowerShellScripts.Init, It.IsAny<IPackage>(), null, null, It.IsAny<ILogger>()), Times.Once());
@@ -273,7 +273,7 @@ namespace NuGet.VisualStudio.Test
                 null);
 
             // Act
-            installer.InstallPackage(sourceRepository, project, "foo", new SemanticVersion("1.0"), ignoreDependencies: false, skipAssemblyReferences: true);
+            installer.InstallPackage(sourceRepository, project, "foo", new NuGetVersion("1.0"), ignoreDependencies: false, skipAssemblyReferences: true);
 
             // Assert
             // state = 4 means that BindingRedirectEnabled is set to 'false', then to 'true', in that order.
@@ -329,7 +329,7 @@ namespace NuGet.VisualStudio.Test
                 null);
 
             // Act
-            installer.InstallPackage(sourceRepository, project, "foo", new SemanticVersion("1.0"), ignoreDependencies: false, skipAssemblyReferences: false);
+            installer.InstallPackage(sourceRepository, project, "foo", new NuGetVersion("1.0"), ignoreDependencies: false, skipAssemblyReferences: false);
 
             // Assert
             packageManager.As<IVsPackageManager>().VerifySet(m => m.BindingRedirectEnabled = false, Times.Never());
@@ -372,7 +372,7 @@ namespace NuGet.VisualStudio.Test
             var installer = new VsPackageInstaller(packageManagerFactory.Object, scriptExecutor.Object, new Mock<IPackageRepositoryFactory>().Object, new Mock<IOutputConsoleProvider>().Object, new Mock<IVsCommonOperations>().Object, new Mock<ISolutionManager>().Object, null, null);
 
             // Act
-            installer.InstallPackage(sourceRepository, project, "foo", new SemanticVersion("1.0"), ignoreDependencies: false, skipAssemblyReferences: false);
+            installer.InstallPackage(sourceRepository, project, "foo", new NuGetVersion("1.0"), ignoreDependencies: false, skipAssemblyReferences: false);
 
             // Assert
             packageManagerFactory.Verify(m => m.CreatePackageManager(It.IsAny<IPackageRepository>(), false), Times.Once());
@@ -493,7 +493,7 @@ namespace NuGet.VisualStudio.Test
 
             var services = new Mock<IVsPackageInstallerServices>();
             services.Setup(x => x.IsPackageInstalled(It.IsAny<Project>(), packageId)).Returns(true);
-            services.Setup(x => x.IsPackageInstalled(It.IsAny<Project>(), packageId, It.IsAny<SemanticVersion>())).Returns(false);
+            services.Setup(x => x.IsPackageInstalled(It.IsAny<Project>(), packageId, It.IsAny<ISemanticVersion>())).Returns(false);
 
             var installer = new VsPackageInstaller(null, null, null, consoleProvider.Object, new Mock<IVsCommonOperations>().Object, new Mock<ISolutionManager>().Object, null, services.Object, registryKeys: new[] { hkcu.Object });
             var packages = new Dictionary<string, string>();
@@ -565,11 +565,11 @@ namespace NuGet.VisualStudio.Test
             packages.Add(packageId, packageVersion);
 
             // Act
-            Assert.False(localRepository.Exists(packageId, new SemanticVersion(packageVersion)));
+            Assert.False(localRepository.Exists(packageId, new NuGetVersion(packageVersion)));
             installer.InstallPackagesFromRegistryRepository(registryKey, isPreUnzipped: false, skipAssemblyReferences: false, project: project, packageVersions: packages);
 
             // Assert
-            Assert.True(localRepository.Exists(packageId, new SemanticVersion(packageVersion)));
+            Assert.True(localRepository.Exists(packageId, new NuGetVersion(packageVersion)));
         }
 
         [Fact]
@@ -627,7 +627,7 @@ namespace NuGet.VisualStudio.Test
                 packageId,
                 packageVersion,
                 new[] { "System" }, null, null,
-                new[] { new PackageDependency(dependencyPackageId, new VersionSpec(new SemanticVersion(dependencyPackageVersion))) });
+                new[] { new PackageDependency(dependencyPackageId, new VersionSpec(new NuGetVersion(dependencyPackageVersion))) });
 
             var dependencyPackage = NuGet.Test.PackageUtility.CreatePackage(
                 dependencyPackageId,
@@ -642,12 +642,12 @@ namespace NuGet.VisualStudio.Test
             packages.Add(packageId, packageVersion);
 
             // Act
-            Assert.False(localRepository.Exists(packageId, new SemanticVersion(packageVersion)));
+            Assert.False(localRepository.Exists(packageId, new NuGetVersion(packageVersion)));
             installer.InstallPackagesFromRegistryRepository(registryKey, isPreUnzipped: false, skipAssemblyReferences: false, ignoreDependencies: false, project: project, packageVersions: packages);
 
             // Assert
-            Assert.True(localRepository.Exists(packageId, new SemanticVersion(packageVersion)));
-            Assert.True(localRepository.Exists(dependencyPackageId, new SemanticVersion(dependencyPackageVersion)));
+            Assert.True(localRepository.Exists(packageId, new NuGetVersion(packageVersion)));
+            Assert.True(localRepository.Exists(dependencyPackageId, new NuGetVersion(dependencyPackageVersion)));
         }
 
         [Fact]
@@ -741,7 +741,7 @@ namespace NuGet.VisualStudio.Test
 
             var services = new Mock<IVsPackageInstallerServices>();
             services.Setup(x => x.IsPackageInstalled(It.IsAny<Project>(), packageId)).Returns(true);
-            services.Setup(x => x.IsPackageInstalled(It.IsAny<Project>(), packageId, It.IsAny<SemanticVersion>())).Returns(false);
+            services.Setup(x => x.IsPackageInstalled(It.IsAny<Project>(), packageId, It.IsAny<ISemanticVersion>())).Returns(false);
 
             var installer = new VsPackageInstaller(null, null, null, consoleProvider.Object, new Mock<IVsCommonOperations>().Object, new Mock<ISolutionManager>().Object, null, services.Object, extensionManagerMock.Object);
             var packages = new Dictionary<string, string>();
@@ -813,11 +813,11 @@ namespace NuGet.VisualStudio.Test
             packages.Add(packageId, packageVersion);
 
             // Act
-            Assert.False(localRepository.Exists(packageId, new SemanticVersion(packageVersion)));
+            Assert.False(localRepository.Exists(packageId, new NuGetVersion(packageVersion)));
             installer.InstallPackagesFromVSExtensionRepository(extensionId, isPreUnzipped: false, skipAssemblyReferences: false, project: project, packageVersions: packages);
 
             // Assert
-            Assert.True(localRepository.Exists(packageId, new SemanticVersion(packageVersion)));
+            Assert.True(localRepository.Exists(packageId, new NuGetVersion(packageVersion)));
         }
     }
 }

@@ -77,19 +77,19 @@ namespace NuGet.Test
                     { 
                         new PackageOperation(PackageUtility.CreatePackage("A", "1.0"), PackageAction.Uninstall),
                         new PackageOperation(PackageUtility.CreatePackage("A.fr", "1.0", language: "fr",
-                            dependencies: new[] { new PackageDependency("A", VersionSpec.ParseVersionSpec("[1.0]")) }), PackageAction.Uninstall),
+                            dependencies: new[] { new PackageDependency("A", VersionSpec.Parse("[1.0]")) }), PackageAction.Uninstall),
                         new PackageOperation(PackageUtility.CreatePackage("A", "1.2"), PackageAction.Install),
                         new PackageOperation(PackageUtility.CreatePackage("A.fr", "1.2", language: "fr",
-                            dependencies: new[] { new PackageDependency("A", VersionSpec.ParseVersionSpec("[1.0]")) }), PackageAction.Install),
+                            dependencies: new[] { new PackageDependency("A", VersionSpec.Parse("[1.0]")) }), PackageAction.Install),
                     },
                     new [] 
                     { 
                         new PackageOperation(PackageUtility.CreatePackage("A.fr", "1.0", language: "fr",
-                            dependencies: new[] { new PackageDependency("A", VersionSpec.ParseVersionSpec("[1.0]")) }), PackageAction.Uninstall),
+                            dependencies: new[] { new PackageDependency("A", VersionSpec.Parse("[1.0]")) }), PackageAction.Uninstall),
                         new PackageOperation(PackageUtility.CreatePackage("A", "1.0"), PackageAction.Uninstall),
                         new PackageOperation(PackageUtility.CreatePackage("A", "1.2"), PackageAction.Install),
                         new PackageOperation(PackageUtility.CreatePackage("A.fr", "1.2", language: "fr",
-                            dependencies: new[] { new PackageDependency("A", VersionSpec.ParseVersionSpec("[1.0]")) }), PackageAction.Install),
+                            dependencies: new[] { new PackageDependency("A", VersionSpec.Parse("[1.0]")) }), PackageAction.Install),
                     },
                 };
 
@@ -100,20 +100,20 @@ namespace NuGet.Test
                         new PackageOperation(PackageUtility.CreatePackage("B", "1.0"), PackageAction.Uninstall),
                         new PackageOperation(PackageUtility.CreatePackage("A", "1.0"), PackageAction.Uninstall),
                         new PackageOperation(PackageUtility.CreatePackage("A.fr", "1.0", language: "fr", 
-                            dependencies: new[] { new PackageDependency("A", VersionSpec.ParseVersionSpec("[1.0]")) }), PackageAction.Uninstall),
+                            dependencies: new[] { new PackageDependency("A", VersionSpec.Parse("[1.0]")) }), PackageAction.Uninstall),
                         new PackageOperation(PackageUtility.CreatePackage("A.fr", "1.2", language: "fr",
-                            dependencies: new[] { new PackageDependency("A", VersionSpec.ParseVersionSpec("[1.0]")) }), PackageAction.Install),
+                            dependencies: new[] { new PackageDependency("A", VersionSpec.Parse("[1.0]")) }), PackageAction.Install),
                         new PackageOperation(PackageUtility.CreatePackage("A", "1.2"), PackageAction.Install),
                     },
                     new[] 
                     {
                         new PackageOperation(PackageUtility.CreatePackage("A.fr", "1.0", language: "fr",
-                            dependencies: new[] { new PackageDependency("A", VersionSpec.ParseVersionSpec("[1.0]")) }), PackageAction.Uninstall),
+                            dependencies: new[] { new PackageDependency("A", VersionSpec.Parse("[1.0]")) }), PackageAction.Uninstall),
                         new PackageOperation(PackageUtility.CreatePackage("B", "1.0"), PackageAction.Uninstall),
                         new PackageOperation(PackageUtility.CreatePackage("A", "1.0"), PackageAction.Uninstall),
                         new PackageOperation(PackageUtility.CreatePackage("A", "1.2"), PackageAction.Install),
                         new PackageOperation(PackageUtility.CreatePackage("A.fr", "1.2", language: "fr",
-                            dependencies: new[] { new PackageDependency("A", VersionSpec.ParseVersionSpec("[1.0]")) }), PackageAction.Install),
+                            dependencies: new[] { new PackageDependency("A", VersionSpec.Parse("[1.0]")) }), PackageAction.Install),
                     }
                 };
             }

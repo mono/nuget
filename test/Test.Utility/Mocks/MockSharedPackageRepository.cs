@@ -54,13 +54,13 @@ namespace NuGet.Test.Mocks
         public bool IsReferenced(string packageId, ISemanticVersion version)
         {
             ISemanticVersion storedVersion;
-            return _references.TryGetValue(packageId, out storedVersion) && storedVersion == version;
+            return _references.TryGetValue(packageId, out storedVersion) && storedVersion.Equals(version);
         }
 
         public bool IsSolutionReferenced(string packageId, ISemanticVersion version)
         {
             ISemanticVersion storedVersion;
-            return _solutionReferences.TryGetValue(packageId, out storedVersion) && storedVersion == version;
+            return _solutionReferences.TryGetValue(packageId, out storedVersion) && storedVersion.Equals(version);
         }
 
         public void RegisterRepository(string path)

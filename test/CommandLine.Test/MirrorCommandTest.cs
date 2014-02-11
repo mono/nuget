@@ -528,11 +528,11 @@ namespace NuGet.Test.ServerExtensions
                     new PackageDependencySet(null, new[]
                         {
                             new PackageDependency("ChildPackage", new VersionSpec
-                                {
-                                    MinVersion = new SemanticVersion("1.0"),
-                                    MaxVersion = new SemanticVersion("2.0"),
-                                    IsMinInclusive = true
-                                })
+                                (
+                                    minVersion: new NuGetVersion("1.0"),
+                                    maxVersion: new NuGetVersion("2.0"),
+                                    isMinInclusive: true
+                                ))
                         })
                 };
 
@@ -541,11 +541,11 @@ namespace NuGet.Test.ServerExtensions
                     new PackageDependencySet(null, new[]
                         {
                             new PackageDependency("ChildPackage", new VersionSpec
-                                {
-                                    MinVersion = new SemanticVersion("2.0"),
-                                    MaxVersion = new SemanticVersion("5.0"),
-                                    IsMinInclusive = false
-                                })
+                                (
+                                    minVersion: new NuGetVersion("2.0"),
+                                    maxVersion: new NuGetVersion("5.0"),
+                                    isMinInclusive: false
+                                ))
                         })
                 };
 

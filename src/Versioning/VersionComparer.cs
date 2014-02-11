@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
 using System.Text;
@@ -47,19 +48,19 @@ namespace NuGet.Versioning
 
             string verString = string.Empty;
 
+            INuGetVersion legacy = obj as INuGetVersion;
+
             if (_mode == VersionComparison.Strict)
             {
                 verString = String.Format(CultureInfo.InvariantCulture, "{0}.{1}.{2}-{3}", obj.Major, obj.Minor, obj.Patch, obj.SpecialVersion);
             }
             else if (_mode == VersionComparison.IgnoreMetadata)
             {
-                INuGetVersion legacy = obj as INuGetVersion;
                 verString = String.Format(CultureInfo.InvariantCulture, "{0}.{1}.{2}.{3}-{4}", obj.Major, obj.Minor, obj.Patch, 
                                             legacy == null ? 0 : legacy.Version.Revision, obj.SpecialVersion.ToUpperInvariant());
             }
             else if (_mode == VersionComparison.Version)
             {
-                INuGetVersion legacy = obj as INuGetVersion;
                 verString = String.Format(CultureInfo.InvariantCulture, "{0}.{1}.{2}.{3}", obj.Major, obj.Minor, obj.Patch,
                                             legacy == null ? 0 : legacy.Version.Revision);
             }
@@ -107,13 +108,9 @@ namespace NuGet.Versioning
                 INuGetVersion legacyX = x as INuGetVersion;
                 INuGetVersion legacyY = y as INuGetVersion;
 
-                // true if one has a 4th version number
-                if (legacyX != null || legacyY != null)
-                {
-                    result = legacyX.Version.CompareTo(legacyY.Version);
-                    if (result != 0)
-                        return result;
-                }
+                result = CompareLegacyVersion(legacyX, legacyY);
+                if (result != 0)
+                    return result;
             }
 
             if (_mode != VersionComparison.Version)
@@ -142,6 +139,35 @@ namespace NuGet.Versioning
             }
 
             return 0;
+        }
+
+        private static int CompareLegacyVersion(INuGetVersion legacyX, INuGetVersion legacyY)
+        {
+            int result = 0;
+
+            // true if one has a 4th version number
+            if (legacyX != null && legacyY != null)
+            {
+                result = legacyX.Version.CompareTo(legacyY.Version);
+            }
+            else if (legacyX != null && legacyX.Version.Revision > 0)
+            {
+                result = 1;
+            }
+            else if (legacyY != null && legacyY.Version.Revision > 0)
+            {
+                result = -1;
+            }
+
+            return result;
+        }
+
+        public static IVersionComparer Default
+        {
+            get
+            {
+                return new VersionComparer(VersionComparison.Default);
+            }
         }
 
         public static IVersionComparer Version

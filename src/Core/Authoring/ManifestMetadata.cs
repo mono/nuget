@@ -392,7 +392,7 @@ namespace NuGet
             var dependencies = from d in manifestDependencySet.Dependencies
                                select new PackageDependency(
                                    d.Id,
-                                   String.IsNullOrEmpty(d.Version) ? null : VersionSpec.ParseVersionSpec(d.Version));
+                                   String.IsNullOrEmpty(d.Version) ? null : VersionSpec.Parse(d.Version));
 
             return new PackageDependencySet(targetFramework, dependencies);
         }

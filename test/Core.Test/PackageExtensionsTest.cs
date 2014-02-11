@@ -89,7 +89,7 @@ namespace NuGet.Test
         {
             // Arrange
             var package = PackageUtility.CreatePackage("Foo.ja-jp", "1.0.0", language: "ja-jp", 
-                dependencies: new[] { new PackageDependency(dependencyId, VersionSpec.ParseVersionSpec(dependencyVersion)) });
+                dependencies: new[] { new PackageDependency(dependencyId, VersionSpec.Parse(dependencyVersion)) });
 
             // Act
             bool result = package.IsSatellitePackage();
@@ -116,7 +116,7 @@ namespace NuGet.Test
         {
             // Arrange
             var package = PackageUtility.CreatePackage("Foo.ja-jp", "1.0.0", language: "ja-jp", 
-                dependencies: new[] { new PackageDependency("Foo", VersionSpec.ParseVersionSpec("[1.0]"))});
+                dependencies: new[] { new PackageDependency("Foo", VersionSpec.Parse("[1.0]"))});
 
             // Act
             bool result = package.IsSatellitePackage();

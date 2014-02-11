@@ -27,7 +27,7 @@ namespace NuGet.Test
             };
 
             // Act
-            selfUpdater.SelfUpdate("c:\foo.exe", new SemanticVersion("2.0"));
+            selfUpdater.SelfUpdate("c:\foo.exe", new NuGetVersion("2.0"));
 
             // Assert
             Assert.Equal("NuGet.exe is up to date.", consoleInfo.WrittenLines[0]);
@@ -49,7 +49,7 @@ namespace NuGet.Test
                             };
 
             // Act & Assert
-            ExceptionAssert.Throws<CommandLineException>(() => selfUpdater.SelfUpdate("c:\foo.exe", new SemanticVersion("2.0")), 
+            ExceptionAssert.Throws<CommandLineException>(() => selfUpdater.SelfUpdate("c:\foo.exe", new NuGetVersion("2.0")), 
                 "Invalid NuGet.CommandLine package. Unable to locate NuGet.exe within the package.");
         }
 
@@ -68,7 +68,7 @@ namespace NuGet.Test
             selfUpdater.Console = consoleInfo.Console;
 
             // Act
-            selfUpdater.SelfUpdate(@"c:\NuGet.exe", new SemanticVersion("2.0"));
+            selfUpdater.SelfUpdate(@"c:\NuGet.exe", new NuGetVersion("2.0"));
 
             // Assert
             Assert.True(selfUpdater.MovedFiles.ContainsKey(@"c:\NuGet.exe"));
@@ -85,8 +85,8 @@ namespace NuGet.Test
 
             // Act
             var infoVersion = assembly.GetCustomAttribute<AssemblyInformationalVersionAttribute>();
-            SemanticVersion semanticVersion;
-            var result = SemanticVersion.TryParseStrict(infoVersion.InformationalVersion, out semanticVersion);
+            NuGetVersion semanticVersion;
+            var result = NuGetVersion.TryParseStrict(infoVersion.InformationalVersion, out semanticVersion);
 
             // Assert
             Assert.NotNull(infoVersion.InformationalVersion);

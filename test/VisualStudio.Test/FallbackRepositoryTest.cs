@@ -129,17 +129,17 @@ namespace NuGet.VisualStudio.Test
 
             // Assert
             var dependencyResolver = repository as IDependencyResolver;
-            IPackage dependency = dependencyResolver.ResolveDependency(new PackageDependency("A", new VersionSpec { MinVersion = new SemanticVersion("1.0.0.0") }), null, allowPrereleaseVersions: false, preferListedPackages: false, dependencyVersion: DependencyVersion.Lowest);
+            IPackage dependency = dependencyResolver.ResolveDependency(new PackageDependency("A", new VersionSpec(minVersion: new NuGetVersion("1.0.0.0"))), null, allowPrereleaseVersions: false, preferListedPackages: false, dependencyVersion: DependencyVersion.Lowest);
             List<IPackage> packages = repository.GetPackages().ToList();
 
             // Assert
             Assert.Equal(1, packages.Count());
             Assert.Equal("A", packages[0].Id);
-            Assert.Equal(new SemanticVersion("1.0"), packages[0].Version);
+            Assert.Equal(new NuGetVersion("1.0"), packages[0].Version);
 
             Assert.NotNull(dependency);
             Assert.Equal("A", dependency.Id);
-            Assert.Equal(new SemanticVersion("1.2"), dependency.Version);
+            Assert.Equal(new NuGetVersion("1.2"), dependency.Version);
         }
 
         [Fact]
@@ -327,7 +327,7 @@ namespace NuGet.VisualStudio.Test
             var fallbackRepository = new FallbackRepository(primaryRepository, aggregateRepository);
 
             // Act
-            var resolvedPackage = fallbackRepository.ResolveDependency(new PackageDependency("M2", new VersionSpec { MinVersion = new SemanticVersion("1.0.1") }), false, false);
+            var resolvedPackage = fallbackRepository.ResolveDependency(new PackageDependency("M2", new VersionSpec(minVersion: new NuGetVersion("1.0.1"))), false, false);
 
             // Assert
             Assert.Null(resolvedPackage);
@@ -346,7 +346,7 @@ namespace NuGet.VisualStudio.Test
             var fallbackRepository = new FallbackRepository(primaryRepository, dependencyResolver);
 
             // Act
-            var resolvedPackage = fallbackRepository.ResolveDependency(new PackageDependency("M2", new VersionSpec { MinVersion = new SemanticVersion("1.0.1") }), false, false);
+            var resolvedPackage = fallbackRepository.ResolveDependency(new PackageDependency("M2", new VersionSpec(minVersion: new NuGetVersion("1.0.1"))), false, false);
 
             // Assert
             Assert.Same(resolvedPackage, packageA11);
@@ -359,12 +359,12 @@ namespace NuGet.VisualStudio.Test
             var primaryRepository = new Mock<IPackageRepository>(MockBehavior.Strict);
             IPackage package = PackageUtility.CreatePackage("A", "1.0");
 
-            primaryRepository.As<IPackageLookup>().Setup(p => p.FindPackage("A", new SemanticVersion("1.0"))).Returns(package).Verifiable();
+            primaryRepository.As<IPackageLookup>().Setup(p => p.FindPackage("A", new NuGetVersion("1.0"))).Returns(package).Verifiable();
 
             var fallbackRepository = new FallbackRepository(primaryRepository.Object, new MockPackageRepository());
 
             // Act
-            IPackage foundPackage = fallbackRepository.FindPackage("A", new SemanticVersion("1.0"));
+            IPackage foundPackage = fallbackRepository.FindPackage("A", new NuGetVersion("1.0"));
 
             // Assert
             primaryRepository.VerifyAll();
@@ -378,13 +378,13 @@ namespace NuGet.VisualStudio.Test
             IPackage package = PackageUtility.CreatePackage("A", "1.0");
             var primaryRepository = new Mock<IPackageRepository>(MockBehavior.Strict);
             primaryRepository.As<IPackageLookup>()
-                             .Setup(s => s.Exists("A", new SemanticVersion("1.0")))
+                             .Setup(s => s.Exists("A", new NuGetVersion("1.0")))
                              .Returns(true)
                              .Verifiable();
             var fallbackRepository = new FallbackRepository(primaryRepository.Object, new MockPackageRepository());
 
             // Act
-            var exists = fallbackRepository.Exists("A", new SemanticVersion("1.0"));
+            var exists = fallbackRepository.Exists("A", new NuGetVersion("1.0"));
 
             // Assert
             Assert.True(exists);

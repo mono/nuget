@@ -383,7 +383,7 @@ namespace NuGet.Dialog.Test
                projectManager, It.IsAny<IEnumerable<IPackage>>(), It.IsAny<IEnumerable<PackageOperation>>(), true, false, It.IsAny<ILogger>())).Callback(
                () =>
                {
-                   projectManager.AddPackageReference("A", new SemanticVersion("2.0"), false, false);
+                   projectManager.AddPackageReference("A", new NuGetVersion("2.0"), false, false);
                });
 
             var scriptExecutor = new Mock<IScriptExecutor>();

@@ -548,8 +548,8 @@ namespace NuGet
             var versionSpec = dependency.VersionSpec;
             if (versionSpec != null)
             {
-                return (versionSpec.MinVersion != null && !String.IsNullOrEmpty(dependency.VersionSpec.MinVersion.SpecialVersion)) ||
-                       (versionSpec.MaxVersion != null && !String.IsNullOrEmpty(dependency.VersionSpec.MaxVersion.SpecialVersion));
+                return (versionSpec.MinVersion != null && versionSpec.MinVersion.IsPrerelease) ||
+                       (versionSpec.MaxVersion != null && versionSpec.MaxVersion.IsPrerelease);
             }
             return false;
         }

@@ -194,7 +194,7 @@ namespace NuGet.Test.NuGetCommandLine.Commands
             // Arrange
             var package = new Mock<IPackage>(MockBehavior.Strict);
             package.SetupGet(p => p.Id).Returns("A");
-            package.SetupGet(p => p.Version).Returns(new SemanticVersion("1.0.0"));
+            package.SetupGet(p => p.Version).Returns(new NuGetVersion("1.0.0"));
             package.SetupGet(p => p.IsLatestVersion).Returns(true).Verifiable();
             package.SetupGet(p => p.Listed).Returns(true);
             package.SetupGet(p => p.IsAbsoluteLatestVersion).Throws(new Exception("Repository does not support this property."));
@@ -230,21 +230,21 @@ namespace NuGet.Test.NuGetCommandLine.Commands
             // Arrange
             var packageA = new Mock<IPackage>(MockBehavior.Strict);
             packageA.SetupGet(p => p.Id).Returns("A");
-            packageA.SetupGet(p => p.Version).Returns(new SemanticVersion("1.0.0"));
+            packageA.SetupGet(p => p.Version).Returns(new NuGetVersion("1.0.0"));
             packageA.SetupGet(p => p.IsLatestVersion).Returns(true);
             packageA.SetupGet(pA => pA.Listed).Returns(false);
             packageA.SetupGet(p => p.Published).Returns(DateTime.Now);
 
             var packageB = new Mock<IPackage>(MockBehavior.Strict);
             packageB.SetupGet(p => p.Id).Returns("B");
-            packageB.SetupGet(p => p.Version).Returns(new SemanticVersion("1.0.2"));
+            packageB.SetupGet(p => p.Version).Returns(new NuGetVersion("1.0.2"));
             packageB.SetupGet(pB => pB.Listed).Returns(true);
             packageB.SetupGet(p => p.IsLatestVersion).Returns(true);
 
 
             var packageC = new Mock<IPackage>(MockBehavior.Strict);
             packageC.SetupGet(p => p.Id).Returns("C");
-            packageC.SetupGet(p => p.Version).Returns(new SemanticVersion("1.0.0"));
+            packageC.SetupGet(p => p.Version).Returns(new NuGetVersion("1.0.0"));
             packageC.SetupGet(p => p.IsLatestVersion).Returns(true);
             packageC.SetupGet(pC => pC.Listed).Returns(false);
             packageC.SetupGet(p => p.Published).Returns(new DateTime(1900, 1, 1, 0, 0, 0));
@@ -276,21 +276,21 @@ namespace NuGet.Test.NuGetCommandLine.Commands
             // Arrange
             var packageA = new Mock<IPackage>(MockBehavior.Strict);
             packageA.SetupGet(p => p.Id).Returns("A");
-            packageA.SetupGet(p => p.Version).Returns(new SemanticVersion("1.0.0"));
+            packageA.SetupGet(p => p.Version).Returns(new NuGetVersion("1.0.0"));
             packageA.SetupGet(p => p.IsAbsoluteLatestVersion).Returns(true).Verifiable();
             packageA.SetupGet(pA => pA.Listed).Returns(false);
             packageA.SetupGet(p => p.Published).Returns(DateTime.Now);
 
             var packageB = new Mock<IPackage>(MockBehavior.Strict);
             packageB.SetupGet(p => p.Id).Returns("B");
-            packageB.SetupGet(p => p.Version).Returns(new SemanticVersion("1.0.2"));
+            packageB.SetupGet(p => p.Version).Returns(new NuGetVersion("1.0.2"));
             packageB.SetupGet(pB => pB.Listed).Returns(true);
             packageB.SetupGet(p => p.IsAbsoluteLatestVersion).Returns(false).Verifiable();
 
 
             var packageC = new Mock<IPackage>(MockBehavior.Strict);
             packageC.SetupGet(p => p.Id).Returns("C");
-            packageC.SetupGet(p => p.Version).Returns(new SemanticVersion("1.0.0"));
+            packageC.SetupGet(p => p.Version).Returns(new NuGetVersion("1.0.0"));
             packageC.SetupGet(p => p.IsAbsoluteLatestVersion).Returns(true).Verifiable();
             packageC.SetupGet(pC => pC.Listed).Returns(true);
 
@@ -342,7 +342,7 @@ namespace NuGet.Test.NuGetCommandLine.Commands
         private static void AssertPackage(dynamic expected, IPackage package)
         {
             Assert.Equal(expected.Id, package.Id);
-            Assert.Equal(new SemanticVersion(expected.Ver), package.Version);
+            Assert.Equal(new NuGetVersion(expected.Ver), package.Version);
         }
 
         private static IPackageRepositoryFactory CreatePackageRepositoryFactory()

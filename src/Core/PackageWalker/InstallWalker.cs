@@ -413,7 +413,7 @@ namespace NuGet
             string message = String.Empty;
             if (spec != null)
             {
-                message = String.Format(CultureInfo.CurrentCulture, NuGetResources.AdditonalConstraintsDefined, dependency.Id, VersionUtility.PrettyPrint(spec), ConstraintProvider.Source);
+                message = String.Format(CultureInfo.CurrentCulture, NuGetResources.AdditonalConstraintsDefined, dependency.Id, spec.PrettyPrint(), ConstraintProvider.Source);
             }
 
             throw new InvalidOperationException(
@@ -498,7 +498,7 @@ namespace NuGet
             IEnumerable<IPackage> allPackagesByDependencyOrder = _packagesByDependencyOrder.SelectMany(p => p.Value).Distinct();
 
             // Only retain the packages for which the operations are being resolved for
-            packagesByDependencyOrder = allPackagesByDependencyOrder.Where(p => packages.Any(q => p.Id == q.Id && p.Version == q.Version)).ToList();
+            packagesByDependencyOrder = allPackagesByDependencyOrder.Where(p => packages.Any(q => p.Id == q.Id && p.Version.Equals(q.Version))).ToList();
             Debug.Assert(packagesByDependencyOrder.Count == packages.Count());
 
             _packagesByDependencyOrder.Clear();

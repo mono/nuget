@@ -365,7 +365,7 @@ namespace NuGet
 
                     if ((!dependency.VersionSpec.IsMaxInclusive ||
                          !dependency.VersionSpec.IsMinInclusive) &&
-                        dependency.VersionSpec.MaxVersion == dependency.VersionSpec.MinVersion)
+                        dependency.VersionSpec.MaxVersion.Equals(dependency.VersionSpec.MinVersion))
                     {
                         throw new InvalidOperationException(String.Format(CultureInfo.CurrentCulture, NuGetResources.DependencyHasInvalidVersion, dependency.Id));
                     }

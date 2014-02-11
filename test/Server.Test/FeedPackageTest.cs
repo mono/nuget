@@ -52,10 +52,10 @@ namespace Server.Test
 
                     new PackageDependencySet(new FrameworkName(".NETFramework, Version=3.0"),
                                              new [] { new PackageDependency("B"), 
-                                                      new PackageDependency("C", VersionSpec.ParseVersionSpec("2.0")) }),
+                                                      new PackageDependency("C", VersionSpec.Parse("2.0")) }),
 
                     new PackageDependencySet((FrameworkName)null,
-                                             new [] { new PackageDependency("D", VersionSpec.ParseVersionSpec("(1.0,3.0-alpha]")) }),
+                                             new [] { new PackageDependency("D", VersionSpec.Parse("(1.0,3.0-alpha]")) }),
 
                     new PackageDependencySet(new FrameworkName(".NETCore, Version=4.5"),
                                              new PackageDependency[0]),

@@ -24,7 +24,7 @@ namespace NuGet.VisualStudio.Test
             sourceRepository.AddPackage(package);
 
             // Act
-            packageManager.InstallPackage(projectManager, "foo", new SemanticVersion("1.0"), ignoreDependencies: false, allowPrereleaseVersions: false, logger: NullLogger.Instance);
+            packageManager.InstallPackage(projectManager, "foo", new NuGetVersion("1.0"), ignoreDependencies: false, allowPrereleaseVersions: false, logger: NullLogger.Instance);
 
             // Assert
             Assert.Equal("Install", sourceRepository.LastOperation);
@@ -47,7 +47,7 @@ namespace NuGet.VisualStudio.Test
             sourceRepository.AddPackage(package);
 
             // Act
-            packageManager.InstallPackage(projectManager, "foo", new SemanticVersion("1.0"), ignoreDependencies: false, allowPrereleaseVersions: false, skipAssemblyReferences: false, logger: NullLogger.Instance);
+            packageManager.InstallPackage(projectManager, "foo", new NuGetVersion("1.0"), ignoreDependencies: false, allowPrereleaseVersions: false, skipAssemblyReferences: false, logger: NullLogger.Instance);
 
             // Assert
             Assert.Equal("Install", sourceRepository.LastOperation);
@@ -226,7 +226,7 @@ namespace NuGet.VisualStudio.Test
             // Act
             packageManager.UpdatePackage(
                 "phuong",
-                new SemanticVersion("2.0"),
+                new NuGetVersion("2.0"),
                 updateDependencies: true,
                 allowPrereleaseVersions: true,
                 logger: NullLogger.Instance,
@@ -271,7 +271,7 @@ namespace NuGet.VisualStudio.Test
             // Act
             packageManager.UpdatePackage(
                 "phuong",
-                new VersionSpec(new SemanticVersion("1.0")),
+                new VersionSpec(new NuGetVersion("1.0")),
                 updateDependencies: true,
                 allowPrereleaseVersions: true,
                 logger: NullLogger.Instance,
@@ -317,7 +317,7 @@ namespace NuGet.VisualStudio.Test
             packageManager.UpdatePackage(
                 projectManager,
                 "phuong",
-                new SemanticVersion("2.0"),
+                new NuGetVersion("2.0"),
                 updateDependencies: true,
                 allowPrereleaseVersions: true,
                 logger: NullLogger.Instance);

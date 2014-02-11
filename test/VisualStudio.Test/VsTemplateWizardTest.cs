@@ -228,12 +228,12 @@ namespace NuGet.VisualStudio.Test
             Assert.Equal(1, extensionResult.Packages.Count);
             Assert.Equal(@"C:\Extension\Dir\Packages", extensionResult.RepositoryPath);
             Assert.Equal("packageFromExtension", extensionResult.Packages.Single().Id);
-            Assert.Equal(new SemanticVersion("1.0"), extensionResult.Packages.Single().Version);
+            Assert.Equal(new NuGetVersion("1.0"), extensionResult.Packages.Single().Version);
 
             Assert.Equal(1, registryResult.Packages.Count);
             Assert.Equal(registryValue, registryResult.RepositoryPath);
             Assert.Equal("packageFromRegistry", registryResult.Packages.Single().Id);
-            Assert.Equal(new SemanticVersion("2.0"), registryResult.Packages.Single().Version);
+            Assert.Equal(new NuGetVersion("2.0"), registryResult.Packages.Single().Version);
         }
 
         [Fact]
@@ -1014,7 +1014,7 @@ namespace NuGet.VisualStudio.Test
             // * Setup mocks
             dteMock.SetupProperty(dte => dte.StatusBar.Text);
             servicesMock.Setup(s => s.IsPackageInstalled(mockProject, "MyOtherPackage")).Returns(true);
-            servicesMock.Setup(s => s.IsPackageInstalled(mockProject, "MyOtherPackage", new SemanticVersion("2.0.3-beta4"))).Returns(true);
+            servicesMock.Setup(s => s.IsPackageInstalled(mockProject, "MyOtherPackage", new NuGetVersion("2.0.3-beta4"))).Returns(true);
 
             // * Setup wizard
             wizard.RunStarted(dteMock.Object, null, WizardRunKind.AsNewProject,
@@ -1059,7 +1059,7 @@ namespace NuGet.VisualStudio.Test
             consoleProviderMock.Setup(cp => cp.CreateOutputConsole(false)).Returns(consoleMock.Object);
             dteMock.SetupProperty(dte => dte.StatusBar.Text);
             servicesMock.Setup(s => s.IsPackageInstalled(mockProject, "MyOtherPackage")).Returns(true);
-            servicesMock.Setup(s => s.IsPackageInstalled(mockProject, "MyOtherPackage", new SemanticVersion("2.0.3-beta4"))).Returns(false);
+            servicesMock.Setup(s => s.IsPackageInstalled(mockProject, "MyOtherPackage", new NuGetVersion("2.0.3-beta4"))).Returns(false);
 
             // * Setup wizard
             wizard.RunStarted(dteMock.Object, null, WizardRunKind.AsNewProject,

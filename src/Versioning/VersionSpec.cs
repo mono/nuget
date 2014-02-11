@@ -12,7 +12,8 @@ namespace NuGet.Versioning
         private readonly bool _isMinInclusive;
         private readonly ISemanticVersion _maxVersion;
         private readonly bool _isMaxInclusive;
-        private readonly IVersionComparer _comparer;
+        private const string LessThanOrEqualTo = "\u2264";
+        private const string GreaterThanOrEqualTo = "\u2265";
 
         /// <summary>
         /// A VersionSpec that matches only the given version.
@@ -36,13 +37,12 @@ namespace NuGet.Versioning
         }
 
         public VersionSpec(ISemanticVersion minVersion=null, ISemanticVersion maxVersion=null,
-            bool isMinInclusive=false, bool isMaxInclusive=false, IVersionComparer comparer=null)
+            bool isMinInclusive=false, bool isMaxInclusive=false)
         {
             _minVersion = minVersion;
             _maxVersion = maxVersion;
             _isMinInclusive = isMinInclusive;
-            _isMaxInclusive = IsMaxInclusive;
-            _comparer = comparer ?? new VersionComparer();
+            _isMaxInclusive = isMaxInclusive;
         }
 
         public ISemanticVersion MinVersion
@@ -82,7 +82,7 @@ namespace NuGet.Versioning
         /// </summary>
         public bool Satisfies(ISemanticVersion version)
         {
-            return Satisfies(version, _comparer);
+            return Satisfies(version, VersionComparer.Default);
         }
 
         public bool Satisfies(ISemanticVersion version, VersionComparison mode)
@@ -100,11 +100,11 @@ namespace NuGet.Versioning
             {
                 if (IsMinInclusive)
                 {
-                    condition &= version.CompareTo(MinVersion) >= 0;
+                    condition &= comparer.Compare(MinVersion, version) <= 0;
                 }
                 else
                 {
-                    condition &= version.CompareTo(MinVersion) > 0;
+                    condition &= comparer.Compare(MinVersion, version) < 0;
                 }
             }
 
@@ -112,11 +112,11 @@ namespace NuGet.Versioning
             {
                 if (IsMaxInclusive)
                 {
-                    condition &= version.CompareTo(MaxVersion) <= 0;
+                    condition &= comparer.Compare(MaxVersion, version) >= 0;
                 }
                 else
                 {
-                    condition &= version.CompareTo(MaxVersion) < 0;
+                    condition &= comparer.Compare(MaxVersion, version) > 0;
                 }
             }
 
@@ -134,10 +134,10 @@ namespace NuGet.Versioning
         ///      (1.0, 2.0)   --> 1.0 &lt; x &lt; 2.0
         ///      [1.0, 2.0]   --> 1.0 ≤ x ≤ 2.0
         /// </summary>
-        public static IVersionSpec ParseVersionSpec(string value)
+        public static IVersionSpec Parse(string value)
         {
             IVersionSpec versionInfo;
-            if (!VersionSpec.TryParseVersionSpec(value, out versionInfo))
+            if (!VersionSpec.TryParse(value, out versionInfo))
             {
                 throw new ArgumentException(
                     String.Format(CultureInfo.CurrentCulture,
@@ -147,14 +147,13 @@ namespace NuGet.Versioning
             return versionInfo;
         }
 
-        public static bool TryParseVersionSpec(string value, out IVersionSpec result)
+        public static bool TryParse(string value, out IVersionSpec result)
         {
             if (value == null)
             {
                 throw new ArgumentNullException("value");
             }
 
-            var versionSpec = new VersionSpec();
             value = value.Trim();
 
             // First, try to parse it as a plain version string
@@ -257,7 +256,7 @@ namespace NuGet.Versioning
                 return MinVersion.ToString();
             }
 
-            if (MinVersion != null && MaxVersion != null && MinVersion == MaxVersion && IsMinInclusive && IsMaxInclusive)
+            if (MinVersion != null && MaxVersion != null && MinVersion.Equals(MaxVersion) && IsMinInclusive && IsMaxInclusive)
             {
                 return "[" + MinVersion + "]";
             }
@@ -270,10 +269,70 @@ namespace NuGet.Versioning
             return versionBuilder.ToString();
         }
 
-        public string ToString(string format, IFormatProvider formatProvider)
+        public string ToNormalizedString()
         {
-            // TODO: Implement format provider
-            return ToString();
+            var versionBuilder = new StringBuilder();
+            versionBuilder.Append(IsMinInclusive ? '[' : '(');
+            versionBuilder.AppendFormat(CultureInfo.InvariantCulture, "{0}, {1}", MinVersion == null ? string.Empty : MinVersion.ToNormalizedString(), MaxVersion == null ? string.Empty : MaxVersion.ToNormalizedString());
+            versionBuilder.Append(IsMaxInclusive ? ']' : ')');
+
+            return versionBuilder.ToString();
+        }
+
+        public string PrettyPrint()
+        {
+            if (MinVersion != null && IsMinInclusive && MaxVersion == null && !IsMaxInclusive)
+            {
+                return String.Format(CultureInfo.InvariantCulture, "({0} {1})", GreaterThanOrEqualTo, MinVersion);
+            }
+
+            if (MinVersion != null && MaxVersion != null && MinVersion.Equals(MaxVersion) && IsMinInclusive && IsMaxInclusive)
+            {
+                return String.Format(CultureInfo.InvariantCulture, "(= {0})", MinVersion);
+            }
+
+            var versionBuilder = new StringBuilder();
+            if (MinVersion != null)
+            {
+                if (IsMinInclusive)
+                {
+                    versionBuilder.AppendFormat(CultureInfo.InvariantCulture, "({0} ", GreaterThanOrEqualTo);
+                }
+                else
+                {
+                    versionBuilder.Append("(> ");
+                }
+                versionBuilder.Append(MinVersion);
+            }
+
+            if (MaxVersion != null)
+            {
+                if (versionBuilder.Length == 0)
+                {
+                    versionBuilder.Append("(");
+                }
+                else
+                {
+                    versionBuilder.Append(" && ");
+                }
+
+                if (IsMaxInclusive)
+                {
+                    versionBuilder.AppendFormat(CultureInfo.InvariantCulture, "{0} ", LessThanOrEqualTo);
+                }
+                else
+                {
+                    versionBuilder.Append("< ");
+                }
+                versionBuilder.Append(MaxVersion);
+            }
+
+            if (versionBuilder.Length > 0)
+            {
+                versionBuilder.Append(")");
+            }
+
+            return versionBuilder.ToString();
         }
 
         private static bool TryParseVersion(string versionString, out NuGetVersion version)

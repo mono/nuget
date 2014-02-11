@@ -513,15 +513,15 @@ namespace NuGet.Test.NuGetCommandLine.Commands
             installCommand.ExecuteCommand();
 
             // Assert - 1
-            Assert.True(repository.Exists("Baz", new SemanticVersion("0.4")));
+            Assert.True(repository.Exists("Baz", new NuGetVersion("0.4")));
 
             // Act - 2
             installCommand.Version = null;
             installCommand.ExecuteCommand();
 
             // Assert - 2
-            Assert.False(repository.Exists("Baz", new SemanticVersion("0.4")));
-            Assert.True(repository.Exists("Baz", new SemanticVersion("0.7")));
+            Assert.False(repository.Exists("Baz", new NuGetVersion("0.4")));
+            Assert.True(repository.Exists("Baz", new NuGetVersion("0.7")));
         }
 
         [Fact]
@@ -534,7 +534,7 @@ namespace NuGet.Test.NuGetCommandLine.Commands
             var packages = new List<IPackage> { baz40 };
             var repository = new Mock<LocalPackageRepository>(new DefaultPackagePathResolver(fileSystem, useSideBySidePaths: false), fileSystem) { CallBase = true };
             repository.Setup(c => c.GetPackages()).Returns(packages.AsQueryable());
-            repository.Setup(c => c.Exists("Baz", new SemanticVersion("0.4"))).Returns(true);
+            repository.Setup(c => c.Exists("Baz", new NuGetVersion("0.4"))).Returns(true);
             repository.Setup(c => c.FindPackagesById("Baz")).Returns(packages);
             repository.Setup(c => c.AddPackage(It.IsAny<IPackage>())).Callback<IPackage>(c => packages.Add(c)).Verifiable();
             repository.Setup(c => c.RemovePackage(It.IsAny<IPackage>())).Callback<IPackage>(c => packages.Remove(c)).Verifiable();
@@ -554,7 +554,7 @@ namespace NuGet.Test.NuGetCommandLine.Commands
             // Assert 
             repository.Verify();
             Assert.Equal("Baz", packages.Single().Id);
-            Assert.Equal(new SemanticVersion("0.7"), packages.Single().Version);
+            Assert.Equal(new NuGetVersion("0.7"), packages.Single().Version);
         }
 
         // Tests that when
@@ -575,7 +575,7 @@ namespace NuGet.Test.NuGetCommandLine.Commands
             var packages = new List<IPackage> { baz };
             var repository = new Mock<LocalPackageRepository>(new DefaultPackagePathResolver(fileSystem, useSideBySidePaths: false), fileSystem) { CallBase = true };
             repository.Setup(c => c.GetPackages()).Returns(packages.AsQueryable());
-            repository.Setup(c => c.Exists("Baz", new SemanticVersion(installedVersion))).Returns(true);
+            repository.Setup(c => c.Exists("Baz", new NuGetVersion(installedVersion))).Returns(true);
             repository.Setup(c => c.FindPackagesById("Baz")).Returns(packages);
 
             var packageManager = new PackageManager(GetFactory().CreateRepository("Some source"), new DefaultPackagePathResolver(fileSystem), fileSystem, repository.Object);
@@ -792,7 +792,7 @@ namespace NuGet.Test.NuGetCommandLine.Commands
             var packageManager = new Mock<IPackageManager>(MockBehavior.Strict);
             var package1 = PackageUtility.CreatePackage("Foo", "1.0.0");
             var package2 = PackageUtility.CreatePackage("Foo.Fr", "1.0.0", language: "fr",
-                dependencies: new[] { new PackageDependency("Foo", VersionSpec.ParseVersionSpec("[1.0.0]")) });
+                dependencies: new[] { new PackageDependency("Foo", VersionSpec.Parse("[1.0.0]")) });
             var repository = new MockPackageRepository { package1, package2 };
             // We *shouldn't* be testing if a sequence of operations worked rather that the outcome that satellite package was installed correctly, 
             // but doing so requires work with  nice to have a unit test that tests it. 

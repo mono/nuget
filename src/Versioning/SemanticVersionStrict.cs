@@ -10,14 +10,14 @@ namespace NuGet.Versioning
     public class SemanticVersionStrict : ISemanticVersion
     {
         private const RegexOptions _flags = RegexOptions.IgnoreCase | RegexOptions.ExplicitCapture;
-        private static readonly Regex _strictSemanticVersionRegex = new Regex(@"^(?<Version>\d+(\.\d+){2})(?<Release>-[0-9A-Za-z-]*(\.[0-9A-Za-z-])*)?(?<Metadata>\+[0-9A-Za-z-]*)?$", _flags);
+        private static readonly Regex _strictSemanticVersionRegex = new Regex(@"^(?<Version>([0-9]|[1-9][0-9]*)(\.([0-9]|[1-9][0-9]*)){2})(?<Release>-[0-9A-Za-z-]+(\.[0-9A-Za-z-]+)*)?(?<Metadata>\+[0-9A-Za-z-]+)?$", _flags);
         private readonly int _major;
         private readonly int _minor;
         private readonly int _patch;
-        private readonly IEnumerable<string> _prereleaseLabels;
+        private readonly IEnumerable<string> _releaseLabels;
         private readonly string _metadata;
 
-        protected SemanticVersionStrict(Version version, string prereleaseLabel, string metadata)
+        protected SemanticVersionStrict(Version version, string releaseLabel, string metadata)
         {
             if (version == null)
             {
@@ -29,8 +29,7 @@ namespace NuGet.Versioning
             _patch = version.Build < 0 ? 0 : version.Build;
             _metadata = metadata;
 
-            if (!String.IsNullOrEmpty(prereleaseLabel))
-                _prereleaseLabels = prereleaseLabel.Split('.');
+            _releaseLabels = ParseReleaseLabels(releaseLabel);
         }
 
         protected SemanticVersionStrict(SemanticVersionStrict strictVersion)
@@ -41,21 +40,26 @@ namespace NuGet.Versioning
             : this(major, minor, patch, null)
         { }
 
-        public SemanticVersionStrict(int major, int minor, int patch, string prereleaseLabel)
-            : this(major, minor, patch, prereleaseLabel, null)
+        public SemanticVersionStrict(int major, int minor, int patch, string releaseLabel)
+            : this(major, minor, patch, releaseLabel, null)
         { }
 
-        public SemanticVersionStrict(int major, int minor, int patch, string prereleaseLabel, string metadata)
-            : this(major, minor, patch, prereleaseLabel == null ? null : prereleaseLabel.Split('.'), metadata)
+        public SemanticVersionStrict(int major, int minor, int patch, string releaseLabel, string metadata)
+            : this(major, minor, patch, ParseReleaseLabels(releaseLabel), metadata)
         { }
 
-        public SemanticVersionStrict(int major, int minor, int patch, IEnumerable<string> prereleaseLabels, string metadata)
+        public SemanticVersionStrict(int major, int minor, int patch, IEnumerable<string> releaseLabels, string metadata)
         {
             _major = major;
             _minor = minor;
             _patch = patch;
-            _prereleaseLabels = prereleaseLabels;
             _metadata = metadata;
+
+            if (releaseLabels != null)
+            {
+                // enumerate the list
+                _releaseLabels = releaseLabels.ToArray();
+            }
         }
 
         public int Major { get { return _major; } }
@@ -67,7 +71,7 @@ namespace NuGet.Versioning
         {
             get
             {
-                return _prereleaseLabels;
+                return _releaseLabels ?? Enumerable.Empty<string>();
             }
         }
 
@@ -78,9 +82,9 @@ namespace NuGet.Versioning
         {
             get
             {
-                if (ReleaseLabels != null)
+                if (_releaseLabels != null)
                 {
-                    return String.Join(".", _prereleaseLabels);
+                    return String.Join(".", _releaseLabels);
                 }
 
                 return string.Empty;
@@ -117,6 +121,11 @@ namespace NuGet.Versioning
             }
         }
 
+        public override string ToString()
+        {
+            return ToNormalizedString();
+        }
+
         public string ToNormalizedString()
         {
             StringBuilder sb = new StringBuilder();
@@ -135,6 +144,23 @@ namespace NuGet.Versioning
 
             return sb.ToString();
         }
+
+        public static SemanticVersionStrict Parse(string version)
+        {
+            if (String.IsNullOrEmpty(version))
+            {
+                throw new ArgumentException(Resources.Argument_Cannot_Be_Null_Or_Empty, "version");
+            }
+
+            SemanticVersionStrict semVer = null;
+            if (!TryParse(version, out semVer))
+            {
+                throw new ArgumentException(String.Format(CultureInfo.CurrentCulture, Resources.InvalidVersionString, version), "version");
+            }
+
+            return semVer;
+        }
+
 
         public static bool TryParse(string version, out SemanticVersionStrict value)
         {
@@ -160,11 +186,22 @@ namespace NuGet.Versioning
             return true;
         }
 
+        public bool Equals(ISemanticVersion other, VersionComparison versionComparison)
+        {
+            return CompareTo(other, versionComparison) == 0;
+        }
+
+        public int CompareTo(ISemanticVersion other, VersionComparison versionComparison)
+        {
+            VersionComparer comparer = new VersionComparer(versionComparison);
+            return comparer.Compare(this, other);
+        }
+
         #region Compare
 
         public override int GetHashCode()
         {
-            return ToNormalizedString().GetHashCode();
+            return String.Format(CultureInfo.InvariantCulture, "{0}.{1}.{2}-{3}", Major, Minor, Patch, SpecialVersion).GetHashCode();
         }
 
         public override bool Equals(object obj)
@@ -232,6 +269,16 @@ namespace NuGet.Versioning
         private static int Compare(ISemanticVersion version1, ISemanticVersion version2)
         {
             return VersionComparer.Strict.Compare(version1, version2);
+        }
+
+        private static string[] ParseReleaseLabels(string releaseLabel)
+        {
+            if (String.IsNullOrEmpty(releaseLabel))
+            {
+                return null;
+            }
+
+            return releaseLabel.Split('.');
         }
 
         #endregion

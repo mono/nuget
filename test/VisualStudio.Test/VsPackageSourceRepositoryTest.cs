@@ -53,7 +53,7 @@ namespace NuGet.VisualStudio.Test
             Assert.Empty(repository.GetPackages());
             Assert.False(repository.SupportsPrereleasePackages);
             Assert.Empty(repository.FindPackagesById("A"));
-            Assert.Null(repository.FindPackage("A", new SemanticVersion("1.0")));
+            Assert.Null(repository.FindPackage("A", new NuGetVersion("1.0")));
             Assert.Empty(repository.Search("web", new string[] { "net40" }, true));
         }
 
@@ -76,7 +76,7 @@ namespace NuGet.VisualStudio.Test
             // Assert
             Assert.Equal(1, packages.Count);
             Assert.Equal("A", packages[0].Id);
-            Assert.Equal(new SemanticVersion("1.0"), packages[0].Version);
+            Assert.Equal(new NuGetVersion("1.0"), packages[0].Version);
         }
 
         [Fact]
@@ -89,7 +89,7 @@ namespace NuGet.VisualStudio.Test
             var mockRepository = new Mock<IPackageRepository>(MockBehavior.Strict);
             var source = new PackageSource("bar", "foo");
             mockRepository.As<IPackageLookup>()
-                          .Setup(p => p.FindPackage("A", new SemanticVersion("1.0")))
+                          .Setup(p => p.FindPackage("A", new NuGetVersion("1.0")))
                           .Returns(PackageUtility.CreatePackage("A", "1.0"))
                           .Verifiable();
 
@@ -98,12 +98,12 @@ namespace NuGet.VisualStudio.Test
             var repository = new VsPackageSourceRepository(mockRepositoryFactory.Object, mockSourceProvider.Object);
 
             // Act
-            IPackage package = repository.FindPackage("A", new SemanticVersion("1.0"));
+            IPackage package = repository.FindPackage("A", new NuGetVersion("1.0"));
 
             // Assert
             mockRepository.VerifyAll();
             Assert.Equal("A", package.Id);
-            Assert.Equal(new SemanticVersion("1.0"), package.Version);
+            Assert.Equal(new NuGetVersion("1.0"), package.Version);
         }
 
         public static IEnumerable<object[]> StartOperationData
@@ -113,8 +113,8 @@ namespace NuGet.VisualStudio.Test
                 yield return new object[] { "Source", new Action<VsPackageSourceRepository>(r => r.Source.ToLower()) }; // Can't make an Action<> out of a property getter, need to do something with it.
                 yield return new object[] { "SupportsPrereleasePackages", new Action<VsPackageSourceRepository>(r => r.SupportsPrereleasePackages.ToString()) };
                 yield return new object[] { "GetPackages", new Action<VsPackageSourceRepository>(r => r.GetPackages()) };
-                yield return new object[] { "FindPackage", new Action<VsPackageSourceRepository>(r => r.FindPackage("abc", new SemanticVersion("1.2.3"))) };
-                yield return new object[] { "Exists", new Action<VsPackageSourceRepository>(r => r.Exists("abc", new SemanticVersion("1.2.3"))) };
+                yield return new object[] { "FindPackage", new Action<VsPackageSourceRepository>(r => r.FindPackage("abc", new NuGetVersion("1.2.3"))) };
+                yield return new object[] { "Exists", new Action<VsPackageSourceRepository>(r => r.Exists("abc", new NuGetVersion("1.2.3"))) };
                 yield return new object[] { "AddPackage", new Action<VsPackageSourceRepository>(r => r.AddPackage(new Mock<IPackage>().Object)) };
                 yield return new object[] { "RemovePackage", new Action<VsPackageSourceRepository>(r => r.RemovePackage(new Mock<IPackage>().Object)) };
                 yield return new object[] { "Search", new Action<VsPackageSourceRepository>(r => r.Search("Foo", Enumerable.Empty<string>(), allowPrereleaseVersions: false)) };

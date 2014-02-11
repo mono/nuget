@@ -18,8 +18,6 @@ namespace NuGet
         private const string NetFrameworkIdentifier = ".NETFramework";
         private const string NetCoreFrameworkIdentifier = ".NETCore";
         private const string PortableFrameworkIdentifier = ".NETPortable";
-        private const string LessThanOrEqualTo = "\u2264";
-        private const string GreaterThanOrEqualTo = "\u2265";
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage(
             "Microsoft.Security",
@@ -305,62 +303,6 @@ namespace NuGet
         public static IVersionSpec GetSafeRange(ISemanticVersion version)
         {
             return new VersionSpec(version, new NuGetVersion(new Version(version.Major, version.Minor + 1)), true, false);
-        }
-
-        public static string PrettyPrint(IVersionSpec versionSpec)
-        {
-            if (versionSpec.MinVersion != null && versionSpec.IsMinInclusive && versionSpec.MaxVersion == null && !versionSpec.IsMaxInclusive)
-            {
-                return String.Format(CultureInfo.InvariantCulture, "({0} {1})", GreaterThanOrEqualTo, versionSpec.MinVersion);
-            }
-
-            if (versionSpec.MinVersion != null && versionSpec.MaxVersion != null && versionSpec.MinVersion == versionSpec.MaxVersion && versionSpec.IsMinInclusive && versionSpec.IsMaxInclusive)
-            {
-                return String.Format(CultureInfo.InvariantCulture, "(= {0})", versionSpec.MinVersion);
-            }
-
-            var versionBuilder = new StringBuilder();
-            if (versionSpec.MinVersion != null)
-            {
-                if (versionSpec.IsMinInclusive)
-                {
-                    versionBuilder.AppendFormat(CultureInfo.InvariantCulture, "({0} ", GreaterThanOrEqualTo);
-                }
-                else
-                {
-                    versionBuilder.Append("(> ");
-                }
-                versionBuilder.Append(versionSpec.MinVersion);
-            }
-
-            if (versionSpec.MaxVersion != null)
-            {
-                if (versionBuilder.Length == 0)
-                {
-                    versionBuilder.Append("(");
-                }
-                else
-                {
-                    versionBuilder.Append(" && ");
-                }
-
-                if (versionSpec.IsMaxInclusive)
-                {
-                    versionBuilder.AppendFormat(CultureInfo.InvariantCulture, "{0} ", LessThanOrEqualTo);
-                }
-                else
-                {
-                    versionBuilder.Append("< ");
-                }
-                versionBuilder.Append(versionSpec.MaxVersion);
-            }
-
-            if (versionBuilder.Length > 0)
-            {
-                versionBuilder.Append(")");
-            }
-
-            return versionBuilder.ToString();
         }
 
         public static string GetFrameworkString(FrameworkName frameworkName)

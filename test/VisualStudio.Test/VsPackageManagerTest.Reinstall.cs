@@ -42,8 +42,8 @@ namespace NuGet.VisualStudio.Test
             packageManager.ReinstallPackage(projectManager, "A", updateDependencies: true, allowPrereleaseVersions: true, logger: null);
 
             // Assert
-            Assert.True(packageManager.LocalRepository.Exists("A", new SemanticVersion("1.2")));
-            Assert.True(projectManager.LocalRepository.Exists("A", new SemanticVersion("1.2")));
+            Assert.True(packageManager.LocalRepository.Exists("A", new NuGetVersion("1.2")));
+            Assert.True(projectManager.LocalRepository.Exists("A", new NuGetVersion("1.2")));
         }
 
         [Fact]
@@ -92,8 +92,8 @@ namespace NuGet.VisualStudio.Test
             logger.Verify();
             Assert.Equal(0, eventCount);
 
-            Assert.True(packageManager.LocalRepository.Exists("A", new SemanticVersion("1.2")));
-            Assert.True(projectManager.LocalRepository.Exists("A", new SemanticVersion("1.2")));
+            Assert.True(packageManager.LocalRepository.Exists("A", new NuGetVersion("1.2")));
+            Assert.True(projectManager.LocalRepository.Exists("A", new NuGetVersion("1.2")));
         }
 
         [Fact]
@@ -124,8 +124,8 @@ namespace NuGet.VisualStudio.Test
             packageManager.ReinstallPackage(projectManager, "A", updateDependencies: true, allowPrereleaseVersions: false, logger: null);
 
             // Assert
-            Assert.True(packageManager.LocalRepository.Exists("A", new SemanticVersion("1.2-alpha")));
-            Assert.True(projectManager.LocalRepository.Exists("A", new SemanticVersion("1.2-alpha")));
+            Assert.True(packageManager.LocalRepository.Exists("A", new NuGetVersion("1.2-alpha")));
+            Assert.True(projectManager.LocalRepository.Exists("A", new NuGetVersion("1.2-alpha")));
         }
 
         [Fact]
@@ -162,11 +162,11 @@ namespace NuGet.VisualStudio.Test
             packageManager.ReinstallPackage(projectManager, "A", updateDependencies: true, allowPrereleaseVersions: false, logger: null);
 
             // Assert
-            Assert.True(packageManager.LocalRepository.Exists("A", new SemanticVersion("1.2-alpha")));
-            Assert.True(projectManager.LocalRepository.Exists("A", new SemanticVersion("1.2-alpha")));
+            Assert.True(packageManager.LocalRepository.Exists("A", new NuGetVersion("1.2-alpha")));
+            Assert.True(projectManager.LocalRepository.Exists("A", new NuGetVersion("1.2-alpha")));
 
-            Assert.True(packageManager.LocalRepository.Exists("B", new SemanticVersion("2.0.0")));
-            Assert.True(projectManager.LocalRepository.Exists("B", new SemanticVersion("2.0.0")));
+            Assert.True(packageManager.LocalRepository.Exists("B", new NuGetVersion("2.0.0")));
+            Assert.True(projectManager.LocalRepository.Exists("B", new NuGetVersion("2.0.0")));
         }
 
         [Fact]
@@ -212,11 +212,11 @@ namespace NuGet.VisualStudio.Test
 
             // Assert
             logger.Verify();
-            Assert.True(packageManager.LocalRepository.Exists("A", new SemanticVersion("1.2-alpha")));
-            Assert.True(projectManager.LocalRepository.Exists("A", new SemanticVersion("1.2-alpha")));
+            Assert.True(packageManager.LocalRepository.Exists("A", new NuGetVersion("1.2-alpha")));
+            Assert.True(projectManager.LocalRepository.Exists("A", new NuGetVersion("1.2-alpha")));
 
-            Assert.True(packageManager.LocalRepository.Exists("B", new SemanticVersion("2.0.0")));
-            Assert.True(projectManager.LocalRepository.Exists("B", new SemanticVersion("2.0.0")));
+            Assert.True(packageManager.LocalRepository.Exists("B", new NuGetVersion("2.0.0")));
+            Assert.True(projectManager.LocalRepository.Exists("B", new NuGetVersion("2.0.0")));
         }
 
         [Fact]
@@ -253,11 +253,11 @@ namespace NuGet.VisualStudio.Test
             packageManager.ReinstallPackage(projectManager, "A", updateDependencies: true, allowPrereleaseVersions: false, logger: null);
 
             // Assert
-            Assert.True(packageManager.LocalRepository.Exists("A", new SemanticVersion("1.2-alpha")));
-            Assert.True(projectManager.LocalRepository.Exists("A", new SemanticVersion("1.2-alpha")));
+            Assert.True(packageManager.LocalRepository.Exists("A", new NuGetVersion("1.2-alpha")));
+            Assert.True(projectManager.LocalRepository.Exists("A", new NuGetVersion("1.2-alpha")));
 
-            Assert.True(packageManager.LocalRepository.Exists("B", new SemanticVersion("2.0.0-beta")));
-            Assert.True(projectManager.LocalRepository.Exists("B", new SemanticVersion("2.0.0-beta")));
+            Assert.True(packageManager.LocalRepository.Exists("B", new NuGetVersion("2.0.0-beta")));
+            Assert.True(projectManager.LocalRepository.Exists("B", new NuGetVersion("2.0.0-beta")));
         }
 
         [Fact]
@@ -289,9 +289,9 @@ namespace NuGet.VisualStudio.Test
 
             sourceRepository.Add(packageA);
 
-            packageManager.InstallPackage(projectManager, "A", new SemanticVersion("1.2-alpha"), ignoreDependencies: false, allowPrereleaseVersions: true, logger: null);
-            Assert.True(packageManager.LocalRepository.Exists("A", new SemanticVersion("1.2-alpha")));
-            Assert.True(projectManager.LocalRepository.Exists("A", new SemanticVersion("1.2-alpha")));
+            packageManager.InstallPackage(projectManager, "A", new NuGetVersion("1.2-alpha"), ignoreDependencies: false, allowPrereleaseVersions: true, logger: null);
+            Assert.True(packageManager.LocalRepository.Exists("A", new NuGetVersion("1.2-alpha")));
+            Assert.True(projectManager.LocalRepository.Exists("A", new NuGetVersion("1.2-alpha")));
             Assert.True(projectSystem.FileExists("content.txt"));
             Assert.False(projectSystem.FileExists("content4.txt"));
             Assert.True(projectSystem.ReferenceExists("ref.dll"));
@@ -304,8 +304,8 @@ namespace NuGet.VisualStudio.Test
             packageManager.ReinstallPackage(projectManager, "A", updateDependencies: true, allowPrereleaseVersions: false, logger: null);
 
             // Assert
-            Assert.True(packageManager.LocalRepository.Exists("A", new SemanticVersion("1.2-alpha")));
-            Assert.True(projectManager.LocalRepository.Exists("A", new SemanticVersion("1.2-alpha")));
+            Assert.True(packageManager.LocalRepository.Exists("A", new NuGetVersion("1.2-alpha")));
+            Assert.True(projectManager.LocalRepository.Exists("A", new NuGetVersion("1.2-alpha")));
             Assert.True(projectSystem.FileExists("content4.txt"));
             Assert.False(projectSystem.FileExists("content.txt"));
             Assert.False(projectSystem.ReferenceExists("ref.dll"));
@@ -358,7 +358,7 @@ namespace NuGet.VisualStudio.Test
             sourceRepository.Add(packageB);
             sourceRepository.Add(packageC);
 
-            packageManager.InstallPackage(projectManager, "A", new SemanticVersion("1.2-alpha"), ignoreDependencies: false, allowPrereleaseVersions: true, logger: null);
+            packageManager.InstallPackage(projectManager, "A", new NuGetVersion("1.2-alpha"), ignoreDependencies: false, allowPrereleaseVersions: true, logger: null);
             Assert.True(packageManager.LocalRepository.Exists("A"));
             Assert.True(projectManager.LocalRepository.Exists("A"));
             Assert.True(packageManager.LocalRepository.Exists("B"));
@@ -433,7 +433,7 @@ namespace NuGet.VisualStudio.Test
             sourceRepository.Add(packageB);
             sourceRepository.Add(packageC);
 
-            packageManager.InstallPackage(projectManager, "A", new SemanticVersion("1.2-alpha"), ignoreDependencies: false, allowPrereleaseVersions: true, logger: null);
+            packageManager.InstallPackage(projectManager, "A", new NuGetVersion("1.2-alpha"), ignoreDependencies: false, allowPrereleaseVersions: true, logger: null);
             Assert.True(packageManager.LocalRepository.Exists("A"));
             Assert.True(projectManager.LocalRepository.Exists("A"));
             Assert.True(packageManager.LocalRepository.Exists("B"));
@@ -508,7 +508,7 @@ namespace NuGet.VisualStudio.Test
             sourceRepository.Add(packageB);
             sourceRepository.Add(packageC);
 
-            packageManager.InstallPackage(projectManager, "A", new SemanticVersion("1.2"), ignoreDependencies: false, allowPrereleaseVersions: true, logger: null);
+            packageManager.InstallPackage(projectManager, "A", new NuGetVersion("1.2"), ignoreDependencies: false, allowPrereleaseVersions: true, logger: null);
             Assert.True(packageManager.LocalRepository.Exists("A"));
             Assert.True(projectManager.LocalRepository.Exists("A"));
             Assert.True(packageManager.LocalRepository.Exists("B"));
@@ -576,7 +576,7 @@ namespace NuGet.VisualStudio.Test
             sourceRepository.Add(packageB);
             sourceRepository.Add(packageC);
 
-            packageManager.InstallPackage(projectManager, "A", new SemanticVersion("1.2-alpha"), ignoreDependencies: false, allowPrereleaseVersions: true, logger: null);
+            packageManager.InstallPackage(projectManager, "A", new NuGetVersion("1.2-alpha"), ignoreDependencies: false, allowPrereleaseVersions: true, logger: null);
             Assert.True(packageManager.LocalRepository.Exists("A"));
             Assert.True(projectManager.LocalRepository.Exists("A"));
             Assert.True(packageManager.LocalRepository.Exists("B"));
@@ -638,11 +638,11 @@ namespace NuGet.VisualStudio.Test
             sourceRepository.Add(packageA);
             sourceRepository.Add(packageB);
 
-            packageManager.InstallPackage(projectManager, "A", new SemanticVersion("1.2-alpha"), ignoreDependencies: false, allowPrereleaseVersions: true, logger: null);
-            packageManager.InstallPackage(projectManager, "B", new SemanticVersion("2.0"), ignoreDependencies: false, allowPrereleaseVersions: true, logger: null);
+            packageManager.InstallPackage(projectManager, "A", new NuGetVersion("1.2-alpha"), ignoreDependencies: false, allowPrereleaseVersions: true, logger: null);
+            packageManager.InstallPackage(projectManager, "B", new NuGetVersion("2.0"), ignoreDependencies: false, allowPrereleaseVersions: true, logger: null);
 
-            Assert.True(packageManager.LocalRepository.Exists("A", new SemanticVersion("1.2-alpha")));
-            Assert.True(projectManager.LocalRepository.Exists("A", new SemanticVersion("1.2-alpha")));
+            Assert.True(packageManager.LocalRepository.Exists("A", new NuGetVersion("1.2-alpha")));
+            Assert.True(projectManager.LocalRepository.Exists("A", new NuGetVersion("1.2-alpha")));
             Assert.True(projectSystem.FileExists("content.txt"));
             Assert.False(projectSystem.FileExists("content4.txt"));
             Assert.True(projectSystem.ReferenceExists("ref.dll"));
@@ -662,8 +662,8 @@ namespace NuGet.VisualStudio.Test
             packageManager.ReinstallPackages(projectManager, updateDependencies: true, allowPrereleaseVersions: false, logger: null);
 
             // Assert
-            Assert.True(packageManager.LocalRepository.Exists("A", new SemanticVersion("1.2-alpha")));
-            Assert.True(projectManager.LocalRepository.Exists("A", new SemanticVersion("1.2-alpha")));
+            Assert.True(packageManager.LocalRepository.Exists("A", new NuGetVersion("1.2-alpha")));
+            Assert.True(projectManager.LocalRepository.Exists("A", new NuGetVersion("1.2-alpha")));
             Assert.False(projectSystem.FileExists("content.txt"));
             Assert.True(projectSystem.FileExists("content4.txt"));
             Assert.False(projectSystem.ReferenceExists("ref.dll"));
@@ -744,8 +744,8 @@ namespace NuGet.VisualStudio.Test
             logger.Verify();
             Assert.Equal(0, eventCount);
 
-            Assert.True(packageManager.LocalRepository.Exists("A", new SemanticVersion("1.2-alpha")));
-            Assert.True(projectManager.LocalRepository.Exists("A", new SemanticVersion("1.2-alpha")));
+            Assert.True(packageManager.LocalRepository.Exists("A", new NuGetVersion("1.2-alpha")));
+            Assert.True(projectManager.LocalRepository.Exists("A", new NuGetVersion("1.2-alpha")));
 
             Assert.True(packageManager.LocalRepository.Exists("B"));
             Assert.True(projectManager.LocalRepository.Exists("B"));
@@ -801,18 +801,18 @@ namespace NuGet.VisualStudio.Test
 
             // install package A -> project 1
             // and package B -> project 2
-            packageManager.InstallPackage(projectManager1, "A", new SemanticVersion("1.2-alpha"), ignoreDependencies: false, allowPrereleaseVersions: true, logger: null);
-            packageManager.InstallPackage(projectManager2, "B", new SemanticVersion("2.0"), ignoreDependencies: false, allowPrereleaseVersions: true, logger: null);
+            packageManager.InstallPackage(projectManager1, "A", new NuGetVersion("1.2-alpha"), ignoreDependencies: false, allowPrereleaseVersions: true, logger: null);
+            packageManager.InstallPackage(projectManager2, "B", new NuGetVersion("2.0"), ignoreDependencies: false, allowPrereleaseVersions: true, logger: null);
 
-            Assert.True(packageManager.LocalRepository.Exists("A", new SemanticVersion("1.2-alpha")));
-            Assert.True(projectManager1.LocalRepository.Exists("A", new SemanticVersion("1.2-alpha")));
+            Assert.True(packageManager.LocalRepository.Exists("A", new NuGetVersion("1.2-alpha")));
+            Assert.True(projectManager1.LocalRepository.Exists("A", new NuGetVersion("1.2-alpha")));
             Assert.True(projectSystem1.FileExists("content.txt"));
             Assert.False(projectSystem1.FileExists("content4.txt"));
             Assert.True(projectSystem1.ReferenceExists("ref.dll"));
             Assert.False(projectSystem1.ReferenceExists("refsl.dll"));
 
-            Assert.True(packageManager.LocalRepository.Exists("B", new SemanticVersion("2.0")));
-            Assert.True(projectManager2.LocalRepository.Exists("B", new SemanticVersion("2.0")));
+            Assert.True(packageManager.LocalRepository.Exists("B", new NuGetVersion("2.0")));
+            Assert.True(projectManager2.LocalRepository.Exists("B", new NuGetVersion("2.0")));
             Assert.True(projectSystem2.FileExists("hello.txt"));
             Assert.False(projectSystem2.FileExists("world.txt"));
             Assert.True(projectSystem2.ReferenceExists("comma.dll"));
@@ -822,23 +822,23 @@ namespace NuGet.VisualStudio.Test
             projectSystem1.ChangeTargetFramework(new FrameworkName("Silverlight, Version=v4.0"));
             projectSystem2.ChangeTargetFramework(new FrameworkName("Silverlight, Version=v4.0, Profile=WindowsPhone71"));
 
-            localRepositoryMock.Setup(p => p.IsReferenced("A", new SemanticVersion("1.2-alpha"))).Returns((string id, SemanticVersion version) => projectManager1.LocalRepository.Exists(id, version));
-            localRepositoryMock.Setup(p => p.IsReferenced("B", new SemanticVersion("2.0"))).Returns((string id, SemanticVersion version) => projectManager2.LocalRepository.Exists(id, version));
+            localRepositoryMock.Setup(p => p.IsReferenced("A", new NuGetVersion("1.2-alpha"))).Returns((string id, ISemanticVersion version) => projectManager1.LocalRepository.Exists(id, version));
+            localRepositoryMock.Setup(p => p.IsReferenced("B", new NuGetVersion("2.0"))).Returns((string id, ISemanticVersion version) => projectManager2.LocalRepository.Exists(id, version));
 
             // Act
             packageManager.ReinstallPackages(updateDependencies: true, allowPrereleaseVersions: false, logger: NullLogger.Instance, eventListener: NullPackageOperationEventListener.Instance);
 
             // Assert
-            Assert.True(packageManager.LocalRepository.Exists("A", new SemanticVersion("1.2-alpha")));
-            Assert.True(projectManager1.LocalRepository.Exists("A", new SemanticVersion("1.2-alpha")));
+            Assert.True(packageManager.LocalRepository.Exists("A", new NuGetVersion("1.2-alpha")));
+            Assert.True(projectManager1.LocalRepository.Exists("A", new NuGetVersion("1.2-alpha")));
 
             Assert.False(projectSystem1.FileExists("content.txt"));
             Assert.True(projectSystem1.FileExists("content4.txt"));
             Assert.False(projectSystem1.ReferenceExists("ref.dll"));
             Assert.True(projectSystem1.ReferenceExists("refsl.dll"));
 
-            Assert.True(packageManager.LocalRepository.Exists("B", new SemanticVersion("2.0")));
-            Assert.True(projectManager2.LocalRepository.Exists("B", new SemanticVersion("2.0")));
+            Assert.True(packageManager.LocalRepository.Exists("B", new NuGetVersion("2.0")));
+            Assert.True(projectManager2.LocalRepository.Exists("B", new NuGetVersion("2.0")));
 
             Assert.False(projectSystem2.FileExists("hello.txt"));
             Assert.True(projectSystem2.FileExists("world.txt"));
@@ -898,15 +898,15 @@ namespace NuGet.VisualStudio.Test
 
             // install package A -> project 1
             // and package B -> project 2
-            packageManager.InstallPackage(projectManager1, "A", new SemanticVersion("1.2-alpha"), ignoreDependencies: false, allowPrereleaseVersions: true, logger: null);
-            packageManager.InstallPackage(projectManager2, "B", new SemanticVersion("2.0"), ignoreDependencies: false, allowPrereleaseVersions: true, logger: null);
+            packageManager.InstallPackage(projectManager1, "A", new NuGetVersion("1.2-alpha"), ignoreDependencies: false, allowPrereleaseVersions: true, logger: null);
+            packageManager.InstallPackage(projectManager2, "B", new NuGetVersion("2.0"), ignoreDependencies: false, allowPrereleaseVersions: true, logger: null);
 
             // now change project's target framework to silverlight
             projectSystem1.ChangeTargetFramework(new FrameworkName("Silverlight, Version=v4.0"));
             projectSystem2.ChangeTargetFramework(new FrameworkName("Silverlight, Version=v4.0, Profile=WindowsPhone71"));
 
-            localRepositoryMock.Setup(p => p.IsReferenced("A", new SemanticVersion("1.2-alpha"))).Returns((string id, SemanticVersion version) => projectManager1.LocalRepository.Exists(id, version));
-            localRepositoryMock.Setup(p => p.IsReferenced("B", new SemanticVersion("2.0"))).Returns((string id, SemanticVersion version) => projectManager2.LocalRepository.Exists(id, version));
+            localRepositoryMock.Setup(p => p.IsReferenced("A", new NuGetVersion("1.2-alpha"))).Returns((string id, ISemanticVersion version) => projectManager1.LocalRepository.Exists(id, version));
+            localRepositoryMock.Setup(p => p.IsReferenced("B", new NuGetVersion("2.0"))).Returns((string id, ISemanticVersion version) => projectManager2.LocalRepository.Exists(id, version));
 
             var logger = new Mock<ILogger>();
             logger.Setup(s => s.Log(
@@ -922,16 +922,16 @@ namespace NuGet.VisualStudio.Test
             // Assert
             logger.Verify();
 
-            Assert.True(packageManager.LocalRepository.Exists("A", new SemanticVersion("1.2-alpha")));
-            Assert.True(projectManager1.LocalRepository.Exists("A", new SemanticVersion("1.2-alpha")));
+            Assert.True(packageManager.LocalRepository.Exists("A", new NuGetVersion("1.2-alpha")));
+            Assert.True(projectManager1.LocalRepository.Exists("A", new NuGetVersion("1.2-alpha")));
 
             Assert.False(projectSystem1.FileExists("content.txt"));
             Assert.True(projectSystem1.FileExists("content4.txt"));
             Assert.False(projectSystem1.ReferenceExists("ref.dll"));
             Assert.True(projectSystem1.ReferenceExists("refsl.dll"));
 
-            Assert.True(packageManager.LocalRepository.Exists("B", new SemanticVersion("2.0")));
-            Assert.True(projectManager2.LocalRepository.Exists("B", new SemanticVersion("2.0")));
+            Assert.True(packageManager.LocalRepository.Exists("B", new NuGetVersion("2.0")));
+            Assert.True(projectManager2.LocalRepository.Exists("B", new NuGetVersion("2.0")));
 
             Assert.True(projectSystem2.FileExists("hello.txt"));
             Assert.False(projectSystem2.FileExists("world.txt"));
@@ -1001,16 +1001,16 @@ namespace NuGet.VisualStudio.Test
 
             // install package A -> project 1
             // and package B -> project 2
-            packageManager.InstallPackage(projectManager1, "A", new SemanticVersion("1.2-alpha"), ignoreDependencies: false, allowPrereleaseVersions: true, logger: null);
-            packageManager.InstallPackage(projectManager2, "B", new SemanticVersion("2.0"), ignoreDependencies: false, allowPrereleaseVersions: true, logger: null);
+            packageManager.InstallPackage(projectManager1, "A", new NuGetVersion("1.2-alpha"), ignoreDependencies: false, allowPrereleaseVersions: true, logger: null);
+            packageManager.InstallPackage(projectManager2, "B", new NuGetVersion("2.0"), ignoreDependencies: false, allowPrereleaseVersions: true, logger: null);
 
-            Assert.True(packageManager.LocalRepository.Exists("A", new SemanticVersion("1.2-alpha")));
-            Assert.True(projectManager1.LocalRepository.Exists("A", new SemanticVersion("1.2-alpha")));
+            Assert.True(packageManager.LocalRepository.Exists("A", new NuGetVersion("1.2-alpha")));
+            Assert.True(projectManager1.LocalRepository.Exists("A", new NuGetVersion("1.2-alpha")));
             Assert.True(projectSystem1.FileExists("content.txt"));
             Assert.True(projectSystem1.ReferenceExists("ref.dll"));
 
-            Assert.True(packageManager.LocalRepository.Exists("B", new SemanticVersion("2.0")));
-            Assert.True(projectManager2.LocalRepository.Exists("B", new SemanticVersion("2.0")));
+            Assert.True(packageManager.LocalRepository.Exists("B", new NuGetVersion("2.0")));
+            Assert.True(projectManager2.LocalRepository.Exists("B", new NuGetVersion("2.0")));
             Assert.True(projectSystem2.FileExists("hello.txt"));
             Assert.True(projectSystem2.ReferenceExists("comma.dll"));
 
@@ -1020,23 +1020,23 @@ namespace NuGet.VisualStudio.Test
             sourceRepository.AddPackage(packageA2);
             sourceRepository.AddPackage(packageB2);
 
-            localRepositoryMock.Setup(p => p.IsReferenced("A", new SemanticVersion("1.2-alpha"))).Returns((string id, SemanticVersion version) => projectManager1.LocalRepository.Exists(id, version));
-            localRepositoryMock.Setup(p => p.IsReferenced("B", new SemanticVersion("2.0"))).Returns((string id, SemanticVersion version) => projectManager2.LocalRepository.Exists(id, version));
+            localRepositoryMock.Setup(p => p.IsReferenced("A", new NuGetVersion("1.2-alpha"))).Returns((string id, ISemanticVersion version) => projectManager1.LocalRepository.Exists(id, version));
+            localRepositoryMock.Setup(p => p.IsReferenced("B", new NuGetVersion("2.0"))).Returns((string id, ISemanticVersion version) => projectManager2.LocalRepository.Exists(id, version));
 
             // Act
             packageManager.ReinstallPackages(updateDependencies: true, allowPrereleaseVersions: false, logger: NullLogger.Instance, eventListener: NullPackageOperationEventListener.Instance);
 
             // Assert
-            Assert.True(packageManager.LocalRepository.Exists("A", new SemanticVersion("1.2-alpha")));
-            Assert.True(projectManager1.LocalRepository.Exists("A", new SemanticVersion("1.2-alpha")));
+            Assert.True(packageManager.LocalRepository.Exists("A", new NuGetVersion("1.2-alpha")));
+            Assert.True(projectManager1.LocalRepository.Exists("A", new NuGetVersion("1.2-alpha")));
 
             Assert.False(projectSystem1.FileExists("content.txt"));
             Assert.True(projectSystem1.FileExists("foo.txt"));
             Assert.False(projectSystem1.ReferenceExists("ref.dll"));
             Assert.True(projectSystem1.ReferenceExists("bar.dll"));
 
-            Assert.True(packageManager.LocalRepository.Exists("B", new SemanticVersion("2.0")));
-            Assert.True(projectManager2.LocalRepository.Exists("B", new SemanticVersion("2.0")));
+            Assert.True(packageManager.LocalRepository.Exists("B", new NuGetVersion("2.0")));
+            Assert.True(projectManager2.LocalRepository.Exists("B", new NuGetVersion("2.0")));
 
             Assert.False(projectSystem2.FileExists("hello.txt"));
             Assert.True(projectSystem2.FileExists("world.txt"));
@@ -1110,16 +1110,16 @@ namespace NuGet.VisualStudio.Test
 
             // install package A -> project 1
             // and package B -> project 2
-            packageManager.InstallPackage(projectManager1, "A", new SemanticVersion("1.2-alpha"), ignoreDependencies: false, allowPrereleaseVersions: true, logger: null);
-            packageManager.InstallPackage(projectManager2, "A", new SemanticVersion("2.0"), ignoreDependencies: false, allowPrereleaseVersions: true, logger: null);
+            packageManager.InstallPackage(projectManager1, "A", new NuGetVersion("1.2-alpha"), ignoreDependencies: false, allowPrereleaseVersions: true, logger: null);
+            packageManager.InstallPackage(projectManager2, "A", new NuGetVersion("2.0"), ignoreDependencies: false, allowPrereleaseVersions: true, logger: null);
 
-            Assert.True(packageManager.LocalRepository.Exists("A", new SemanticVersion("1.2-alpha")));
-            Assert.True(projectManager1.LocalRepository.Exists("A", new SemanticVersion("1.2-alpha")));
+            Assert.True(packageManager.LocalRepository.Exists("A", new NuGetVersion("1.2-alpha")));
+            Assert.True(projectManager1.LocalRepository.Exists("A", new NuGetVersion("1.2-alpha")));
             Assert.True(projectSystem1.FileExists("content.txt"));
             Assert.True(projectSystem1.ReferenceExists("ref.dll"));
 
-            Assert.True(packageManager.LocalRepository.Exists("A", new SemanticVersion("2.0")));
-            Assert.True(projectManager2.LocalRepository.Exists("A", new SemanticVersion("2.0")));
+            Assert.True(packageManager.LocalRepository.Exists("A", new NuGetVersion("2.0")));
+            Assert.True(projectManager2.LocalRepository.Exists("A", new NuGetVersion("2.0")));
             Assert.True(projectSystem2.FileExists("hello.txt"));
             Assert.True(projectSystem2.ReferenceExists("comma.dll"));
 
@@ -1129,23 +1129,23 @@ namespace NuGet.VisualStudio.Test
             sourceRepository.AddPackage(packageA2);
             sourceRepository.AddPackage(A4);
 
-            localRepositoryMock.Setup(p => p.IsReferenced("A", new SemanticVersion("1.2-alpha"))).Returns((string id, SemanticVersion version) => projectManager1.LocalRepository.Exists(id, version));
-            localRepositoryMock.Setup(p => p.IsReferenced("A", new SemanticVersion("2.0"))).Returns((string id, SemanticVersion version) => projectManager2.LocalRepository.Exists(id, version));
+            localRepositoryMock.Setup(p => p.IsReferenced("A", new NuGetVersion("1.2-alpha"))).Returns((string id, ISemanticVersion version) => projectManager1.LocalRepository.Exists(id, version));
+            localRepositoryMock.Setup(p => p.IsReferenced("A", new NuGetVersion("2.0"))).Returns((string id, ISemanticVersion version) => projectManager2.LocalRepository.Exists(id, version));
 
             // Act
             packageManager.ReinstallPackages(updateDependencies: true, allowPrereleaseVersions: false, logger: NullLogger.Instance, eventListener: NullPackageOperationEventListener.Instance);
 
             // Assert
-            Assert.True(packageManager.LocalRepository.Exists("A", new SemanticVersion("1.2-alpha")));
-            Assert.True(projectManager1.LocalRepository.Exists("A", new SemanticVersion("1.2-alpha")));
+            Assert.True(packageManager.LocalRepository.Exists("A", new NuGetVersion("1.2-alpha")));
+            Assert.True(projectManager1.LocalRepository.Exists("A", new NuGetVersion("1.2-alpha")));
 
             Assert.False(projectSystem1.FileExists("content.txt"));
             Assert.True(projectSystem1.FileExists("foo.txt"));
             Assert.False(projectSystem1.ReferenceExists("ref.dll"));
             Assert.True(projectSystem1.ReferenceExists("bar.dll"));
 
-            Assert.True(packageManager.LocalRepository.Exists("A", new SemanticVersion("2.0")));
-            Assert.True(projectManager2.LocalRepository.Exists("A", new SemanticVersion("2.0")));
+            Assert.True(packageManager.LocalRepository.Exists("A", new NuGetVersion("2.0")));
+            Assert.True(projectManager2.LocalRepository.Exists("A", new NuGetVersion("2.0")));
 
             Assert.False(projectSystem2.FileExists("hello.txt"));
             Assert.True(projectSystem2.FileExists("world.txt"));
@@ -1219,16 +1219,16 @@ namespace NuGet.VisualStudio.Test
 
             // install package A -> project 1
             // and package B -> project 2
-            packageManager.InstallPackage(projectManager1, "A", new SemanticVersion("1.2-alpha"), ignoreDependencies: false, allowPrereleaseVersions: true, logger: null);
-            packageManager.InstallPackage(projectManager2, "A", new SemanticVersion("2.0"), ignoreDependencies: false, allowPrereleaseVersions: true, logger: null);
+            packageManager.InstallPackage(projectManager1, "A", new NuGetVersion("1.2-alpha"), ignoreDependencies: false, allowPrereleaseVersions: true, logger: null);
+            packageManager.InstallPackage(projectManager2, "A", new NuGetVersion("2.0"), ignoreDependencies: false, allowPrereleaseVersions: true, logger: null);
 
-            Assert.True(packageManager.LocalRepository.Exists("A", new SemanticVersion("1.2-alpha")));
-            Assert.True(projectManager1.LocalRepository.Exists("A", new SemanticVersion("1.2-alpha")));
+            Assert.True(packageManager.LocalRepository.Exists("A", new NuGetVersion("1.2-alpha")));
+            Assert.True(projectManager1.LocalRepository.Exists("A", new NuGetVersion("1.2-alpha")));
             Assert.True(projectSystem1.FileExists("content.txt"));
             Assert.True(projectSystem1.ReferenceExists("ref.dll"));
 
-            Assert.True(packageManager.LocalRepository.Exists("A", new SemanticVersion("2.0")));
-            Assert.True(projectManager2.LocalRepository.Exists("A", new SemanticVersion("2.0")));
+            Assert.True(packageManager.LocalRepository.Exists("A", new NuGetVersion("2.0")));
+            Assert.True(projectManager2.LocalRepository.Exists("A", new NuGetVersion("2.0")));
             Assert.True(projectSystem2.FileExists("hello.txt"));
             Assert.True(projectSystem2.ReferenceExists("comma.dll"));
 
@@ -1238,23 +1238,23 @@ namespace NuGet.VisualStudio.Test
             sourceRepository.AddPackage(packageA2);
             sourceRepository.AddPackage(A4);
 
-            localRepositoryMock.Setup(p => p.IsReferenced("A", new SemanticVersion("1.2-alpha"))).Returns((string id, SemanticVersion version) => projectManager1.LocalRepository.Exists(id, version));
-            localRepositoryMock.Setup(p => p.IsReferenced("A", new SemanticVersion("2.0"))).Returns((string id, SemanticVersion version) => projectManager2.LocalRepository.Exists(id, version));
+            localRepositoryMock.Setup(p => p.IsReferenced("A", new NuGetVersion("1.2-alpha"))).Returns((string id, ISemanticVersion version) => projectManager1.LocalRepository.Exists(id, version));
+            localRepositoryMock.Setup(p => p.IsReferenced("A", new NuGetVersion("2.0"))).Returns((string id, ISemanticVersion version) => projectManager2.LocalRepository.Exists(id, version));
 
             // Act
             packageManager.ReinstallPackage("A", updateDependencies: true, allowPrereleaseVersions: false, logger: NullLogger.Instance, eventListener: NullPackageOperationEventListener.Instance);
 
             // Assert
-            Assert.True(packageManager.LocalRepository.Exists("A", new SemanticVersion("1.2-alpha")));
-            Assert.True(projectManager1.LocalRepository.Exists("A", new SemanticVersion("1.2-alpha")));
+            Assert.True(packageManager.LocalRepository.Exists("A", new NuGetVersion("1.2-alpha")));
+            Assert.True(projectManager1.LocalRepository.Exists("A", new NuGetVersion("1.2-alpha")));
 
             Assert.False(projectSystem1.FileExists("content.txt"));
             Assert.True(projectSystem1.FileExists("foo.txt"));
             Assert.False(projectSystem1.ReferenceExists("ref.dll"));
             Assert.True(projectSystem1.ReferenceExists("bar.dll"));
 
-            Assert.True(packageManager.LocalRepository.Exists("A", new SemanticVersion("2.0")));
-            Assert.True(projectManager2.LocalRepository.Exists("A", new SemanticVersion("2.0")));
+            Assert.True(packageManager.LocalRepository.Exists("A", new NuGetVersion("2.0")));
+            Assert.True(projectManager2.LocalRepository.Exists("A", new NuGetVersion("2.0")));
 
             Assert.False(projectSystem2.FileExists("hello.txt"));
             Assert.True(projectSystem2.FileExists("world.txt"));
@@ -1304,7 +1304,7 @@ namespace NuGet.VisualStudio.Test
             logger.Verify();
             Assert.Equal(0, eventCount);
 
-            Assert.True(packageManager.LocalRepository.Exists("A", new SemanticVersion("1.2")));
+            Assert.True(packageManager.LocalRepository.Exists("A", new NuGetVersion("1.2")));
         }
 
         private void RegisterInstallerEvents(Mock<VsPackageInstallerEvents> installerEvents, VsPackageEventHandler handler)

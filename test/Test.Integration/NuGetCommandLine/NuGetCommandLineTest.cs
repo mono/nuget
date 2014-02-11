@@ -1038,7 +1038,7 @@ public class Baz {
             Assert.True(File.Exists(expectedPackage));
             var package = VerifyPackageContents(expectedPackage, new[] { @"lib\net40\FakeProject.dll" });
             Assert.Equal("FakeProject", package.Id);
-            Assert.Equal(new SemanticVersion("1.2"), package.Version);
+            Assert.Equal(new NuGetVersion("1.2"), package.Version);
             Assert.Equal("David Inc", package.Authors.First());
             Assert.Equal("This is a test. Ignore me", package.Description);
             Assert.True(File.Exists(expectedSymbolsPackage));
@@ -1097,7 +1097,7 @@ public class Cl_{0} {{
                                                                          @"content\Foo.xml",
                                                                          @"content\Bar.txt" });
             Assert.Equal("ProjectWithContent", package.Id);
-            Assert.Equal(new SemanticVersion("1.5"), package.Version);
+            Assert.Equal(new NuGetVersion("1.5"), package.Version);
             Assert.Equal("David", package.Authors.First());
             Assert.Equal("Project with content", package.Description);
         }
@@ -1202,7 +1202,7 @@ public class Cl_{0} {{
 
             var package = VerifyPackageContents(expectedPackage, new[] { @"lib\net40\ProjectWithNuSpec.dll" });
             Assert.Equal("ProjectWithNuSpec", package.Id);
-            Assert.Equal(new SemanticVersion("1.2"), package.Version);
+            Assert.Equal(new NuGetVersion("1.2"), package.Version);
             Assert.Equal("Title of Package", package.Title);
             Assert.Equal("David", package.Authors.First());
             Assert.Equal("Description from nuspec", package.Description);
@@ -1297,7 +1297,7 @@ public class Cl_{0} {{
 
             var package = VerifyPackageContents(expectedPackage, new[] { @"lib\net40\FooProject.dll" });
             Assert.Equal("Test", package.Id);
-            Assert.Equal(new SemanticVersion("1.2"), package.Version);
+            Assert.Equal(new NuGetVersion("1.2"), package.Version);
             Assert.Equal("Description from nuspec", package.Description);
             Assert.Equal("John", package.Authors.First());
         }
@@ -1404,7 +1404,7 @@ public class Cl_{0} {{
             var package = VerifyPackageContents(expectedPackage, new[] { @"lib\net40\ProjectWithNuSpecAndFiles.dll", 
                                                                          @"lib\net40\ProjectWithNuSpecAndFiles.pdb" });
             Assert.Equal("ProjectWithNuSpecAndFiles", package.Id);
-            Assert.Equal(new SemanticVersion("1.3"), package.Version);
+            Assert.Equal(new NuGetVersion("1.3"), package.Version);
             Assert.Equal("David2", package.Authors.First());
             Assert.Equal("Project with nuspec that has files", package.Description);
         }
@@ -1446,7 +1446,7 @@ public class Cl_{0} {{
 
             var package = VerifyPackageContents(expectedPackage, new[] { @"lib\net40\ProjectWithNuSpecProjectWins.dll" });
             Assert.Equal("ProjectWithNuSpecProjectWins", package.Id);
-            Assert.Equal(new SemanticVersion("1.2"), package.Version);
+            Assert.Equal(new NuGetVersion("1.2"), package.Version);
             Assert.Equal("David2", package.Authors.First());
             Assert.Equal("Project with nuspec", package.Description);
         }
@@ -1480,7 +1480,7 @@ public class Cl_{0} {{
 
             var package = VerifyPackageContents(expectedPackage, new[] { @"lib\net40\ProjectWithAssembliesInOutputPath.dll" });
             Assert.Equal("ProjectWithAssembliesInOutputPath", package.Id);
-            Assert.Equal(new SemanticVersion("1.3"), package.Version);
+            Assert.Equal(new NuGetVersion("1.3"), package.Version);
             Assert.Equal("David2", package.Authors.First());
             Assert.Equal("Project with nuspec that has files", package.Description);
         }
@@ -1614,7 +1614,7 @@ public class Cl_{0} {{
             Directory.CreateDirectory(tempPath);
             var builder = new PackageBuilder();
             builder.Id = id;
-            builder.Version = new SemanticVersion(version);
+            builder.Version = new NuGetVersion(version);
             builder.Description = "test desc";
             builder.Authors.Add("test");
 
@@ -1666,7 +1666,7 @@ public class Cl_{0} {{
             Assert.True(File.Exists(expectedPackage));
             var package = VerifyPackageContents(expectedPackage, new[] { @"foo.txt" });
             Assert.Equal("foo", package.Id);
-            Assert.Equal(new SemanticVersion("1.1"), package.Version);
+            Assert.Equal(new NuGetVersion("1.1"), package.Version);
             Assert.Equal("Auth", package.Authors.First());
             Assert.Equal("Desc", package.Description);
         }
@@ -1752,7 +1752,7 @@ public class Runner {
             Assert.True(File.Exists(expectedPackage));
             var package = VerifyPackageContents(expectedPackage, new[] { @"foo.txt" });
             Assert.Equal("MyPackage", package.Id);
-            Assert.Equal(new SemanticVersion("2.5"), package.Version);
+            Assert.Equal(new NuGetVersion("2.5"), package.Version);
             Assert.Equal("Auth", package.Authors.First());
             Assert.Equal("Desc", package.Description);
         }

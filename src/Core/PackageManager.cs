@@ -450,7 +450,7 @@ namespace NuGet
 
             IPackage newPackage = resolvePackage();
 
-            if (newPackage != null && oldPackage.Version != newPackage.Version)
+            if (newPackage != null && !oldPackage.Version.Equals(newPackage.Version))
             {
                 UpdatePackage(newPackage, updateDependencies, allowPrereleaseVersions);
             }

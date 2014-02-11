@@ -1,11 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.Globalization;
 using System.Linq;
 using System.Text;
-using System.ComponentModel;
-using System.Globalization;
 using System.Text.RegularExpressions;
-using System.Runtime.Serialization;
 
 namespace NuGet.Versioning
 {
@@ -16,11 +15,10 @@ namespace NuGet.Versioning
     public sealed class NuGetVersion : INuGetVersion
     {
         private const RegexOptions _flags = RegexOptions.IgnoreCase | RegexOptions.ExplicitCapture;
-        private static readonly Regex _semanticVersionRegex = new Regex(@"^(?<Version>\d+(\s*\.\s*\d+){0,3})(?<Release>-[a-z][0-9a-z-]*)?(?<Metadata>\+[0-9A-Za-z-]+)?$", _flags);
-        private static readonly Regex _strictSemanticVersionRegex = new Regex(@"^(?<Version>([0-9]|[1-9][0-9]*)(\.([0-9]|[1-9][0-9]*)){2})(?<Release>-[0-9A-Za-z-]+(\.[0-9A-Za-z-]+)*)?(?<Metadata>\+[0-9A-Za-z-]+)?$", _flags);
+        private static readonly Regex _semanticVersionRegex = new Regex(@"^(?<Version>\d+(\s*\.\s*\d+){0,3})(?<Release>-[0-9A-Za-z-]+(\.[0-9A-Za-z-]+)*)?(?<Metadata>\+[0-9A-Za-z-]+)?$", _flags);
         private readonly string _originalString;
-        private Version _version;
-        private readonly List<string> _releaseLabels;
+        private readonly Version _version;
+        private readonly IEnumerable<string> _releaseLabels;
         private readonly string _metadata;
 
         public NuGetVersion(string version)
@@ -31,12 +29,39 @@ namespace NuGet.Versioning
             _originalString = version;
         }
 
+        public NuGetVersion(ISemanticVersion version)
+        {
+            if (version == null)
+                throw new ArgumentNullException("version");
+
+            INuGetVersion nugetVersion = version as INuGetVersion;
+
+            if (nugetVersion != null)
+            {
+                _version = nugetVersion.Version;
+                _originalString = nugetVersion.ToString();
+            }
+            else
+            {
+                _version = new Version(version.Major, version.Minor, version.Patch);
+            }
+
+            if (version.ReleaseLabels != null)
+            {
+                var labels = version.ReleaseLabels.ToArray();
+                if (labels.Length > 0)
+                    _releaseLabels = labels;
+            }
+
+            _metadata = version.Metadata;
+        }
+
         public NuGetVersion(int major, int minor, int build, int revision)
             : this(new Version(major, minor, build, revision))
         { }
 
         public NuGetVersion(int major, int minor, int patch, IEnumerable<string> releaseLabels, string metadata)
-            : this(new Version(major, minor, patch), new List<string>(releaseLabels), metadata, null)
+            : this(new Version(major, minor, patch), releaseLabels, metadata, null)
         { }
 
         public NuGetVersion(Version version)
@@ -48,18 +73,16 @@ namespace NuGet.Versioning
         { }
 
         private NuGetVersion(Version version, string specialVersion, string metadata, string originalString)
-            : this(version, new List<string>() { specialVersion }, metadata, originalString)
+            : this(version, ParseReleaseLabels(specialVersion), metadata, originalString)
         { }
 
-        private NuGetVersion(Version version, List<string> releaseLabels, string metadata, string originalString)
+        private NuGetVersion(Version version, IEnumerable<string> releaseLabels, string metadata, string originalString)
         {
             _metadata = metadata;
 
-            _releaseLabels = releaseLabels;
-
-            if (releaseLabels == null || releaseLabels.All(s => String.IsNullOrEmpty(s)))
+            if (releaseLabels != null && !releaseLabels.All(s => String.IsNullOrEmpty(s)))
             {
-                 _releaseLabels = new List<string>(0);
+                _releaseLabels = releaseLabels;
             }
 
             if (!String.IsNullOrEmpty(originalString))
@@ -68,7 +91,7 @@ namespace NuGet.Versioning
             }
             else
             {
-                _originalString = GetLegacyString(version, _releaseLabels);
+                _originalString = GetLegacyString(version, _releaseLabels, metadata);
             }
 
             _version = NormalizeVersionValue(version);
@@ -86,7 +109,7 @@ namespace NuGet.Versioning
         {
             get
             {
-                return _releaseLabels;
+                return _releaseLabels ?? Enumerable.Empty<string>();
             }
         }
 
@@ -97,7 +120,7 @@ namespace NuGet.Versioning
         {
             get
             {
-                if (ReleaseLabels != null)
+                if (_releaseLabels != null)
                 {
                     return String.Join(".", _releaseLabels);
                 }
@@ -110,7 +133,7 @@ namespace NuGet.Versioning
         {
             get
             {
-                return _releaseLabels.Count > 0;
+                return _releaseLabels != null;
             }
         }
 
@@ -137,11 +160,6 @@ namespace NuGet.Versioning
         {
             get
             {
-                if (_version == null)
-                {
-                    _version = new Version(Major, Minor, Patch, 0);
-                }
-
                 return _version;
             }
         }
@@ -152,6 +170,28 @@ namespace NuGet.Versioning
             {
                 return _version != null && _version.Revision > 0;
             }
+        }
+
+        public bool Equals(ISemanticVersion other, VersionComparison versionComparison)
+        {
+            return CompareTo(other, versionComparison) == 0;
+        }
+
+        public int CompareTo(ISemanticVersion other, VersionComparison versionComparison)
+        {
+            VersionComparer comparer = new VersionComparer(versionComparison);
+            return comparer.Compare(this, other);
+        }
+
+        public int CompareTo(ISemanticVersion other)
+        {
+            VersionComparer comparer = new VersionComparer();
+            return comparer.Compare(this, other);
+        }
+
+        public bool Equals(ISemanticVersion other)
+        {
+            return CompareTo(other) == 0;
         }
 
         /// <summary>
@@ -186,7 +226,15 @@ namespace NuGet.Versioning
         /// </summary>
         public static bool TryParseStrict(string version, out NuGetVersion value)
         {
-            return TryParseInternal(version, _strictSemanticVersionRegex, out value);
+            SemanticVersionStrict semVer = null;
+            if (SemanticVersionStrict.TryParse(version, out semVer))
+            {
+                value = new NuGetVersion(semVer);
+                return true;
+            }
+
+            value = null;
+            return false;
         }
 
         private static bool TryParseInternal(string version, Regex regex, out NuGetVersion value)
@@ -216,18 +264,18 @@ namespace NuGet.Versioning
         /// Attempts to parse the version token as a SemanticVersion.
         /// </summary>
         /// <returns>An instance of SemanticVersion if it parses correctly, null otherwise.</returns>
-        public static NuGetVersion ParseOptionalVersion(string version)
-        {
-            NuGetVersion semver = null;
-            TryParse(version, out semver);
-            return semver;
-        }
+        //public static NuGetVersion ParseOptionalVersion(string version)
+        //{
+        //    NuGetVersion semver = null;
+        //    TryParse(version, out semver);
+        //    return semver;
+        //}
 
         public override string ToString()
         {
             if (_originalString == null)
             {
-                return GetLegacyString(Version, _releaseLabels);
+                return GetLegacyString(Version, _releaseLabels, _metadata);
             }
 
             return _originalString;
@@ -237,28 +285,11 @@ namespace NuGet.Versioning
         {
             if (IsLegacyVersion)
             {
-                return GetLegacyString(Version, _releaseLabels);
+                return GetLegacyString(NormalizeVersionValue(Version), _releaseLabels, _metadata);
             }
 
             return GetStrictSemVerString();
         }
-
-        /*
-        public static SemanticVersion MaxValue
-        {
-            get
-            {
-                return new SemanticVersion(Int32.MaxValue, Int32.MaxValue, Int32.MaxValue, Int32.MaxValue);
-            }
-        }
-
-        public static SemanticVersion MinValue
-        {
-            get
-            {
-                return new SemanticVersion(new Version(0, 0), "PRE");
-            }
-        } */
 
         private string GetStrictSemVerString()
         {
@@ -279,10 +310,21 @@ namespace NuGet.Versioning
             return sb.ToString();
         }
 
-        private static string GetLegacyString(Version version, List<string> releaseLabels)
+        private static string GetLegacyString(Version version, IEnumerable<string> releaseLabels, string metadata)
         {
-            string specialVersion = String.Join(".", releaseLabels);
-            return version.ToString() + (!String.IsNullOrEmpty(specialVersion) ? "-" + specialVersion : null);
+            StringBuilder sb = new StringBuilder(version.ToString());
+
+            if (releaseLabels != null)
+            {
+                sb.AppendFormat(CultureInfo.InvariantCulture, "-{0}", String.Join(".", releaseLabels));
+            }
+
+            if (!String.IsNullOrEmpty(metadata))
+            {
+                sb.AppendFormat(CultureInfo.InvariantCulture, "+{0}", metadata);
+            }
+
+            return sb.ToString();
         }
 
         #region Compare
@@ -383,6 +425,17 @@ namespace NuGet.Versioning
                                Math.Max(version.Revision, 0));
         }
 
+        private static string[] ParseReleaseLabels(string releaseLabel)
+        {
+            if (String.IsNullOrEmpty(releaseLabel))
+            {
+                return null;
+            }
+
+            return releaseLabel.Split('.');
+        }
+
         #endregion
+
     }
 }

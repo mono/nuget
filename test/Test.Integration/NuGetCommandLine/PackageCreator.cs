@@ -11,7 +11,7 @@ namespace NuGet.Test.Integration.NuGetCommandLine
             PackageBuilder builder = new PackageBuilder()
             {
                 Id = id,
-                Version = new SemanticVersion(version),
+                Version = new NuGetVersion(version),
                 Description = "Descriptions",
             };
             builder.Authors.Add("test");

@@ -39,12 +39,12 @@ namespace NuGet
                 return Id;
             }
 
-            return Id + " " + VersionUtility.PrettyPrint(VersionSpec);
+            return Id + " " + VersionSpec.PrettyPrint();
         }
 
         internal static PackageDependency CreateDependency(string id, string versionSpec)
         {
-            return new PackageDependency(id, NuGet.Versioning.VersionSpec.ParseVersionSpec(versionSpec));
+            return new PackageDependency(id, NuGet.Versioning.VersionSpec.Parse(versionSpec));
         }
     }
 }

@@ -44,8 +44,8 @@ namespace NuGet.VisualStudio.Test
 
             // Act
             websiteHandler.AddRefreshFilesForReferences(
-                website.Object, packagesFileSystem, new[] { new PackageName("A", new SemanticVersion("1.0")), 
-                                                            new PackageName("B", new SemanticVersion("3.0.0-beta"))});
+                website.Object, packagesFileSystem, new[] { new PackageName("A", new NuGetVersion("1.0")), 
+                                                            new PackageName("B", new NuGetVersion("3.0.0-beta"))});
 
             // Assert
             Assert.True(projectSystem.DirectoryExists("bin"));
@@ -90,8 +90,8 @@ namespace NuGet.VisualStudio.Test
 
             // Act
             websiteHandler.AddRefreshFilesForReferences(
-                website.Object, packagesFileSystem, new[] { new PackageName("A", new SemanticVersion("1.0")), 
-                                                            new PackageName("B", new SemanticVersion("3.0.0-beta"))});
+                website.Object, packagesFileSystem, new[] { new PackageName("A", new NuGetVersion("1.0")), 
+                                                            new PackageName("B", new NuGetVersion("3.0.0-beta"))});
 
             // Assert
             Assert.True(projectSystem.DirectoryExists("bin"));
@@ -129,8 +129,8 @@ namespace NuGet.VisualStudio.Test
 
             // Act
             websiteHandler.AddRefreshFilesForReferences(
-                website.Object, packagesFileSystem, new[] { new PackageName("A", new SemanticVersion("1.0")), 
-                                                            new PackageName("B", new SemanticVersion("3.0.0-beta"))});
+                website.Object, packagesFileSystem, new[] { new PackageName("A", new NuGetVersion("1.0")), 
+                                                            new PackageName("B", new NuGetVersion("3.0.0-beta"))});
 
             // Assert
             Assert.True(projectSystem.DirectoryExists("bin"));
@@ -173,8 +173,8 @@ namespace NuGet.VisualStudio.Test
 
             // Act
             websiteHandler.AddRefreshFilesForReferences(
-                website.Object, packagesFileSystem, new[] { new PackageName("A", new SemanticVersion("2.0")), 
-                                                            new PackageName("B", new SemanticVersion("3.0.0-beta"))});
+                website.Object, packagesFileSystem, new[] { new PackageName("A", new NuGetVersion("2.0")), 
+                                                            new PackageName("B", new NuGetVersion("3.0.0-beta"))});
 
             // Assert
             Assert.True(projectSystem.DirectoryExists("bin"));
@@ -212,8 +212,8 @@ namespace NuGet.VisualStudio.Test
 
             // Act
             websiteHandler.CopyNativeBinaries(
-                website.Object, packagesFileSystem, new[] { new PackageName("A", new SemanticVersion("1.0")), 
-                                                            new PackageName("B", new SemanticVersion("3.0.0-beta"))});
+                website.Object, packagesFileSystem, new[] { new PackageName("A", new NuGetVersion("1.0")), 
+                                                            new PackageName("B", new NuGetVersion("3.0.0-beta"))});
 
             // Assert
             Assert.True(projectSystem.DirectoryExists("bin"));
