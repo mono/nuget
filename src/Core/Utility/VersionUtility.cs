@@ -541,16 +541,16 @@ namespace NuGet
             // Trim the version so things like 1.0.0.0 end up being 1.0
             Version version = TrimVersion(semVer.GetLegacyVersion());
 
-            yield return new NuGetVersion(version, semVer.SpecialVersion);
+            yield return new NuGetVersion(version, semVer.Release);
 
             if (version.Build == -1 && version.Revision == -1)
             {
-                yield return new NuGetVersion(new Version(version.Major, version.Minor, 0), semVer.SpecialVersion);
-                yield return new NuGetVersion(new Version(version.Major, version.Minor, 0, 0), semVer.SpecialVersion);
+                yield return new NuGetVersion(new Version(version.Major, version.Minor, 0), semVer.Release);
+                yield return new NuGetVersion(new Version(version.Major, version.Minor, 0, 0), semVer.Release);
             }
             else if (version.Revision == -1)
             {
-                yield return new NuGetVersion(new Version(version.Major, version.Minor, version.Build, 0), semVer.SpecialVersion);
+                yield return new NuGetVersion(new Version(version.Major, version.Minor, version.Build, 0), semVer.Release);
             }
         }
 

@@ -408,7 +408,7 @@ namespace NuGet.Commands
         internal void AnalyzePackage(IPackage package)
         {
             IEnumerable<IPackageRule> packageRules = Rules;
-            if (!String.IsNullOrEmpty(package.Version.SpecialVersion))
+            if (!String.IsNullOrEmpty(package.Version.Release))
             {
                 // If a package contains a special token, we'll warn users if it does not strictly follow semver guidelines.
                 packageRules = packageRules.Concat(new[] { new StrictSemanticVersionValidationRule() });

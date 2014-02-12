@@ -9,6 +9,7 @@ namespace NuGet.Versioning
 {
     public class SemanticVersionStrict : ISemanticVersion
     {
+        #region Fields
         private const RegexOptions _flags = RegexOptions.IgnoreCase | RegexOptions.ExplicitCapture;
         private static readonly Regex _strictSemanticVersionRegex = new Regex(@"^(?<Version>([0-9]|[1-9][0-9]*)(\.([0-9]|[1-9][0-9]*)){2})(?<Release>-[0-9A-Za-z-]+(\.[0-9A-Za-z-]+)*)?(?<Metadata>\+[0-9A-Za-z-]+)?$", _flags);
         private readonly int _major;
@@ -16,7 +17,9 @@ namespace NuGet.Versioning
         private readonly int _patch;
         private readonly IEnumerable<string> _releaseLabels;
         private readonly string _metadata;
+        #endregion
 
+        #region Constructors
         protected SemanticVersionStrict(Version version, string releaseLabel, string metadata)
         {
             if (version == null)
@@ -61,12 +64,28 @@ namespace NuGet.Versioning
                 _releaseLabels = releaseLabels.ToArray();
             }
         }
+        #endregion
 
+        #region ISemanticVersion
+
+        /// <summary>
+        /// Major version X (X.y.z)
+        /// </summary>
         public int Major { get { return _major; } }
+
+        /// <summary>
+        /// Minor version Y (x.Y.z)
+        /// </summary>
         public int Minor { get { return _minor; } }
+
+        /// <summary>
+        /// Patch version Z (x.y.Z)
+        /// </summary>
         public int Patch { get { return _patch; } }
 
-
+        /// <summary>
+        /// A collection of pre-release labels attached to the version.
+        /// </summary>
         public IEnumerable<string> ReleaseLabels
         {
             get
@@ -76,9 +95,9 @@ namespace NuGet.Versioning
         }
 
         /// <summary>
-        /// Gets the optional special version.
+        /// The full pre-release label for the version.
         /// </summary>
-        public string SpecialVersion
+        public string Release
         {
             get
             {
@@ -91,6 +110,9 @@ namespace NuGet.Versioning
             }
         }
 
+        /// <summary>
+        /// True if pre-release labels exist for the version.
+        /// </summary>
         public virtual bool IsPrerelease
         {
             get
@@ -105,6 +127,9 @@ namespace NuGet.Versioning
             }
         }
 
+        /// <summary>
+        /// True if metadata exists for the version.
+        /// </summary>
         public virtual bool HasMetadata
         {
             get
@@ -113,6 +138,9 @@ namespace NuGet.Versioning
             }
         }
 
+        /// <summary>
+        /// Build metadata attached to the version.
+        /// </summary>
         public virtual string Metadata
         {
             get
@@ -120,6 +148,10 @@ namespace NuGet.Versioning
                 return _metadata;
             }
         }
+
+        #endregion
+
+        #region ToString
 
         public override string ToString()
         {
@@ -134,7 +166,7 @@ namespace NuGet.Versioning
 
             if (IsPrerelease)
             {
-                sb.AppendFormat(CultureInfo.InvariantCulture, "-{0}", SpecialVersion);
+                sb.AppendFormat(CultureInfo.InvariantCulture, "-{0}", Release);
             }
 
             if (HasMetadata)
@@ -144,6 +176,10 @@ namespace NuGet.Versioning
 
             return sb.ToString();
         }
+
+        #endregion
+
+        #region Static parsers
 
         public static SemanticVersionStrict Parse(string version)
         {
@@ -186,6 +222,10 @@ namespace NuGet.Versioning
             return true;
         }
 
+        #endregion
+
+        #region Compare
+
         public bool Equals(ISemanticVersion other, VersionComparison versionComparison)
         {
             return CompareTo(other, versionComparison) == 0;
@@ -197,11 +237,9 @@ namespace NuGet.Versioning
             return comparer.Compare(this, other);
         }
 
-        #region Compare
-
         public override int GetHashCode()
         {
-            return String.Format(CultureInfo.InvariantCulture, "{0}.{1}.{2}-{3}", Major, Minor, Patch, SpecialVersion).GetHashCode();
+            return String.Format(CultureInfo.InvariantCulture, "{0}.{1}.{2}-{3}", Major, Minor, Patch, Release).GetHashCode();
         }
 
         public override bool Equals(object obj)

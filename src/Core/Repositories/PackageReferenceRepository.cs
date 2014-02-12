@@ -186,7 +186,7 @@ namespace NuGet
             IEnumerable<PackageReference> references = GetPackageReferences(id);
             if (!includePrerelease) 
             {
-                references = references.Where(r => String.IsNullOrEmpty(r.Version.SpecialVersion));
+                references = references.Where(r => String.IsNullOrEmpty(r.Version.Release));
             }
 
             PackageReference reference = references.OrderByDescending(r => r.Version).FirstOrDefault();

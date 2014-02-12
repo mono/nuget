@@ -45,7 +45,7 @@ namespace NuGet.Test
             // Assert
             versions.ForEach(v =>
             {
-                Assert.Equal(expected, v.SpecialVersion);
+                Assert.Equal(expected, v.Release);
             });
         }
 

@@ -18,7 +18,7 @@ namespace NuGet
 
         public static bool IsReleaseVersion(this IPackageName packageMetadata)
         {
-            return String.IsNullOrEmpty(packageMetadata.Version.SpecialVersion);
+            return String.IsNullOrEmpty(packageMetadata.Version.Release);
         }
 
         public static bool IsListed(this IPackage package)

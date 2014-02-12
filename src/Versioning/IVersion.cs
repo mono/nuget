@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace NuGet.Versioning
 {
@@ -10,6 +7,9 @@ namespace NuGet.Versioning
     /// </summary>
     public interface IVersion : IComparable
     {
+        /// <summary>
+        /// Gives a normalized representation of the version.
+        /// </summary>
         string ToNormalizedString();
     }
 }

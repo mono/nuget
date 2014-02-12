@@ -40,7 +40,7 @@ namespace NuGet.Test
 
             // Assert
             Assert.Equal(versionValue, semanticVersion.Version);
-            Assert.Equal(specialValue, semanticVersion.SpecialVersion);
+            Assert.Equal(specialValue, semanticVersion.Release);
             Assert.Equal(version, semanticVersion.ToString());
         }
 
@@ -99,7 +99,7 @@ namespace NuGet.Test
 
             // Assert
             Assert.Equal(expected.Version, actual.Version);
-            Assert.Equal(expected.SpecialVersion, actual.SpecialVersion);
+            Assert.Equal(expected.Release, actual.Release);
         }
 
         public static IEnumerable<object[]> SemVerData
@@ -122,7 +122,7 @@ namespace NuGet.Test
 
             // Assert
             Assert.Equal(expected.Version, actual.Version);
-            Assert.Equal(expected.SpecialVersion, actual.SpecialVersion);
+            Assert.Equal(expected.Release, actual.Release);
         }
 
         public static IEnumerable<object[]> SemVerWithWhiteSpace
@@ -144,7 +144,7 @@ namespace NuGet.Test
 
             // Assert
             Assert.Equal(expected.Version, actual.Version);
-            Assert.Equal(expected.SpecialVersion, actual.SpecialVersion);
+            Assert.Equal(expected.Release, actual.Release);
         }
 
         [Theory]
@@ -278,7 +278,7 @@ namespace NuGet.Test
             // Assert
             Assert.True(result);
             Assert.Equal(new Version("1.3.2"), version.Version);
-            Assert.Equal("CTP-2-Refresh-Alpha", version.SpecialVersion);
+            Assert.Equal("CTP-2-Refresh-Alpha", version.Release);
         }
 
     }

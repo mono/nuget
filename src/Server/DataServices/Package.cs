@@ -19,7 +19,7 @@ namespace NuGet.Server.DataServices
         {
             Id = package.Id;
             Version = package.Version.ToString();
-            IsPrerelease = !String.IsNullOrEmpty(package.Version.SpecialVersion);
+            IsPrerelease = !String.IsNullOrEmpty(package.Version.Release);
             Title = package.Title;
             Authors = String.Join(",", package.Authors);
             Owners = String.Join(",", package.Owners);

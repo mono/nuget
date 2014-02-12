@@ -18,7 +18,7 @@ namespace NuGet.Test
         public int GetHashCode(ISemanticVersion obj)
         {
             return String.Format(CultureInfo.InvariantCulture, "{0}.{1}.{2}-{3}GIT{4}",
-                obj.Major, obj.Minor, obj.Patch, obj.SpecialVersion, GetCommitFromMetadata(obj.Metadata)).GetHashCode();
+                obj.Major, obj.Minor, obj.Patch, obj.Release, GetCommitFromMetadata(obj.Metadata)).GetHashCode();
         }
 
         public int Compare(ISemanticVersion x, ISemanticVersion y)

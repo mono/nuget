@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
 using System.Text;
@@ -14,13 +13,21 @@ namespace NuGet.Versioning
     /// </summary>
     public sealed class NuGetVersion : INuGetVersion
     {
+
+        #region Fields
         private const RegexOptions _flags = RegexOptions.IgnoreCase | RegexOptions.ExplicitCapture;
         private static readonly Regex _semanticVersionRegex = new Regex(@"^(?<Version>\d+(\s*\.\s*\d+){0,3})(?<Release>-[0-9A-Za-z-]+(\.[0-9A-Za-z-]+)*)?(?<Metadata>\+[0-9A-Za-z-]+)?$", _flags);
         private readonly string _originalString;
         private readonly Version _version;
         private readonly IEnumerable<string> _releaseLabels;
         private readonly string _metadata;
+        #endregion
 
+        #region Constructors
+
+        /// <summary>
+        /// Creates a NuGetVersion from a version string.
+        /// </summary>
         public NuGetVersion(string version)
             : this(Parse(version))
         {
@@ -29,6 +36,9 @@ namespace NuGet.Versioning
             _originalString = version;
         }
 
+        /// <summary>
+        /// Creates a NuGetVersion from an existing semantic version.
+        /// </summary>
         public NuGetVersion(ISemanticVersion version)
         {
             if (version == null)
@@ -56,14 +66,33 @@ namespace NuGet.Versioning
             _metadata = version.Metadata;
         }
 
+        /// <summary>
+        /// Creates a NuGetVersion from a four digit version.
+        /// </summary>
+        /// <param name="major">major version number</param>
+        /// <param name="minor">minor version number</param>
+        /// <param name="build">patch or build version number</param>
+        /// <param name="revision">fourth version number or revision number</param>
         public NuGetVersion(int major, int minor, int build, int revision)
             : this(new Version(major, minor, build, revision))
         { }
 
+        /// <summary>
+        /// Creates a NuGetVersion from the semantic version parts.
+        /// </summary>
+        /// <param name="major">major version number</param>
+        /// <param name="minor">minor verson number</param>
+        /// <param name="patch">patch version number</param>
+        /// <param name="releaseLabels">optional release labels</param>
+        /// <param name="metadata">optional metadata</param>
         public NuGetVersion(int major, int minor, int patch, IEnumerable<string> releaseLabels, string metadata)
             : this(new Version(major, minor, patch), releaseLabels, metadata, null)
         { }
 
+        /// <summary>
+        /// Creates a NuGetVersion from a System.Version.
+        /// </summary>
+        /// <param name="version">Version number</param>
         public NuGetVersion(Version version)
             : this(version, String.Empty)
         { }
@@ -101,10 +130,28 @@ namespace NuGet.Versioning
             : this(semVer.Version, new List<string>(semVer.ReleaseLabels), semVer.Metadata, semVer.ToString())
         { }
 
+        #endregion
+
+        #region ISemanticVersion
+
+        /// <summary>
+        /// Major version X (X.y.z)
+        /// </summary>
         public int Major { get { return Version.Major; } }
+
+        /// <summary>
+        /// Minor version Y (x.Y.z)
+        /// </summary>
         public int Minor { get { return Version.Minor; } }
+
+        /// <summary>
+        /// Patch version Z (x.y.Z)
+        /// </summary>
         public int Patch { get { return Version.Build; } }
 
+        /// <summary>
+        /// A collection of pre-release labels attached to the version.
+        /// </summary>
         public IEnumerable<string> ReleaseLabels
         {
             get
@@ -114,9 +161,9 @@ namespace NuGet.Versioning
         }
 
         /// <summary>
-        /// Gets the optional special version.
+        /// The full pre-release label for the version.
         /// </summary>
-        public string SpecialVersion
+        public string Release
         {
             get
             {
@@ -129,6 +176,9 @@ namespace NuGet.Versioning
             }
         }
 
+        /// <summary>
+        /// True if pre-release labels exist for the version.
+        /// </summary>
         public bool IsPrerelease
         {
             get
@@ -137,6 +187,9 @@ namespace NuGet.Versioning
             }
         }
 
+        /// <summary>
+        /// True if metadata exists for the version.
+        /// </summary>
         public bool HasMetadata
         {
             get
@@ -145,11 +198,29 @@ namespace NuGet.Versioning
             }
         }
 
+        /// <summary>
+        /// Build metadata attached to the version.
+        /// </summary>
         public string Metadata
         {
             get
             {
                 return _metadata;
+            }
+        }
+
+        #endregion
+
+        #region INuGetVersion
+
+        /// <summary>
+        ///  True if a 4th digit exists in the version number.
+        /// </summary>
+        public bool IsLegacyVersion
+        {
+            get
+            {
+                return _version != null && _version.Revision > 0;
             }
         }
 
@@ -164,35 +235,9 @@ namespace NuGet.Versioning
             }
         }
 
-        public bool IsLegacyVersion
-        {
-            get
-            {
-                return _version != null && _version.Revision > 0;
-            }
-        }
+        #endregion
 
-        public bool Equals(ISemanticVersion other, VersionComparison versionComparison)
-        {
-            return CompareTo(other, versionComparison) == 0;
-        }
-
-        public int CompareTo(ISemanticVersion other, VersionComparison versionComparison)
-        {
-            VersionComparer comparer = new VersionComparer(versionComparison);
-            return comparer.Compare(this, other);
-        }
-
-        public int CompareTo(ISemanticVersion other)
-        {
-            VersionComparer comparer = new VersionComparer();
-            return comparer.Compare(this, other);
-        }
-
-        public bool Equals(ISemanticVersion other)
-        {
-            return CompareTo(other) == 0;
-        }
+        #region Static parsers
 
         /// <summary>
         /// Parses a version string using loose semantic versioning rules that allows 2-4 version components followed by an optional special version.
@@ -218,7 +263,25 @@ namespace NuGet.Versioning
         /// </summary>
         public static bool TryParse(string version, out NuGetVersion value)
         {
-            return TryParseInternal(version, _semanticVersionRegex, out value);
+            if (!String.IsNullOrEmpty(version))
+            {
+                var match = _semanticVersionRegex.Match(version.Trim());
+
+                Version versionValue;
+                if (match.Success && Version.TryParse(match.Groups["Version"].Value, out versionValue))
+                {
+                    Version ver = NormalizeVersionValue(versionValue);
+
+                    value = new NuGetVersion(version: ver,
+                                                specialVersion: match.Groups["Release"].Value.TrimStart('-'),
+                                                metadata: match.Groups["Metadata"].Value.TrimStart('+'),
+                                                originalString: version.Replace(" ", ""));
+                    return true;
+                }
+            }
+
+            value = null;
+            return false;
         }
 
         /// <summary>
@@ -237,40 +300,14 @@ namespace NuGet.Versioning
             return false;
         }
 
-        private static bool TryParseInternal(string version, Regex regex, out NuGetVersion value)
-        {
-            if (!String.IsNullOrEmpty(version))
-            {
-                var match = regex.Match(version.Trim());
+        #endregion
 
-                Version versionValue;
-                if (match.Success && Version.TryParse(match.Groups["Version"].Value, out versionValue))
-                {
-                    Version ver = NormalizeVersionValue(versionValue);
-
-                    value = new NuGetVersion(version: ver, 
-                                                specialVersion: match.Groups["Release"].Value.TrimStart('-'), 
-                                                metadata: match.Groups["Metadata"].Value.TrimStart('+'),
-                                                originalString: version.Replace(" ", ""));
-                    return true;
-                }
-            }
-
-            value = null;
-            return false;
-        }
+        #region ToString
 
         /// <summary>
-        /// Attempts to parse the version token as a SemanticVersion.
+        /// Returns the version string.
         /// </summary>
-        /// <returns>An instance of SemanticVersion if it parses correctly, null otherwise.</returns>
-        //public static NuGetVersion ParseOptionalVersion(string version)
-        //{
-        //    NuGetVersion semver = null;
-        //    TryParse(version, out semver);
-        //    return semver;
-        //}
-
+        /// <remarks>This method includes legacy behavior. Use ToNormalizedString() instead.</remarks>
         public override string ToString()
         {
             if (_originalString == null)
@@ -281,6 +318,9 @@ namespace NuGet.Versioning
             return _originalString;
         }
 
+        /// <summary>
+        /// Returns a normalized version string.
+        /// </summary>
         public string ToNormalizedString()
         {
             if (IsLegacyVersion)
@@ -291,6 +331,9 @@ namespace NuGet.Versioning
             return GetStrictSemVerString();
         }
 
+        /// <summary>
+        /// Creates a normalized SemVer 2.0.0 string.
+        /// </summary>
         private string GetStrictSemVerString()
         {
             StringBuilder sb = new StringBuilder();
@@ -299,7 +342,7 @@ namespace NuGet.Versioning
 
             if (IsPrerelease)
             {
-                sb.AppendFormat(CultureInfo.InvariantCulture, "-{0}", SpecialVersion);
+                sb.AppendFormat(CultureInfo.InvariantCulture, "-{0}", Release);
             }
 
             if (HasMetadata)
@@ -310,6 +353,9 @@ namespace NuGet.Versioning
             return sb.ToString();
         }
 
+        /// <summary>
+        /// Creates a legacy version string using System.Version
+        /// </summary>
         private static string GetLegacyString(Version version, IEnumerable<string> releaseLabels, string metadata)
         {
             StringBuilder sb = new StringBuilder(version.ToString());
@@ -326,6 +372,8 @@ namespace NuGet.Versioning
 
             return sb.ToString();
         }
+
+        #endregion
 
         #region Compare
 
@@ -375,6 +423,28 @@ namespace NuGet.Versioning
         {
             VersionComparer comparer = new VersionComparer(versionComparison);
             return comparer.Compare(this, other);
+        }
+
+        public bool Equals(ISemanticVersion other, VersionComparison versionComparison)
+        {
+            return CompareTo(other, versionComparison) == 0;
+        }
+
+        public int CompareTo(ISemanticVersion other, VersionComparison versionComparison)
+        {
+            VersionComparer comparer = new VersionComparer(versionComparison);
+            return comparer.Compare(this, other);
+        }
+
+        public int CompareTo(ISemanticVersion other)
+        {
+            VersionComparer comparer = new VersionComparer();
+            return comparer.Compare(this, other);
+        }
+
+        public bool Equals(ISemanticVersion other)
+        {
+            return CompareTo(other) == 0;
         }
 
         public static bool operator ==(NuGetVersion version1, NuGetVersion version2)

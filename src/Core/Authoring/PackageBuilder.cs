@@ -344,7 +344,7 @@ namespace NuGet
                 PackageIdValidator.ValidatePackageId(dep.Id);
             }
 
-            if (String.IsNullOrEmpty(version.SpecialVersion))
+            if (String.IsNullOrEmpty(version.Release))
             {
                 // If we are creating a production package, do not allow any of the dependencies to be a prerelease version.
                 var prereleaseDependency = dependencies.SelectMany(set => set.Dependencies).FirstOrDefault(IsPrereleaseDependency);
@@ -556,7 +556,7 @@ namespace NuGet
 
         private static bool ValidateSpecialVersionLength(ISemanticVersion version)
         {
-            return version == null || version.SpecialVersion == null || version.SpecialVersion.Length <= 20;
+            return version == null || version.Release == null || version.Release.Length <= 20;
         }
     }
 }

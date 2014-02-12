@@ -1,20 +1,25 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Globalization;
-using System.Text;
 using System.Linq;
+using System.Text;
 
 namespace NuGet.Versioning
 {
+    /// <summary>
+    /// Represents a range of versions.
+    /// </summary>
     public class VersionSpec : IVersionSpec
     {
+        #region Fields
         private readonly ISemanticVersion _minVersion;
         private readonly bool _isMinInclusive;
         private readonly ISemanticVersion _maxVersion;
         private readonly bool _isMaxInclusive;
         private const string LessThanOrEqualTo = "\u2264";
         private const string GreaterThanOrEqualTo = "\u2265";
+        #endregion
 
+        #region Constructors
         /// <summary>
         /// A VersionSpec that matches only the given version.
         /// </summary>
@@ -44,7 +49,9 @@ namespace NuGet.Versioning
             _isMinInclusive = isMinInclusive;
             _isMaxInclusive = isMaxInclusive;
         }
+        #endregion
 
+        #region IVersionSpec
         public ISemanticVersion MinVersion
         {
             get
@@ -78,16 +85,17 @@ namespace NuGet.Versioning
         }
 
         /// <summary>
-        /// Determines if the specified version is within the version spec
+        /// Determines if the specified version is within the version spec.
         /// </summary>
         public bool Satisfies(ISemanticVersion version)
         {
-            return Satisfies(version, VersionComparer.Default);
+            // ignore metadata by default when finding a range.
+            return Satisfies(version, VersionComparer.IgnoreMetadata);
         }
 
-        public bool Satisfies(ISemanticVersion version, VersionComparison mode)
+        public bool Satisfies(ISemanticVersion version, VersionComparison versionComparison)
         {
-            return Satisfies(version, new VersionComparer(mode));
+            return Satisfies(version, new VersionComparer(versionComparison));
         }
 
         public bool Satisfies(ISemanticVersion version, IVersionComparer comparer)
@@ -95,6 +103,7 @@ namespace NuGet.Versioning
             if (version == null)
                 throw new ArgumentNullException("version");
 
+            // Determine if version is in the given range using the comparer.
             bool condition = true;
             if (MinVersion != null)
             {
@@ -122,7 +131,9 @@ namespace NuGet.Versioning
 
             return condition;
         }
+        #endregion
 
+        #region Static parsers
         /// <summary>
         /// The version string is either a simple version or an arithmetic range
         /// e.g.
@@ -248,6 +259,9 @@ namespace NuGet.Versioning
             result = new VersionSpec(minVersion, maxVersion, isMinInclusive, isMaxInclusive);
             return true;
         }
+        #endregion
+
+        #region ToString
 
         public override string ToString()
         {
@@ -271,6 +285,7 @@ namespace NuGet.Versioning
 
         public string ToNormalizedString()
         {
+            // Create a normalized string for the VersionSpec that is fully contained in braces, and includes a comma.
             var versionBuilder = new StringBuilder();
             versionBuilder.Append(IsMinInclusive ? '[' : '(');
             versionBuilder.AppendFormat(CultureInfo.InvariantCulture, "{0}, {1}", MinVersion == null ? string.Empty : MinVersion.ToNormalizedString(), MaxVersion == null ? string.Empty : MaxVersion.ToNormalizedString());
@@ -335,6 +350,10 @@ namespace NuGet.Versioning
             return versionBuilder.ToString();
         }
 
+        #endregion
+
+        #region Private helpers
+
         private static bool TryParseVersion(string versionString, out NuGetVersion version)
         {
             version = null;
@@ -349,5 +368,7 @@ namespace NuGet.Versioning
             }
             return version != null;
         }
+
+        #endregion
     }
 }

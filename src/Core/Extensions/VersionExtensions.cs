@@ -112,7 +112,7 @@ namespace NuGet
         public static IEnumerable<string> GetComparableVersionStrings(this ISemanticVersion version)
         {
             Version coreVersion = version.GetLegacyVersion();
-            string specialVersion = String.IsNullOrEmpty(version.SpecialVersion) ? String.Empty : "-" + version.SpecialVersion;
+            string specialVersion = String.IsNullOrEmpty(version.Release) ? String.Empty : "-" + version.Release;
 
             string originalVersion = version.ToString();
             string[] originalVersionComponents = version.GetOriginalVersionComponents();

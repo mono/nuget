@@ -785,7 +785,7 @@ namespace NuGet.VisualStudio
                                packageId,
                                version: oldVersion,
                                ignoreDependencies: !updateDependencies,
-                               allowPrereleaseVersions: allowPrereleaseVersions || !String.IsNullOrEmpty(oldVersion.SpecialVersion),
+                               allowPrereleaseVersions: allowPrereleaseVersions || !String.IsNullOrEmpty(oldVersion.Release),
                                logger: logger);
                        }
                    }

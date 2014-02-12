@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace NuGet.Versioning
+﻿namespace NuGet.Versioning
 {
     /// <summary>
     /// IVersionSpec represents a range of allowed versions.
@@ -31,14 +28,14 @@ namespace NuGet.Versioning
         /// <summary>
         /// Determines if an ISemanticVersion meets the requirements.
         /// </summary>
-        /// <param name="version">SemVer to compare.</param>
+        /// <param name="version">SemVer to compare</param>
         /// <returns>True if the given version meets the version requirements.</returns>
         bool Satisfies(ISemanticVersion version);
 
         /// <summary>
         /// Determines if an ISemanticVersion meets the requirements using the given mode.
         /// </summary>
-        /// <param name="version">SemVer to compare.</param>
+        /// <param name="version">SemVer to compare</param>
         /// <param name="versionComparison">VersionComparison mode used to determine the version range.</param>
         /// <returns>True if the given version meets the version requirements.</returns>
         bool Satisfies(ISemanticVersion version, VersionComparison versionComparison);
@@ -59,7 +56,6 @@ namespace NuGet.Versioning
         /// <summary>
         /// Returns a string representing the IVersionSpec with normalized versions.
         /// </summary>
-        /// <returns></returns>
         string ToNormalizedString();
     }
 }

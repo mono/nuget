@@ -44,7 +44,7 @@ namespace NuGet
             }
 
             NuGetVersion semanticVersion;
-            if (NuGetVersion.TryParse(metadata.Version, out semanticVersion) && !String.IsNullOrEmpty(semanticVersion.SpecialVersion))
+            if (NuGetVersion.TryParse(metadata.Version, out semanticVersion) && !String.IsNullOrEmpty(semanticVersion.Release))
             {
                 return SemverVersion;
             }

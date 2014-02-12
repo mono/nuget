@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace NuGet.Versioning
 {
@@ -33,7 +31,7 @@ namespace NuGet.Versioning
         /// <summary>
         /// The full pre-release label for the version.
         /// </summary>
-        string SpecialVersion { get; }
+        string Release { get; }
 
         /// <summary>
         /// True if pre-release labels exist for the version.
