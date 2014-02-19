@@ -265,18 +265,30 @@ namespace NuGet.Versioning
             int version2Num = 0;
             int result = 0;
 
+            // check if the identifiers are numeric
+            bool v1IsNumeric = Int32.TryParse(version1, out version1Num);
+            bool v2IsNumeric = Int32.TryParse(version2, out version2Num);
+
             // if both are numeric compare them as numbers
-            if (Int32.TryParse(version1, out version1Num) && Int32.TryParse(version2, out version2Num))
+            if (v1IsNumeric && v2IsNumeric)
             {
                 result = version1Num.CompareTo(version2Num);
             }
-            else if (_mode == VersionComparison.Strict)
+            else if (v1IsNumeric || v2IsNumeric)
             {
-                // case sensitive
-                result = StringComparer.Ordinal.Compare(version1, version2);
+                // numeric labels come before alpha labels
+                if (v1IsNumeric)
+                {
+                    result = -1;
+                }
+                else
+                {
+                    result = 1;
+                }
             }
             else
             {
+                // Ignoring 2.0.0 case sensitive compare. Everything will be compared case insensitively as 2.0.1 specifies.
                 result = StringComparer.OrdinalIgnoreCase.Compare(version1, version2);
             }
 

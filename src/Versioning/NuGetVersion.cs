@@ -13,17 +13,12 @@ namespace NuGet.Versioning
     /// </summary>
     public sealed class NuGetVersion : INuGetVersion
     {
-
-        #region Fields
         private const RegexOptions _flags = RegexOptions.IgnoreCase | RegexOptions.ExplicitCapture;
         private static readonly Regex _semanticVersionRegex = new Regex(@"^(?<Version>\d+(\s*\.\s*\d+){0,3})(?<Release>-[0-9A-Za-z-]+(\.[0-9A-Za-z-]+)*)?(?<Metadata>\+[0-9A-Za-z-]+)?$", _flags);
         private readonly string _originalString;
         private readonly Version _version;
         private readonly IEnumerable<string> _releaseLabels;
         private readonly string _metadata;
-        #endregion
-
-        #region Constructors
 
         /// <summary>
         /// Creates a NuGetVersion from a version string.
@@ -130,10 +125,6 @@ namespace NuGet.Versioning
             : this(semVer.Version, new List<string>(semVer.ReleaseLabels), semVer.Metadata, semVer.ToString())
         { }
 
-        #endregion
-
-        #region ISemanticVersion
-
         /// <summary>
         /// Major version X (X.y.z)
         /// </summary>
@@ -209,10 +200,6 @@ namespace NuGet.Versioning
             }
         }
 
-        #endregion
-
-        #region INuGetVersion
-
         /// <summary>
         ///  True if a 4th digit exists in the version number.
         /// </summary>
@@ -234,10 +221,6 @@ namespace NuGet.Versioning
                 return _version;
             }
         }
-
-        #endregion
-
-        #region Static parsers
 
         /// <summary>
         /// Parses a version string using loose semantic versioning rules that allows 2-4 version components followed by an optional special version.
@@ -299,10 +282,6 @@ namespace NuGet.Versioning
             value = null;
             return false;
         }
-
-        #endregion
-
-        #region ToString
 
         /// <summary>
         /// Returns the version string.
@@ -372,10 +351,6 @@ namespace NuGet.Versioning
 
             return sb.ToString();
         }
-
-        #endregion
-
-        #region Compare
 
         public override int GetHashCode()
         {
@@ -477,10 +452,6 @@ namespace NuGet.Versioning
             return Compare(version1, version2) >= 0;
         }
 
-        #endregion
-
-        #region Helper methods
-
         private static int Compare(INuGetVersion version1, INuGetVersion version2)
         {
             IVersionComparer comparer = new VersionComparer();
@@ -504,8 +475,5 @@ namespace NuGet.Versioning
 
             return releaseLabel.Split('.');
         }
-
-        #endregion
-
     }
 }

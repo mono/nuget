@@ -10,16 +10,13 @@ namespace NuGet.Versioning
     /// </summary>
     public class VersionSpec : IVersionSpec
     {
-        #region Fields
         private readonly ISemanticVersion _minVersion;
         private readonly bool _isMinInclusive;
         private readonly ISemanticVersion _maxVersion;
         private readonly bool _isMaxInclusive;
         private const string LessThanOrEqualTo = "\u2264";
         private const string GreaterThanOrEqualTo = "\u2265";
-        #endregion
 
-        #region Constructors
         /// <summary>
         /// A VersionSpec that matches only the given version.
         /// </summary>
@@ -49,9 +46,7 @@ namespace NuGet.Versioning
             _isMinInclusive = isMinInclusive;
             _isMaxInclusive = isMaxInclusive;
         }
-        #endregion
 
-        #region IVersionSpec
         public ISemanticVersion MinVersion
         {
             get
@@ -131,9 +126,7 @@ namespace NuGet.Versioning
 
             return condition;
         }
-        #endregion
 
-        #region Static parsers
         /// <summary>
         /// The version string is either a simple version or an arithmetic range
         /// e.g.
@@ -259,9 +252,7 @@ namespace NuGet.Versioning
             result = new VersionSpec(minVersion, maxVersion, isMinInclusive, isMaxInclusive);
             return true;
         }
-        #endregion
 
-        #region ToString
 
         public override string ToString()
         {
@@ -350,10 +341,6 @@ namespace NuGet.Versioning
             return versionBuilder.ToString();
         }
 
-        #endregion
-
-        #region Private helpers
-
         private static bool TryParseVersion(string versionString, out NuGetVersion version)
         {
             version = null;
@@ -369,6 +356,6 @@ namespace NuGet.Versioning
             return version != null;
         }
 
-        #endregion
+
     }
 }
