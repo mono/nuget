@@ -25,7 +25,7 @@ namespace NuGet
             }
         }
 
-        public IVersionSpec GetConstraint(string packageId)
+        public NuGetVersionRange GetConstraint(string packageId)
         {
             return _constraintProviders.Select(cp => cp.GetConstraint(packageId))
                                        .FirstOrDefault(constraint => constraint != null);

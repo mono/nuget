@@ -300,9 +300,9 @@ namespace NuGet
         /// <summary>
         /// The safe range is defined as the highest build and revision for a given major and minor version
         /// </summary>
-        public static IVersionSpec GetSafeRange(ISemanticVersion version)
+        public static NuGetVersionRange GetSafeRange(NuGetVersion version)
         {
-            return new VersionSpec(version, new NuGetVersion(new Version(version.Major, version.Minor + 1)), true, false);
+            return new NuGetVersionRange(version, true, new NuGetVersion(new Version(version.Major, version.Minor + 1)), false);
         }
 
         public static string GetFrameworkString(FrameworkName frameworkName)
@@ -536,7 +536,7 @@ namespace NuGet
         /// <summary>
         /// Returns all possible versions for a version. i.e. 1.0 would return 1.0, 1.0.0, 1.0.0.0
         /// </summary>
-        internal static IEnumerable<ISemanticVersion> GetPossibleVersions(ISemanticVersion semVer)
+        internal static IEnumerable<NuGetVersion> GetPossibleVersions(NuGetVersion semVer)
         {
             // Trim the version so things like 1.0.0.0 end up being 1.0
             Version version = TrimVersion(semVer.GetLegacyVersion());

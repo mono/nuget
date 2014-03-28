@@ -193,7 +193,7 @@ namespace NuGet
         [XmlIgnore]
         public List<ManifestReferenceSet> ReferenceSets { get; set; }
 
-        ISemanticVersion IPackageName.Version
+        NuGetVersion IPackageName.Version
         {
             get
             {
@@ -201,7 +201,7 @@ namespace NuGet
                 {
                     return null;
                 }
-                return new NuGetVersion(Version);
+                return NuGetVersion.Parse(Version);
             }
         }
 
@@ -392,7 +392,7 @@ namespace NuGet
             var dependencies = from d in manifestDependencySet.Dependencies
                                select new PackageDependency(
                                    d.Id,
-                                   String.IsNullOrEmpty(d.Version) ? null : VersionSpec.Parse(d.Version));
+                                   String.IsNullOrEmpty(d.Version) ? null : NuGetVersionRange.Parse(d.Version));
 
             return new PackageDependencySet(targetFramework, dependencies);
         }

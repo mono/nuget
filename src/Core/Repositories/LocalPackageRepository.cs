@@ -136,7 +136,7 @@ namespace NuGet
             }
         }
 
-        public virtual IPackage FindPackage(string packageId, ISemanticVersion version)
+        public virtual IPackage FindPackage(string packageId, NuGetVersion version)
         {
             if (String.IsNullOrEmpty(packageId))
             {
@@ -159,12 +159,12 @@ namespace NuGet
             return FindPackagesById(OpenPackage, packageId);
         }
 
-        public virtual bool Exists(string packageId, ISemanticVersion version)
+        public virtual bool Exists(string packageId, NuGetVersion version)
         {
             return FindPackage(packageId, version) != null;
         }
 
-        public virtual IEnumerable<string> GetPackageLookupPaths(string packageId, ISemanticVersion version)
+        public virtual IEnumerable<string> GetPackageLookupPaths(string packageId, NuGetVersion version)
         {
             // Files created by the path resolver. This would take into account the non-side-by-side scenario 
             // and we do not need to match this for id and version.
@@ -200,7 +200,7 @@ namespace NuGet
             return filesMatchingFullName;
         }
 
-        internal IPackage FindPackage(Func<string, IPackage> openPackage, string packageId, ISemanticVersion version)
+        internal IPackage FindPackage(Func<string, IPackage> openPackage, string packageId, NuGetVersion version)
         {
             var lookupPackageName = new PackageName(packageId, version);
             string packagePath;
@@ -377,13 +377,13 @@ namespace NuGet
                                 PathResolver.GetPackageFileName(package));
         }
 
-        protected virtual string GetPackageFilePath(string id, ISemanticVersion version)
+        protected virtual string GetPackageFilePath(string id, NuGetVersion version)
         {
             return Path.Combine(PathResolver.GetPackageDirectory(id, version),
                                 PathResolver.GetPackageFileName(id, version));
         }
 
-        private static bool FileNameMatchesPattern(string packageId, ISemanticVersion version, string path)
+        private static bool FileNameMatchesPattern(string packageId, NuGetVersion version, string path)
         {
             var name = Path.GetFileNameWithoutExtension(path);
             NuGetVersion parsedVersion;
@@ -395,7 +395,7 @@ namespace NuGet
                    parsedVersion.Equals(version);
         }
 
-        private string GetManifestFilePath(string packageId, ISemanticVersion version)
+        private string GetManifestFilePath(string packageId, NuGetVersion version)
         {
             string packageDirectory = PathResolver.GetPackageDirectory(packageId, version);
             string manifestFileName = packageDirectory + Constants.ManifestExtension;

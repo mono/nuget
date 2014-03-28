@@ -61,7 +61,7 @@ namespace NuGet.VisualStudio
             return IsPackageInstalled(project, packageId, version);
         }
 
-        public bool IsPackageInstalled(Project project, string packageId, ISemanticVersion version)
+        public bool IsPackageInstalled(Project project, string packageId, NuGetVersion version)
         {
             if (project == null)
             {

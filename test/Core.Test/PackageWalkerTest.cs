@@ -108,7 +108,7 @@ namespace NuGet.Test
         public void ResolveDependenciesForInstallPackageResolvesDependencyWithConstraintsUsingDependencyResolver()
         {
             // Arrange            
-            var packageDependency = new PackageDependency("B", new VersionSpec(new NuGetVersion("1.1"), false));
+            var packageDependency = new PackageDependency("B", new NuGetVersionRange(new NuGetVersion("1.1"), false));
             IPackage packageA = PackageUtility.CreatePackage("A", "1.0",
                                                             dependencies: new List<PackageDependency> { packageDependency });
             IPackage packageB12 = PackageUtility.CreatePackage("B", "1.2");
@@ -500,7 +500,7 @@ namespace NuGet.Test
             var localRepository = new MockPackageRepository();
             var sourceRepository = new MockPackageRepository();
             var constraintProvider = new Mock<IPackageConstraintProvider>();
-            constraintProvider.Setup(m => m.GetConstraint("B")).Returns(VersionSpec.Parse("[1.4]"));
+            constraintProvider.Setup(m => m.GetConstraint("B")).Returns(NuGetVersionRange.Parse("[1.4]"));
             constraintProvider.Setup(m => m.Source).Returns("foo");
 
             IPackage A10 = PackageUtility.CreatePackage("A", "1.0",

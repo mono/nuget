@@ -75,7 +75,7 @@ namespace NuGet.Test
         {
             // Arrange
             var repository = new MockPackageRepository();
-            var package = PackageUtility.CreatePackage("foo.fr-fr", language: "fr-fr", dependencies: new[] { new PackageDependency("foo", VersionSpec.Parse("[1.0]")) });
+            var package = PackageUtility.CreatePackage("foo.fr-fr", language: "fr-fr", dependencies: new[] { new PackageDependency("foo", NuGetVersionRange.Parse("[1.0]")) });
 
             // Act
             IPackage runtimePackage;
@@ -92,7 +92,7 @@ namespace NuGet.Test
             // Arrange
             var repository = new MockPackageRepository();
             var runtime = PackageUtility.CreatePackage("foo");
-            var package = PackageUtility.CreatePackage("foo.fr-fr", language: "fr-fr", dependencies: new[] { new PackageDependency("foo", VersionSpec.Parse("[1.0]")) });
+            var package = PackageUtility.CreatePackage("foo.fr-fr", language: "fr-fr", dependencies: new[] { new PackageDependency("foo", NuGetVersionRange.Parse("[1.0]")) });
 
             repository.AddPackage(runtime);
 
@@ -111,7 +111,7 @@ namespace NuGet.Test
             // Arrange
             var repository = new MockPackageRepository();
             var runtime = PackageUtility.CreatePackage("foo");
-            var package = PackageUtility.CreatePackage("foo.Fr-Fr", language: "fr-FR", dependencies: new[] { new PackageDependency("foo", VersionSpec.Parse("[1.0]")) });
+            var package = PackageUtility.CreatePackage("foo.Fr-Fr", language: "fr-FR", dependencies: new[] { new PackageDependency("foo", NuGetVersionRange.Parse("[1.0]")) });
 
             repository.AddPackage(runtime);
 

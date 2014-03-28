@@ -53,7 +53,7 @@ namespace NuGet.VisualStudio
             get { return _basePackage.Id; }
         }
 
-        public ISemanticVersion Version
+        public NuGetVersion Version
         {
             get { return _basePackage.Version; }
         }

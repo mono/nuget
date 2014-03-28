@@ -10,27 +10,32 @@ namespace NuGet.Test
 {
     public class GitMetadataComparer : IVersionComparer
     {
-        public bool Equals(ISemanticVersion x, ISemanticVersion y)
+        public bool Equals(SimpleVersion x, SimpleVersion y)
         {
             return Compare(x, y) == 0;
         }
 
-        public int GetHashCode(ISemanticVersion obj)
+        public int GetHashCode(SimpleVersion obj)
         {
+            NuGetVersion version = obj as NuGetVersion;
+
             return String.Format(CultureInfo.InvariantCulture, "{0}.{1}.{2}-{3}GIT{4}",
-                obj.Major, obj.Minor, obj.Patch, obj.Release, GetCommitFromMetadata(obj.Metadata)).GetHashCode();
+                version.Major, version.Minor, version.Patch, version.Release, GetCommitFromMetadata(version.Metadata)).GetHashCode();
         }
 
-        public int Compare(ISemanticVersion x, ISemanticVersion y)
+        public int Compare(SimpleVersion x, SimpleVersion y)
         {
+            NuGetVersion versionX = x as NuGetVersion;
+            NuGetVersion versionY = y as NuGetVersion;
+
             // compare without metadata
-            int result = VersionComparer.IgnoreMetadata.Compare(x, y);
+            int result = VersionComparer.VersionRelease.Compare(x, y);
 
             if (result != 0)
                 return result;
 
             // compare git commits, form: buildmachine-gitcommit
-            return GitCommitOrder(GetCommitFromMetadata(x.Metadata)).CompareTo(GitCommitOrder(GetCommitFromMetadata(y.Metadata)));
+            return GitCommitOrder(GetCommitFromMetadata(versionX.Metadata)).CompareTo(GitCommitOrder(GetCommitFromMetadata(versionY.Metadata)));
         }
 
         /// <summary>

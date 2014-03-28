@@ -178,7 +178,7 @@ namespace NuGet
         private static void DeletePackageFromFileSystem(IFileSystem fileSystem, string packageId, string packageVersion)
         {
             var pathResolver = new DefaultPackagePathResolver(fileSystem);
-            var packageFileName = pathResolver.GetPackageFileName(packageId, new NuGetVersion(packageVersion));
+            var packageFileName = pathResolver.GetPackageFileName(packageId, NuGetVersion.Parse(packageVersion));
             fileSystem.DeleteFile(packageFileName);
         }
         

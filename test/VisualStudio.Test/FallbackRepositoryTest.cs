@@ -129,7 +129,7 @@ namespace NuGet.VisualStudio.Test
 
             // Assert
             var dependencyResolver = repository as IDependencyResolver;
-            IPackage dependency = dependencyResolver.ResolveDependency(new PackageDependency("A", new VersionSpec(minVersion: new NuGetVersion("1.0.0.0"))), null, allowPrereleaseVersions: false, preferListedPackages: false, dependencyVersion: DependencyVersion.Lowest);
+            IPackage dependency = dependencyResolver.ResolveDependency(new PackageDependency("A", new NuGetVersionRange(lowerBound: new NuGetVersion("1.0.0.0"))), null, allowPrereleaseVersions: false, preferListedPackages: false, dependencyVersion: DependencyVersion.Lowest);
             List<IPackage> packages = repository.GetPackages().ToList();
 
             // Assert
@@ -327,7 +327,7 @@ namespace NuGet.VisualStudio.Test
             var fallbackRepository = new FallbackRepository(primaryRepository, aggregateRepository);
 
             // Act
-            var resolvedPackage = fallbackRepository.ResolveDependency(new PackageDependency("M2", new VersionSpec(minVersion: new NuGetVersion("1.0.1"))), false, false);
+            var resolvedPackage = fallbackRepository.ResolveDependency(new PackageDependency("M2", new NuGetVersionRange(lowerBound: new NuGetVersion("1.0.1"))), false, false);
 
             // Assert
             Assert.Null(resolvedPackage);
@@ -346,7 +346,7 @@ namespace NuGet.VisualStudio.Test
             var fallbackRepository = new FallbackRepository(primaryRepository, dependencyResolver);
 
             // Act
-            var resolvedPackage = fallbackRepository.ResolveDependency(new PackageDependency("M2", new VersionSpec(minVersion: new NuGetVersion("1.0.1"))), false, false);
+            var resolvedPackage = fallbackRepository.ResolveDependency(new PackageDependency("M2", new NuGetVersionRange(lowerBound: new NuGetVersion("1.0.1"))), false, false);
 
             // Assert
             Assert.Same(resolvedPackage, packageA11);

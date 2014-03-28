@@ -528,7 +528,7 @@ namespace NuGet.VisualStudio.Test
         {
             // Arrange            
             var localRepository = new Mock<MockPackageRepository>() { CallBase = true }.As<ISharedPackageRepository>();
-            localRepository.Setup(m => m.IsReferenced("foo", It.IsAny<ISemanticVersion>())).Returns(true);
+            localRepository.Setup(m => m.IsReferenced("foo", It.IsAny<NuGetVersion>())).Returns(true);
             var sourceRepository = new MockPackageRepository();
             var fileSystem = new MockFileSystem();
             var pathResolver = new DefaultPackagePathResolver(fileSystem);
@@ -548,7 +548,7 @@ namespace NuGet.VisualStudio.Test
         {
             // Arrange            
             var localRepository = new Mock<MockPackageRepository>() { CallBase = true }.As<ISharedPackageRepository>();
-            localRepository.Setup(m => m.IsReferenced("foo", It.IsAny<ISemanticVersion>())).Returns(true);
+            localRepository.Setup(m => m.IsReferenced("foo", It.IsAny<NuGetVersion>())).Returns(true);
             var sourceRepository = new MockPackageRepository();
             var fileSystem = new MockFileSystem();
             var pathResolver = new DefaultPackagePathResolver(fileSystem);
@@ -566,7 +566,7 @@ namespace NuGet.VisualStudio.Test
         {
             // Arrange            
             var localRepository = new Mock<MockPackageRepository>() { CallBase = true }.As<ISharedPackageRepository>();
-            localRepository.Setup(m => m.IsReferenced("foo", It.IsAny<ISemanticVersion>())).Returns(false);
+            localRepository.Setup(m => m.IsReferenced("foo", It.IsAny<NuGetVersion>())).Returns(false);
             var sourceRepository = new MockPackageRepository();
             var fileSystem = new MockFileSystem();
             var pathResolver = new DefaultPackagePathResolver(fileSystem);
@@ -833,12 +833,12 @@ namespace NuGet.VisualStudio.Test
             // A2 -> B2
             // F1 -> G1
             // G1 -> B1
-            var A10 = PackageUtility.CreatePackage("A", "1.0", new[] { "hello" }, dependencies: new[] { new PackageDependency("B", VersionSpec.Parse("1.0")) });
-            var A20 = PackageUtility.CreatePackage("A", "2.0", new[] { "hello" }, dependencies: new[] { new PackageDependency("B", VersionSpec.Parse("2.0")) });
+            var A10 = PackageUtility.CreatePackage("A", "1.0", new[] { "hello" }, dependencies: new[] { new PackageDependency("B", NuGetVersionRange.Parse("1.0")) });
+            var A20 = PackageUtility.CreatePackage("A", "2.0", new[] { "hello" }, dependencies: new[] { new PackageDependency("B", NuGetVersionRange.Parse("2.0")) });
             var B10 = PackageUtility.CreatePackage("B", "1.0", new[] { "hello" });
             var B20 = PackageUtility.CreatePackage("B", "2.0", new[] { "hello" });
-            var F10 = PackageUtility.CreatePackage("F", "1.0", new[] { "hello" }, dependencies: new[] { new PackageDependency("G", VersionSpec.Parse("1.0")) });
-            var G10 = PackageUtility.CreatePackage("G", "1.0", new[] { "hello" }, dependencies: new[] { new PackageDependency("B", VersionSpec.Parse("1.0")) });
+            var F10 = PackageUtility.CreatePackage("F", "1.0", new[] { "hello" }, dependencies: new[] { new PackageDependency("G", NuGetVersionRange.Parse("1.0")) });
+            var G10 = PackageUtility.CreatePackage("G", "1.0", new[] { "hello" }, dependencies: new[] { new PackageDependency("B", NuGetVersionRange.Parse("1.0")) });
             sourceRepository.AddPackage(A10);
             sourceRepository.AddPackage(A20);
             sourceRepository.AddPackage(B10);
@@ -880,8 +880,8 @@ namespace NuGet.VisualStudio.Test
             var pathResolver = new DefaultPackagePathResolver(fileSystem);
             // A1 -> B1
             // A2 -> B1
-            var A10 = PackageUtility.CreatePackage("A", "1.0", assemblyReferences: new[] { "A1.dll" }, dependencies: new[] { new PackageDependency("B", VersionSpec.Parse("1.0")) });
-            var A20 = PackageUtility.CreatePackage("A", "2.0", assemblyReferences: new[] { "A2.dll" }, dependencies: new[] { new PackageDependency("B", VersionSpec.Parse("1.0")) });
+            var A10 = PackageUtility.CreatePackage("A", "1.0", assemblyReferences: new[] { "A1.dll" }, dependencies: new[] { new PackageDependency("B", NuGetVersionRange.Parse("1.0")) });
+            var A20 = PackageUtility.CreatePackage("A", "2.0", assemblyReferences: new[] { "A2.dll" }, dependencies: new[] { new PackageDependency("B", NuGetVersionRange.Parse("1.0")) });
             var B10 = PackageUtility.CreatePackage("B", "1.0", assemblyReferences: new[] { "B1.dll" });
             sourceRepository.AddPackage(A10);
             sourceRepository.AddPackage(A20);
@@ -917,7 +917,7 @@ namespace NuGet.VisualStudio.Test
             var pathResolver = new DefaultPackagePathResolver(fileSystem);
             // A1 -> B1
             // A2
-            var A10 = PackageUtility.CreatePackage("A", "1.0", assemblyReferences: new[] { "A1.dll" }, dependencies: new[] { new PackageDependency("B", VersionSpec.Parse("1.0")) });
+            var A10 = PackageUtility.CreatePackage("A", "1.0", assemblyReferences: new[] { "A1.dll" }, dependencies: new[] { new PackageDependency("B", NuGetVersionRange.Parse("1.0")) });
             var A20 = PackageUtility.CreatePackage("A", "2.0", assemblyReferences: new[] { "A2.dll" });
             var B10 = PackageUtility.CreatePackage("B", "1.0", assemblyReferences: new[] { "B1.dll" });
             sourceRepository.AddPackage(A10);
@@ -955,11 +955,11 @@ namespace NuGet.VisualStudio.Test
             // A1 -> B1, C1
             // A2 -> B1
             var A10 = PackageUtility.CreatePackage("A", "1.0", assemblyReferences: new[] { "A1.dll" }, dependencies: new[] { 
-                new PackageDependency("B", VersionSpec.Parse("1.0")),
-                new PackageDependency("C", VersionSpec.Parse("1.0")),
+                new PackageDependency("B", NuGetVersionRange.Parse("1.0")),
+                new PackageDependency("C", NuGetVersionRange.Parse("1.0")),
             });
             var A20 = PackageUtility.CreatePackage("A", "2.0", assemblyReferences: new[] { "A2.dll" }, dependencies: new[] { 
-                new PackageDependency("B", VersionSpec.Parse("1.0"))
+                new PackageDependency("B", NuGetVersionRange.Parse("1.0"))
             });
             var B10 = PackageUtility.CreatePackage("B", "1.0", assemblyReferences: new[] { "B1.dll" });
             var C10 = PackageUtility.CreatePackage("C", "1.0", assemblyReferences: new[] { "C1.dll" });
@@ -1044,8 +1044,8 @@ namespace NuGet.VisualStudio.Test
             var package = PackageUtility.CreatePackage("foo", "1.0.0", dependencies: new[] { new PackageDependency("bar") });
             sourceRepository.AddPackage(package);
 
-            var versionSpec = VersionSpec.Parse("[0.6, 1.0)");
-            var package2 = PackageUtility.CreatePackage("bar", "2.0.0", dependencies: new[] { new PackageDependency("qux", versionSpec) });
+            var versionRange = NuGetVersionRange.Parse("[0.6, 1.0)");
+            var package2 = PackageUtility.CreatePackage("bar", "2.0.0", dependencies: new[] { new PackageDependency("qux", versionRange) });
             sourceRepository.AddPackage(package2);
 
             var package3A = PackageUtility.CreatePackage("qux", "1.0-alpha");
@@ -1073,8 +1073,8 @@ namespace NuGet.VisualStudio.Test
             var package = PackageUtility.CreatePackage("foo", "1.0.0", dependencies: new[] { new PackageDependency("bar") });
             sourceRepository.AddPackage(package);
 
-            var versionSpec = VersionSpec.Parse("[0.6, 1.0)");
-            var package2 = PackageUtility.CreatePackage("bar", "2.0.0", dependencies: new[] { new PackageDependency("qux", versionSpec) });
+            var versionRange = NuGetVersionRange.Parse("[0.6, 1.0)");
+            var package2 = PackageUtility.CreatePackage("bar", "2.0.0", dependencies: new[] { new PackageDependency("qux", versionRange) });
             sourceRepository.AddPackage(package2);
 
             var package3A = PackageUtility.CreatePackage("qux", "1.0-alpha");
@@ -1249,7 +1249,7 @@ namespace NuGet.VisualStudio.Test
             packageManager.Object.InstallPackage(projectManager, "A", packageA20.Version, true, true, null);
 
             // Act
-            packageManager.Object.UpdatePackage("A", (IVersionSpec)null, true, true, null, null);
+            packageManager.Object.UpdatePackage("A", (NuGetVersionRange)null, true, true, null, null);
 
             // Assert
             Assert.True(localRepository.Object.Exists(packageA10));
@@ -1364,8 +1364,8 @@ namespace NuGet.VisualStudio.Test
             var projectRepository = new MockProjectPackageRepository(localRepository.Object);
             var projectManager = new ProjectManager(localRepository.Object, pathResolver, projectSystem, projectRepository);
 
-            localRepository.Setup(r => r.IsReferenced(It.IsAny<string>(), It.IsAny<ISemanticVersion>())).
-                Returns((string id, ISemanticVersion version) => projectRepository.Exists(id, version));
+            localRepository.Setup(r => r.IsReferenced(It.IsAny<string>(), It.IsAny<NuGetVersion>())).
+                Returns((string id, NuGetVersion version) => projectRepository.Exists(id, version));
 
             // Act
             packageManager.InstallPackage(
@@ -1417,8 +1417,8 @@ namespace NuGet.VisualStudio.Test
             var projectRepository = new MockProjectPackageRepository(localRepository.Object);
             var projectManager = new ProjectManager(localRepository.Object, pathResolver, projectSystem, projectRepository);
 
-            localRepository.Setup(r => r.IsReferenced(It.IsAny<string>(), It.IsAny<ISemanticVersion>())).
-                Returns((string id, ISemanticVersion version) => projectRepository.Exists(id, version));
+            localRepository.Setup(r => r.IsReferenced(It.IsAny<string>(), It.IsAny<NuGetVersion>())).
+                Returns((string id, NuGetVersion version) => projectRepository.Exists(id, version));
 
             // Act
             packageManager.InstallPackage(

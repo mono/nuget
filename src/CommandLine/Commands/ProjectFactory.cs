@@ -335,7 +335,7 @@ namespace NuGet.Commands
             string version = _project.GetPropertyValue("Version");
             builder.Version = builder.Version ??
                               NuGetVersion.Parse(version) ??
-                              new NuGetVersion("1.0");
+                              NuGetVersion.Parse("1.0");
         }
 
         private static IEnumerable<string> GetFiles(string path, string fileNameWithoutExtension, HashSet<string> allowedExtensions)
@@ -489,7 +489,7 @@ namespace NuGet.Commands
                 projectFactory.ProcessNuspec(builder, null);
                 return new PackageDependency(
                     builder.Id,
-                    VersionSpec.Parse(builder.Version.ToString()));
+                    NuGetVersionRange.Parse(builder.Version.ToString()));
             }
             catch (Exception ex)
             {
@@ -633,7 +633,7 @@ namespace NuGet.Commands
                     IPackage package = repository.FindPackage(reference.Id, reference.Version);
                     if (package != null && !packagesAndDependencies.ContainsKey(package.Id))
                     {
-                        IVersionSpec spec = GetVersionConstraint(packageReferences, package);
+                        NuGetVersionRange spec = GetVersionConstraint(packageReferences, package);
                         var dependency = new PackageDependency(package.Id, spec);
                         packagesAndDependencies.Add(package.Id, new Tuple<IPackage,PackageDependency>(package, dependency));
                     }
@@ -641,9 +641,9 @@ namespace NuGet.Commands
             }
         }
 
-        private static IVersionSpec GetVersionConstraint(IDictionary<PackageName, PackageReference> packageReferences, IPackage package)
+        private static NuGetVersionRange GetVersionConstraint(IDictionary<PackageName, PackageReference> packageReferences, IPackage package)
         {
-            IVersionSpec defaultVersionConstraint = VersionSpec.Parse(package.Version.ToString());
+            NuGetVersionRange defaultVersionConstraint = NuGetVersionRange.Parse(package.Version.ToString());
 
             PackageReference packageReference;
             var key = new PackageName(package.Id, package.Version);

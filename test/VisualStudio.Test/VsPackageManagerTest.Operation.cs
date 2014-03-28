@@ -239,7 +239,7 @@ namespace NuGet.VisualStudio.Test
         }
 
         [Fact]
-        public void UpdatePackageWithVersionSpecSetOperationToUpdate()
+        public void UpdatePackageWithVersionRangeSetOperationToUpdate()
         {
             // Arrange
             var localRepository = new MockSharedPackageRepository();
@@ -271,7 +271,7 @@ namespace NuGet.VisualStudio.Test
             // Act
             packageManager.UpdatePackage(
                 "phuong",
-                new VersionSpec(new NuGetVersion("1.0")),
+                new NuGetVersionRange(new NuGetVersion("1.0")),
                 updateDependencies: true,
                 allowPrereleaseVersions: true,
                 logger: NullLogger.Instance,

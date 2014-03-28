@@ -38,13 +38,13 @@ namespace NuGet
             var dependency = package.GetCompatiblePackageDependencies(targetFramework: null).FirstOrDefault();
             if (dependency != null && 
                 dependency.Id.Equals(SpecCommand.SampleManifestDependency.Id, StringComparison.Ordinal) &&
-                dependency.VersionSpec != null &&
-                dependency.VersionSpec.ToString().Equals("[" + SpecCommand.SampleManifestDependency.Version + "]", StringComparison.Ordinal))
+                dependency.VersionRange != null &&
+                dependency.VersionRange.ToString().Equals("[" + SpecCommand.SampleManifestDependency.Version + "]", StringComparison.Ordinal))
             {
                 yield return CreateIssueFor("Dependency", dependency.ToString());
             }
 
-            if (dependency != null && dependency.VersionSpec == null)
+            if (dependency != null && dependency.VersionRange == null)
             {
                 var message = String.Format(
                     CultureInfo.CurrentCulture, 

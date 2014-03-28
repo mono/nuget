@@ -13,6 +13,6 @@ namespace NuGet
             bool includePrerelease, 
             bool includeAllVersions, 
             IEnumerable<FrameworkName> targetFrameworks,
-            IEnumerable<IVersionSpec> versionConstraints);
+            IEnumerable<NuGetVersionRange> versionConstraints);
     }
 }

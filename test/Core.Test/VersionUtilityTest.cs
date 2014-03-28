@@ -350,7 +350,7 @@ namespace NuGet.Test
         }
 
         [Fact]
-        public void ParseFrameworkNameUsesNetFrameworkIfOnlyVersionSpecified()
+        public void ParseFrameworkNameUsesNetFrameworkIfOnlyVersionRangeified()
         {
             // Arrange
             Version version20 = new Version("2.0");
@@ -689,22 +689,22 @@ namespace NuGet.Test
         public void GetSafeVersions()
         {
             // Act
-            IVersionSpec versionSpec1 = VersionUtility.GetSafeRange(new NuGetVersion("1.3"));
-            IVersionSpec versionSpec2 = VersionUtility.GetSafeRange(new NuGetVersion("0.9"));
-            IVersionSpec versionSpec3 = VersionUtility.GetSafeRange(new NuGetVersion("2.9.45.6"));
+            NuGetVersionRange versionRange1 = VersionUtility.GetSafeRange(new NuGetVersion("1.3"));
+            NuGetVersionRange versionRange2 = VersionUtility.GetSafeRange(new NuGetVersion("0.9"));
+            NuGetVersionRange versionRange3 = VersionUtility.GetSafeRange(new NuGetVersion("2.9.45.6"));
 
             // Assert
-            AssertSafeVersion(versionSpec1, new NuGetVersion("1.3"), new NuGetVersion("1.4"));
-            AssertSafeVersion(versionSpec2, new NuGetVersion("0.9"), new NuGetVersion("0.10"));
-            AssertSafeVersion(versionSpec3, new NuGetVersion("2.9.45.6"), new NuGetVersion("2.10"));
+            AssertSafeVersion(versionRange1, new NuGetVersion("1.3"), new NuGetVersion("1.4"));
+            AssertSafeVersion(versionRange2, new NuGetVersion("0.9"), new NuGetVersion("0.10"));
+            AssertSafeVersion(versionRange3, new NuGetVersion("2.9.45.6"), new NuGetVersion("2.10"));
         }
 
-        private void AssertSafeVersion(IVersionSpec versionSpec, ISemanticVersion minVer, ISemanticVersion maxVer)
+        private void AssertSafeVersion(NuGetVersionRange versionRange, NuGetVersion minVer, NuGetVersion maxVer)
         {
-            Assert.True(versionSpec.IsMinInclusive);
-            Assert.False(versionSpec.IsMaxInclusive);
-            Assert.Equal(versionSpec.MinVersion, minVer);
-            Assert.Equal(versionSpec.MaxVersion, maxVer);
+            Assert.True(versionRange.Lower.IncludeBound);
+            Assert.False(versionRange.IsMaxInclusive);
+            Assert.Equal(versionRange.Lower.Bound, minVer);
+            Assert.Equal(versionRange.Upper.Bound, maxVer);
         }
 
         [Fact]

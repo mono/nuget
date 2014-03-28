@@ -348,8 +348,8 @@ namespace Proj2
                     dependencies,
                     new PackageDependency[]
                     {
-                        new PackageDependency("proj2", VersionSpec.Parse("1.0.0.0")),
-                        new PackageDependency("proj6", VersionSpec.Parse("2.0.0.0"))
+                        new PackageDependency("proj2", NuGetVersionRange.Parse("1.0.0.0")),
+                        new PackageDependency("proj6", NuGetVersionRange.Parse("2.0.0.0"))
                     },
                     new PackageDepencyComparer());
             }
@@ -456,8 +456,8 @@ namespace Proj2
                     dependencies.OrderBy(d => d.ToString()),
                     new PackageDependency[]
                     {
-                        new PackageDependency("proj2", VersionSpec.Parse("1.0.0.0")),
-                        new PackageDependency(prefixTokenValue + "proj6", VersionSpec.Parse("2.0.0.0"))
+                        new PackageDependency("proj2", NuGetVersionRange.Parse("1.0.0.0")),
+                        new PackageDependency(prefixTokenValue + "proj6", NuGetVersionRange.Parse("2.0.0.0"))
                     }.OrderBy(d => d.ToString()),
                     new PackageDepencyComparer());
             } finally {
@@ -530,7 +530,7 @@ namespace Proj2
                     dependencies,
                     new PackageDependency[]
                     {
-                        new PackageDependency("proj2", VersionSpec.Parse("1.2.0.0"))
+                        new PackageDependency("proj2", NuGetVersionRange.Parse("1.2.0.0"))
                     },
                     new PackageDepencyComparer());
             }
@@ -1063,7 +1063,7 @@ namespace Proj1
                 Assert.Equal(1, dependencySet.Dependencies.Count);                
                 var dependency = dependencySet.Dependencies.First();
                 Assert.Equal("testPackage1", dependency.Id);
-                Assert.Equal("1.1.0", dependency.VersionSpec.ToString());
+                Assert.Equal("1.1.0", dependency.VersionRange.ToString());
             }
             finally
             {
@@ -1255,8 +1255,8 @@ namespace " + projectName + @"
             {
                 return string.Equals(x.Id, y.Id, StringComparison.OrdinalIgnoreCase) &&
                     string.Equals(
-                        x.VersionSpec.ToString(), 
-                        y.VersionSpec.ToString(), 
+                        x.VersionRange.ToString(), 
+                        y.VersionRange.ToString(), 
                         StringComparison.OrdinalIgnoreCase);
             }
 

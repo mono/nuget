@@ -157,12 +157,12 @@ namespace NuGet.Server.DataServices
                 packagesToUpdate.Add(new PackageBuilder { Id = idValues[i], Version = new NuGetVersion(versionValues[i]) });
             }
 
-            var versionConstraintsList = new IVersionSpec[versionConstraintValues.Length];
+            var versionConstraintsList = new NuGetVersionRange[versionConstraintValues.Length];
             for (int i = 0; i < versionConstraintsList.Length; i++)
             {
                 if (!String.IsNullOrEmpty(versionConstraintValues[i]))
                 {
-                    VersionSpec.TryParse(versionConstraintValues[i], out versionConstraintsList[i]);
+                    NuGetVersionRange.TryParse(versionConstraintValues[i], out versionConstraintsList[i]);
                 }
             }
 

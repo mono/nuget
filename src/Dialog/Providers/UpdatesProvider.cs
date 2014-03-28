@@ -104,7 +104,7 @@ namespace NuGet.Dialog.Providers
             var packageLookup = LocalRepository as ILatestPackageLookup;
             if (packageLookup != null)
             {
-                ISemanticVersion localPackageVersion; 
+                NuGetVersion localPackageVersion; 
                 return packageLookup.TryFindLatestPackageById(item.Id, out localPackageVersion) &&
                        localPackageVersion.CompareTo(package.Version) < 0;
             }

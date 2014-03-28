@@ -6,9 +6,9 @@ namespace NuGet
     public class PackageName : IPackageName, IEquatable<PackageName>
     {
         private readonly string _packageId;
-        private readonly ISemanticVersion _version;
+        private readonly NuGetVersion _version;
 
-        public PackageName(string packageId, ISemanticVersion version)
+        public PackageName(string packageId, NuGetVersion version)
         {
             _packageId = packageId;
             _version = version;
@@ -19,7 +19,7 @@ namespace NuGet
             get { return _packageId; }
         }
 
-        public ISemanticVersion Version
+        public NuGetVersion Version
         {
             get
             {

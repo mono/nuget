@@ -18,10 +18,10 @@ namespace NuGet.Test
         [InlineData("(2.3.1-RC+srv01-a5c5ff9, 2.3.1-RC+srv02-dbf5ec0)", "2.3.1-RC+srv04-0ed1eb0")]
         [InlineData("(2.3.1-RC+srv01-a5c5ff9, 2.3.1-RC+srv02-dbf5ec0)", "2.3.1-RC+srv04-cc5438c")]
         [InlineData("[2.3.1-RC+srv01-a5c5ff9, 2.3.1-RC+srv02-dbf5ec0)", "2.3.1-RC+srv00-a5c5ff9")]
-        public void VersionSpecWithGitCommit(string verSpec, string ver)
+        public void NuGetVersionRangeWithGitCommit(string verSpec, string ver)
         {
             // Arrange
-            var versionInfo = VersionSpec.Parse(verSpec);
+            var versionInfo = VersionRange.Parse(verSpec);
             var version = NuGetVersion.Parse(ver);
             var comparer = new GitMetadataComparer();
 
@@ -37,10 +37,10 @@ namespace NuGet.Test
         [InlineData("(2.3.1-RC+srv02-dbf5ec0, )", "2.3.1-RC+srv04-0ed1eb0")]
         [InlineData("(2.3.1-RC+srv02-dbf5ec0, )", "2.3.1-RC+srv04-cc5438c")]
         [InlineData("[2.3.1-RC+srv02-dbf5ec0, )", "2.3.1-RC+srv00-a5c5ff9")]
-        public void VersionSpecWithGitCommitNotInRange(string verSpec, string ver)
+        public void NuGetVersionRangeWithGitCommitNotInRange(string verSpec, string ver)
         {
             // Arrange
-            var versionInfo = VersionSpec.Parse(verSpec);
+            var versionInfo = VersionRange.Parse(verSpec);
             var version = NuGetVersion.Parse(ver);
             var comparer = new GitMetadataComparer();
 
@@ -58,7 +58,7 @@ namespace NuGet.Test
         {
             // Arrange
             var semVer1 = NuGetVersion.Parse(version1);
-            var semVer2 = SemanticVersionStrict.Parse(version2);
+            var semVer2 = NuGetVersion.Parse(version2);
             var comparer = new GitMetadataComparer();
 
             // Act
@@ -75,7 +75,7 @@ namespace NuGet.Test
         {
             // Arrange
             var semVer1 = NuGetVersion.Parse(version1);
-            var semVer2 = SemanticVersionStrict.Parse(version2);
+            var semVer2 = NuGetVersion.Parse(version2);
             var comparer = new GitMetadataComparer();
 
             // Act
@@ -92,18 +92,15 @@ namespace NuGet.Test
         {
             // Arrange
             var semVer1 = NuGetVersion.Parse(version1);
-            var semVer2 = SemanticVersionStrict.Parse(version2);
+            var semVer2 = NuGetVersion.Parse(version2);
             var comparer = new GitMetadataComparer();
-            var gitHash = new HashSet<ISemanticVersion>(comparer);
-            var normalHash = new HashSet<ISemanticVersion>();
+            var gitHash = new HashSet<NuGetVersion>(comparer);
 
             // Act
             gitHash.Add(semVer1);
-            normalHash.Add(semVer1);
 
             // Assert
             Assert.True(gitHash.Contains(semVer2));
-            Assert.False(normalHash.Contains(semVer2));
         }
     }
 }

@@ -146,7 +146,7 @@ namespace NuGet.Test
 
             var satellitePackage = PackageUtility.CreatePackage("foo.ja-jp", "1.0.0", language: "ja-jp",
                                                     satelliteAssemblies: new[] { @"lib\ja-jp\foo.resources.dll", @"lib\ja-jp\foo.xml" },
-                                                    dependencies: new[] { new PackageDependency("foo", VersionSpec.Parse("[1.0.0]")) });
+                                                    dependencies: new[] { new PackageDependency("foo", NuGetVersionRange.Parse("[1.0.0]")) });
 
             var projectSystem = new MockProjectSystem();
             var localRepository = new MockPackageRepository();
@@ -177,7 +177,7 @@ namespace NuGet.Test
 
             var satellitePackage = PackageUtility.CreatePackage("foo.ja-jp", "1.0.0", language: "ja-jp",
                                                     satelliteAssemblies: new[] { @"lib\ja-jp\foo.resources.dll", @"lib\ja-jp\foo.xml" },
-                                                    dependencies: new[] { new PackageDependency("foo", VersionSpec.Parse("[1.0.0]")) });
+                                                    dependencies: new[] { new PackageDependency("foo", NuGetVersionRange.Parse("[1.0.0]")) });
 
             var projectSystem = new MockProjectSystem();
             var localRepository = new MockPackageRepository();
@@ -219,7 +219,7 @@ namespace NuGet.Test
                                                     content: new[] {
                                                         @"english.txt",
                                                         @"japanese.txt" },
-                                                    dependencies: new[] { new PackageDependency("foo", VersionSpec.Parse("[1.0.0]")) });
+                                                    dependencies: new[] { new PackageDependency("foo", NuGetVersionRange.Parse("[1.0.0]")) });
 
             var projectSystem = new MockProjectSystem();
             var localRepository = new MockPackageRepository();
@@ -327,7 +327,7 @@ namespace NuGet.Test
 
             var satellitePackage = PackageUtility.CreatePackage("foo.ja-jp", "1.0.0", language: "ja-jp",
                                                     satelliteAssemblies: new[] { @"lib\ja-jp\collision.txt" },
-                                                    dependencies: new[] { new PackageDependency("foo", VersionSpec.Parse("[1.0.0]")) });
+                                                    dependencies: new[] { new PackageDependency("foo", NuGetVersionRange.Parse("[1.0.0]")) });
 
             var projectSystem = new MockProjectSystem();
             var localRepository = new MockPackageRepository();
@@ -633,7 +633,7 @@ namespace NuGet.Test
             var packageB_05 = PackageUtility.CreatePackage("B", "0.5.0");
             var packageB_10a = PackageUtility.CreatePackage("B", "1.0.0-a");
             var packageA = PackageUtility.CreatePackage("A",
-                                dependencies: new[] { new PackageDependency("B", VersionSpec.Parse("[0.5.0, 2.0.0)")) });
+                                dependencies: new[] { new PackageDependency("B", NuGetVersionRange.Parse("[0.5.0, 2.0.0)")) });
 
             var localRepository = new MockPackageRepository();
             var sourceRepository = new MockPackageRepository();

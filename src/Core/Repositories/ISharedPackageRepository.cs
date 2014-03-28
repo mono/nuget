@@ -5,12 +5,12 @@ namespace NuGet
 {
     public interface ISharedPackageRepository : IPackageRepository
     {
-        bool IsReferenced(string packageId, ISemanticVersion version);
+        bool IsReferenced(string packageId, NuGetVersion version);
 
         /// <summary>
         /// Gets whether the repository contains a solution-level package with the specified id and version.
         /// </summary>
-        bool IsSolutionReferenced(string packageId, ISemanticVersion version);
+        bool IsSolutionReferenced(string packageId, NuGetVersion version);
         
         /// <summary>
         /// Registers a new repository for the shared repository

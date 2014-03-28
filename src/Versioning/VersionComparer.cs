@@ -5,7 +5,7 @@ using System.Globalization;
 namespace NuGet.Versioning
 {
     /// <summary>
-    /// An IVersionComparer for ISemanticVersion and INuGetVersion types.
+    /// An IVersionComparer for NuGetVersion and NuGetVersion types.
     /// </summary>
     public sealed class VersionComparer : IVersionComparer
     {
@@ -31,7 +31,7 @@ namespace NuGet.Versioning
         /// <summary>
         /// Determines if both versions are equal.
         /// </summary>
-        public bool Equals(ISemanticVersion x, ISemanticVersion y)
+        public bool Equals(SimpleVersion x, SimpleVersion y)
         {
             return Compare(x, y) == 0;
         }
@@ -39,7 +39,7 @@ namespace NuGet.Versioning
         /// <summary>
         /// Compares the given versions using the VersionComparison mode.
         /// </summary>
-        public static int Compare(ISemanticVersion version1, ISemanticVersion version2, VersionComparison versionComparison)
+        public static int Compare(SimpleVersion version1, SimpleVersion version2, VersionComparison versionComparison)
         {
             IVersionComparer comparer = new VersionComparer(versionComparison);
             return comparer.Compare(version1, version2);
@@ -48,7 +48,7 @@ namespace NuGet.Versioning
         /// <summary>
         /// Gives a hash code based on the normalized version string.
         /// </summary>
-        public int GetHashCode(ISemanticVersion obj)
+        public int GetHashCode(SimpleVersion obj)
         {
             if (Object.ReferenceEquals(obj, null))
             {
@@ -57,23 +57,24 @@ namespace NuGet.Versioning
 
             string verString = string.Empty;
 
-            INuGetVersion legacy = obj as INuGetVersion;
+            VersionFormatter formatter = new VersionFormatter();
 
-            if (_mode == VersionComparison.Strict)
+            if (_mode == VersionComparison.Default || _mode == VersionComparison.VersionRelease)
             {
-                verString = String.Format(CultureInfo.InvariantCulture, "{0}.{1}.{2}-{3}", obj.Major, obj.Minor, obj.Patch, obj.Release);
-            }
-            else if (_mode == VersionComparison.IgnoreMetadata)
-            {
-                verString = String.Format(CultureInfo.InvariantCulture, "{0}.{1}.{2}.{3}-{4}", obj.Major, obj.Minor, obj.Patch, 
-                                            legacy == null ? 0 : legacy.Version.Revision, obj.Release.ToUpperInvariant());
+                verString = obj.ToString("V-R", formatter).ToUpperInvariant();
             }
             else if (_mode == VersionComparison.Version)
             {
-                verString = String.Format(CultureInfo.InvariantCulture, "{0}.{1}.{2}.{3}", obj.Major, obj.Minor, obj.Patch,
-                                            legacy == null ? 0 : legacy.Version.Revision);
+                verString = obj.ToString("V", formatter);
             }
-            else
+            else if (_mode == VersionComparison.VersionReleaseMetadata)
+            {
+                verString = String.Format(CultureInfo.InvariantCulture, "{0}+{1}",
+                    obj.ToString("V-R", formatter).ToUpperInvariant(),
+                    obj.ToString("M", formatter));
+            }
+
+            if (String.IsNullOrEmpty(verString))
             {
                 verString = obj.ToNormalizedString().ToUpperInvariant();
             }
@@ -84,7 +85,7 @@ namespace NuGet.Versioning
         /// <summary>
         /// Compare versions.
         /// </summary>
-        public int Compare(ISemanticVersion x, ISemanticVersion y)
+        public int Compare(SimpleVersion x, SimpleVersion y)
         {
             // null checks
             if (Object.ReferenceEquals(x, null) && Object.ReferenceEquals(y, null))
@@ -102,51 +103,54 @@ namespace NuGet.Versioning
                 return -1;
             }
 
-            // compare version
-            int result = x.Major.CompareTo(y.Major);
-            if (result != 0)
-                return result;
+            SemanticVersion semX = x as SemanticVersion;
+            SemanticVersion semY = y as SemanticVersion;
 
-            result = x.Minor.CompareTo(y.Minor);
-            if (result != 0)
-                return result;
-
-            result = x.Patch.CompareTo(y.Patch);
-            if (result != 0)
-                return result;
-
-            if (_mode != VersionComparison.Strict)
+            if (semX != null && semY != null)
             {
-                INuGetVersion legacyX = x as INuGetVersion;
-                INuGetVersion legacyY = y as INuGetVersion;
+                // compare version
+                int result = semX.Major.CompareTo(semY.Major);
+                if (result != 0)
+                    return result;
+
+                result = semX.Minor.CompareTo(semY.Minor);
+                if (result != 0)
+                    return result;
+
+                result = semX.Patch.CompareTo(semY.Patch);
+                if (result != 0)
+                    return result;
+
+                NuGetVersion legacyX = x as NuGetVersion;
+                NuGetVersion legacyY = y as NuGetVersion;
 
                 result = CompareLegacyVersion(legacyX, legacyY);
                 if (result != 0)
                     return result;
-            }
 
-            if (_mode != VersionComparison.Version)
-            {
-                // compare release labels
-                if (x.IsPrerelease && !y.IsPrerelease)
-                    return -1;
-
-                if (!x.IsPrerelease && y.IsPrerelease)
-                    return 1;
-
-                if (x.IsPrerelease && y.IsPrerelease)
+                if (_mode != VersionComparison.Version)
                 {
-                    result = CompareReleaseLabels(x.ReleaseLabels, y.ReleaseLabels);
-                    if (result != 0)
-                        return result;
-                }
+                    // compare release labels
+                    if (semX.IsPrerelease && !semY.IsPrerelease)
+                        return -1;
 
-                // compare the metadata
-                if (_mode != VersionComparison.IgnoreMetadata && _mode != VersionComparison.Strict)
-                {
-                    result = StringComparer.OrdinalIgnoreCase.Compare(x.Metadata ?? string.Empty, y.Metadata ?? string.Empty);
-                    if (result != 0)
-                        return result;
+                    if (!semX.IsPrerelease && semY.IsPrerelease)
+                        return 1;
+
+                    if (semX.IsPrerelease && semY.IsPrerelease)
+                    {
+                        result = CompareReleaseLabels(semX.ReleaseLabels, semY.ReleaseLabels);
+                        if (result != 0)
+                            return result;
+                    }
+
+                    // compare the metadata
+                    if (_mode == VersionComparison.VersionReleaseMetadata)
+                    {
+                        result = StringComparer.OrdinalIgnoreCase.Compare(semX.Metadata ?? string.Empty, semY.Metadata ?? string.Empty);
+                        if (result != 0)
+                            return result;
+                    }
                 }
             }
 
@@ -156,7 +160,7 @@ namespace NuGet.Versioning
         /// <summary>
         /// Compares the 4th digit of the version number.
         /// </summary>
-        private static int CompareLegacyVersion(INuGetVersion legacyX, INuGetVersion legacyY)
+        private static int CompareLegacyVersion(NuGetVersion legacyX, NuGetVersion legacyY)
         {
             int result = 0;
 
@@ -202,29 +206,29 @@ namespace NuGet.Versioning
         /// <summary>
         /// Compares versions without comparing the metadata.
         /// </summary>
-        public static IVersionComparer IgnoreMetadata
+        public static IVersionComparer VersionRelease
         {
             get
             {
-                return new VersionComparer(VersionComparison.IgnoreMetadata);
+                return new VersionComparer(VersionComparison.VersionRelease);
             }
         }
 
         /// <summary>
         /// A version comparer that follows SemVer 2.0.0 rules.
         /// </summary>
-        public static IVersionComparer Strict
+        public static IVersionComparer VersionReleaseMetadata
         {
             get
             {
-                return new VersionComparer(VersionComparison.Strict);
+                return new VersionComparer(VersionComparison.VersionReleaseMetadata);
             }
         }
 
         /// <summary>
         /// Compares sets of release labels.
         /// </summary>
-        private int CompareReleaseLabels(IEnumerable<string> version1, IEnumerable<string> version2)
+        private static int CompareReleaseLabels(IEnumerable<string> version1, IEnumerable<string> version2)
         {
             int result = 0;
 
@@ -259,7 +263,7 @@ namespace NuGet.Versioning
         /// Release labels are compared as numbers if they are numeric, otherwise they will be compared
         /// as strings.
         /// </summary>
-        private int CompareRelease(string version1, string version2)
+        private static int CompareRelease(string version1, string version2)
         {
             int version1Num = 0;
             int version2Num = 0;

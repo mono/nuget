@@ -180,10 +180,10 @@ namespace NuGet.Test
         [InlineData("1.0.2.4.2")]
         [InlineData("abc.2")]
         [InlineData("1.2-alpha")]
-        public void InvalidReuiredMinVersionValueWillThrow(string minVersionValue)
+        public void InvalidReuiredlowerBoundValueWillThrow(string lowerBoundValue)
         {
             // Arrange
-            var manifestStream = CreateManifest(minClientVersion: minVersionValue);
+            var manifestStream = CreateManifest(minClientVersion: lowerBoundValue);
 
             // Act && Assert
             ExceptionAssert.Throws<InvalidDataException>(
@@ -192,7 +192,7 @@ namespace NuGet.Test
         }
 
         [Fact]
-        public void EmptyReuiredMinVersionValueWillNotThrow()
+        public void EmptyReuiredlowerBoundValueWillNotThrow()
         {
             // Arrange
             var manifestStream = CreateManifest(minClientVersion: "");

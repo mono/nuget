@@ -107,7 +107,7 @@ namespace NuGet
             return CreateAggregateQuery(Repositories.Select(getPackages));
         }
 
-        public IPackage FindPackage(string packageId, ISemanticVersion version)
+        public IPackage FindPackage(string packageId, NuGetVersion version)
         {
             // When we're looking for an exact package, we can optimize but searching each
             // repository one by one until we find the package that matches.
@@ -116,7 +116,7 @@ namespace NuGet
                                .FirstOrDefault(p => p != null);
         }
 
-        public bool Exists(string packageId, ISemanticVersion version)
+        public bool Exists(string packageId, NuGetVersion version)
         {
             // When we're looking for an exact package, we can optimize but searching each
             // repository one by one until we find the package that matches.
@@ -238,7 +238,7 @@ namespace NuGet
             bool includePrerelease, 
             bool includeAllVersions, 
             IEnumerable<FrameworkName> targetFrameworks,
-            IEnumerable<IVersionSpec> versionConstraints)
+            IEnumerable<NuGetVersionRange> versionConstraints)
         {
             // GetUpdatesCore returns all updates. We'll allow the extension method to determine if we need to collapse based on allVersion.
             var tasks = _repositories.Select(p => Task.Factory.StartNew(state => p.GetUpdates(packages, includePrerelease, includeAllVersions, targetFrameworks, versionConstraints), p)).ToArray();

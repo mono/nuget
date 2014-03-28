@@ -38,7 +38,7 @@ namespace NuGet.VisualStudio
         }
 
         public string Id { get; private set; }
-        public ISemanticVersion Version { get; private set; }
+        public NuGetVersion Version { get; private set; }
         public bool SkipAssemblyReferences { get; private set; }
         public bool IgnoreDependencies { get; private set; }
     }

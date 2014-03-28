@@ -26,7 +26,7 @@ namespace NuGet
             }
         }
 
-        public IVersionSpec GetConstraint(string packageId)
+        public NuGetVersionRange GetConstraint(string packageId)
         {
             return null;
         }

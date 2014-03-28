@@ -6,18 +6,18 @@ namespace NuGet
     public class PackageDependency
     {
         public PackageDependency(string id)
-            : this(id, versionSpec: null)
+            : this(id, versionRange: null)
         {
         }
 
-        public PackageDependency(string id, IVersionSpec versionSpec) 
+        public PackageDependency(string id, NuGetVersionRange versionRange) 
         {
             if (String.IsNullOrEmpty(id))
             {
                 throw new ArgumentException(CommonResources.Argument_Cannot_Be_Null_Or_Empty, "id");
             }
             Id = id;
-            VersionSpec = versionSpec;
+            VersionRange = versionRange;
         }
 
         public string Id
@@ -26,7 +26,7 @@ namespace NuGet
             private set;
         }
 
-        public IVersionSpec VersionSpec
+        public NuGetVersionRange VersionRange
         {
             get;
             private set;
@@ -34,17 +34,17 @@ namespace NuGet
 
         public override string ToString()
         {
-            if (VersionSpec == null)
+            if (VersionRange == null)
             {
                 return Id;
             }
 
-            return Id + " " + VersionSpec.PrettyPrint();
+            return Id + " " + VersionRange.PrettyPrint();
         }
 
-        internal static PackageDependency CreateDependency(string id, string versionSpec)
+        internal static PackageDependency CreateDependency(string id, string versionRange)
         {
-            return new PackageDependency(id, NuGet.Versioning.VersionSpec.Parse(versionSpec));
+            return new PackageDependency(id, NuGetVersionRange.Parse(versionRange));
         }
     }
 }

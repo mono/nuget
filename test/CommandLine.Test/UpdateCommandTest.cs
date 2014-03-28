@@ -338,9 +338,9 @@ namespace NuGet.Test.NuGetCommandLine.Commands
             var projectSystem = new MockProjectSystem();
             var packages = new List<IPackage>();
 
-            var package_A10 = PackageUtility.CreatePackage("A", "1.0", content: new[] { "A.txt" }, dependencies: new[] { new PackageDependency("C", VersionSpec.Parse("1.0")) });
-            var package_B10 = PackageUtility.CreatePackage("B", "1.0", content: new[] { "B.txt" }, dependencies: new[] { new PackageDependency("C", VersionSpec.Parse("1.0")) });
-            var package_A12 = PackageUtility.CreatePackage("A", "1.2", content: new[] { "A.txt" }, dependencies: new[] { new PackageDependency("C", VersionSpec.Parse("1.0")) });
+            var package_A10 = PackageUtility.CreatePackage("A", "1.0", content: new[] { "A.txt" }, dependencies: new[] { new PackageDependency("C", NuGetVersionRange.Parse("1.0")) });
+            var package_B10 = PackageUtility.CreatePackage("B", "1.0", content: new[] { "B.txt" }, dependencies: new[] { new PackageDependency("C", NuGetVersionRange.Parse("1.0")) });
+            var package_A12 = PackageUtility.CreatePackage("A", "1.2", content: new[] { "A.txt" }, dependencies: new[] { new PackageDependency("C", NuGetVersionRange.Parse("1.0")) });
             var package_B20 = PackageUtility.CreatePackage("B", "2.0", content: new[] { "B.txt" });
             var package_C10 = PackageUtility.CreatePackage("C", "1.0", content: new[] { "C.txt" });
             localRepository.AddRange(new[] { package_A10, package_B10, package_C10});

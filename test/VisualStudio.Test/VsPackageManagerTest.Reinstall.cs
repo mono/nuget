@@ -822,8 +822,8 @@ namespace NuGet.VisualStudio.Test
             projectSystem1.ChangeTargetFramework(new FrameworkName("Silverlight, Version=v4.0"));
             projectSystem2.ChangeTargetFramework(new FrameworkName("Silverlight, Version=v4.0, Profile=WindowsPhone71"));
 
-            localRepositoryMock.Setup(p => p.IsReferenced("A", new NuGetVersion("1.2-alpha"))).Returns((string id, ISemanticVersion version) => projectManager1.LocalRepository.Exists(id, version));
-            localRepositoryMock.Setup(p => p.IsReferenced("B", new NuGetVersion("2.0"))).Returns((string id, ISemanticVersion version) => projectManager2.LocalRepository.Exists(id, version));
+            localRepositoryMock.Setup(p => p.IsReferenced("A", new NuGetVersion("1.2-alpha"))).Returns((string id, NuGetVersion version) => projectManager1.LocalRepository.Exists(id, version));
+            localRepositoryMock.Setup(p => p.IsReferenced("B", new NuGetVersion("2.0"))).Returns((string id, NuGetVersion version) => projectManager2.LocalRepository.Exists(id, version));
 
             // Act
             packageManager.ReinstallPackages(updateDependencies: true, allowPrereleaseVersions: false, logger: NullLogger.Instance, eventListener: NullPackageOperationEventListener.Instance);
@@ -905,8 +905,8 @@ namespace NuGet.VisualStudio.Test
             projectSystem1.ChangeTargetFramework(new FrameworkName("Silverlight, Version=v4.0"));
             projectSystem2.ChangeTargetFramework(new FrameworkName("Silverlight, Version=v4.0, Profile=WindowsPhone71"));
 
-            localRepositoryMock.Setup(p => p.IsReferenced("A", new NuGetVersion("1.2-alpha"))).Returns((string id, ISemanticVersion version) => projectManager1.LocalRepository.Exists(id, version));
-            localRepositoryMock.Setup(p => p.IsReferenced("B", new NuGetVersion("2.0"))).Returns((string id, ISemanticVersion version) => projectManager2.LocalRepository.Exists(id, version));
+            localRepositoryMock.Setup(p => p.IsReferenced("A", new NuGetVersion("1.2-alpha"))).Returns((string id, NuGetVersion version) => projectManager1.LocalRepository.Exists(id, version));
+            localRepositoryMock.Setup(p => p.IsReferenced("B", new NuGetVersion("2.0"))).Returns((string id, NuGetVersion version) => projectManager2.LocalRepository.Exists(id, version));
 
             var logger = new Mock<ILogger>();
             logger.Setup(s => s.Log(
@@ -1020,8 +1020,8 @@ namespace NuGet.VisualStudio.Test
             sourceRepository.AddPackage(packageA2);
             sourceRepository.AddPackage(packageB2);
 
-            localRepositoryMock.Setup(p => p.IsReferenced("A", new NuGetVersion("1.2-alpha"))).Returns((string id, ISemanticVersion version) => projectManager1.LocalRepository.Exists(id, version));
-            localRepositoryMock.Setup(p => p.IsReferenced("B", new NuGetVersion("2.0"))).Returns((string id, ISemanticVersion version) => projectManager2.LocalRepository.Exists(id, version));
+            localRepositoryMock.Setup(p => p.IsReferenced("A", new NuGetVersion("1.2-alpha"))).Returns((string id, NuGetVersion version) => projectManager1.LocalRepository.Exists(id, version));
+            localRepositoryMock.Setup(p => p.IsReferenced("B", new NuGetVersion("2.0"))).Returns((string id, NuGetVersion version) => projectManager2.LocalRepository.Exists(id, version));
 
             // Act
             packageManager.ReinstallPackages(updateDependencies: true, allowPrereleaseVersions: false, logger: NullLogger.Instance, eventListener: NullPackageOperationEventListener.Instance);
@@ -1129,8 +1129,8 @@ namespace NuGet.VisualStudio.Test
             sourceRepository.AddPackage(packageA2);
             sourceRepository.AddPackage(A4);
 
-            localRepositoryMock.Setup(p => p.IsReferenced("A", new NuGetVersion("1.2-alpha"))).Returns((string id, ISemanticVersion version) => projectManager1.LocalRepository.Exists(id, version));
-            localRepositoryMock.Setup(p => p.IsReferenced("A", new NuGetVersion("2.0"))).Returns((string id, ISemanticVersion version) => projectManager2.LocalRepository.Exists(id, version));
+            localRepositoryMock.Setup(p => p.IsReferenced("A", new NuGetVersion("1.2-alpha"))).Returns((string id, NuGetVersion version) => projectManager1.LocalRepository.Exists(id, version));
+            localRepositoryMock.Setup(p => p.IsReferenced("A", new NuGetVersion("2.0"))).Returns((string id, NuGetVersion version) => projectManager2.LocalRepository.Exists(id, version));
 
             // Act
             packageManager.ReinstallPackages(updateDependencies: true, allowPrereleaseVersions: false, logger: NullLogger.Instance, eventListener: NullPackageOperationEventListener.Instance);
@@ -1238,8 +1238,8 @@ namespace NuGet.VisualStudio.Test
             sourceRepository.AddPackage(packageA2);
             sourceRepository.AddPackage(A4);
 
-            localRepositoryMock.Setup(p => p.IsReferenced("A", new NuGetVersion("1.2-alpha"))).Returns((string id, ISemanticVersion version) => projectManager1.LocalRepository.Exists(id, version));
-            localRepositoryMock.Setup(p => p.IsReferenced("A", new NuGetVersion("2.0"))).Returns((string id, ISemanticVersion version) => projectManager2.LocalRepository.Exists(id, version));
+            localRepositoryMock.Setup(p => p.IsReferenced("A", new NuGetVersion("1.2-alpha"))).Returns((string id, NuGetVersion version) => projectManager1.LocalRepository.Exists(id, version));
+            localRepositoryMock.Setup(p => p.IsReferenced("A", new NuGetVersion("2.0"))).Returns((string id, NuGetVersion version) => projectManager2.LocalRepository.Exists(id, version));
 
             // Act
             packageManager.ReinstallPackage("A", updateDependencies: true, allowPrereleaseVersions: false, logger: NullLogger.Instance, eventListener: NullPackageOperationEventListener.Instance);

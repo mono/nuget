@@ -190,7 +190,7 @@ namespace NuGet
             // Given the above graph, if we upgrade from C1 to C2, we need to see if A and B can work with the new C
             var incompatiblePackages = from dependentPackage in GetDependents(conflictResult)
                                        let dependency = dependentPackage.FindDependency(package.Id, TargetFramework)
-                                       where dependency != null && !dependency.VersionSpec.Satisfies(package.Version)
+                                       where dependency != null && !dependency.VersionRange.Satisfies(package.Version)
                                        select dependentPackage;
 
             // If there were incompatible packages that we failed to update then we throw an exception
@@ -250,7 +250,7 @@ namespace NuGet
             return dependencies.SelectDependency(DependencyVersion);
         }
 
-        [SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "We re-throw a more specific exception later on")]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "We re-throw a more specific exception later on")]
         private bool TryUpdate(IEnumerable<IPackage> dependents, ConflictResult conflictResult, IPackage package, out IEnumerable<IPackage> incompatiblePackages)
         {
             // Key dependents by id so we can look up the old package later
@@ -306,7 +306,7 @@ namespace NuGet
 
                 // Respect all existing constraints plus an additional one that we specify based on the incoming package
                 var constraintProvider = new DefaultConstraintProvider();
-                constraintProvider.AddConstraint(package.Id, new VersionSpec(package.Version));
+                constraintProvider.AddConstraint(package.Id, new NuGetVersionRange(package.Version));
                 ConstraintProvider = new AggregateConstraintProvider(ConstraintProvider, constraintProvider);
 
                 // Mark the incoming package as visited so that we don't try walking the graph again
@@ -408,7 +408,7 @@ namespace NuGet
 
         protected override void OnDependencyResolveError(PackageDependency dependency)
         {
-            IVersionSpec spec = ConstraintProvider.GetConstraint(dependency.Id);
+            NuGetVersionRange spec = ConstraintProvider.GetConstraint(dependency.Id);
 
             string message = String.Empty;
             if (spec != null)

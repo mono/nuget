@@ -120,7 +120,7 @@ namespace NuGet.VisualStudio.Test
                 yield return new object[] { "Search", new Action<VsPackageSourceRepository>(r => r.Search("Foo", Enumerable.Empty<string>(), allowPrereleaseVersions: false)) };
                 yield return new object[] { "Clone", new Action<VsPackageSourceRepository>(r => r.Clone()) };
                 yield return new object[] { "FindPackagesById", new Action<VsPackageSourceRepository>(r => r.FindPackagesById("Foo")) };
-                yield return new object[] { "GetUpdates", new Action<VsPackageSourceRepository>(r => r.GetUpdates(Enumerable.Empty<IPackage>(), includePrerelease: false, includeAllVersions: false, targetFrameworks: Enumerable.Empty<FrameworkName>(), versionConstraints: Enumerable.Empty<IVersionSpec>())) };
+                yield return new object[] { "GetUpdates", new Action<VsPackageSourceRepository>(r => r.GetUpdates(Enumerable.Empty<IPackage>(), includePrerelease: false, includeAllVersions: false, targetFrameworks: Enumerable.Empty<FrameworkName>(), versionConstraints: Enumerable.Empty<NuGetVersionRange>())) };
             }
         }
 

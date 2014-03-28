@@ -21,11 +21,9 @@
     <Compile Include="..\..\Common\CommonAssemblyInfo.cs">
       <Link>Properties\CommonAssemblyInfo.cs</Link>
     </Compile>
-    <Compile Include="ISemanticVersion.cs" />
-    <Compile Include="INuGetVersion.cs" />
-    <Compile Include="IVersion.cs" />
+    <Compile Include="Constants.cs" />
+    <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="IVersionComparer.cs" />
-    <Compile Include="IVersionSpec.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Resources.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -33,10 +31,16 @@
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
     <Compile Include="NuGetVersion.cs" />
-    <Compile Include="SemanticVersionStrict.cs" />
+    <Compile Include="SemanticVersion.cs" />
+    <Compile Include="SemanticVersionFactory.cs" />
+    <Compile Include="SimpleVersion.cs" />
     <Compile Include="VersionComparer.cs" />
     <Compile Include="VersionComparison.cs" />
-    <Compile Include="VersionSpec.cs" />
+    <Compile Include="NuGetVersionFactory.cs" />
+    <Compile Include="VersionFormatter.cs" />
+    <Compile Include="VersionRange.cs" />
+    <Compile Include="VersionRangeFactory.cs" />
+    <Compile Include="VersionRangeFormatter.cs" />
   </ItemGroup>
   <ItemGroup>
     <CodeAnalysisDictionary Include="..\..\CodeAnalysisDictionary.xml">
@@ -50,6 +54,7 @@
     <EmbeddedResource Include="Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />

@@ -36,7 +36,7 @@ namespace NuGet.Common
             SelfUpdate(assembly.Location, version);
         }
 
-        internal void SelfUpdate(string exePath, ISemanticVersion version)
+        internal void SelfUpdate(string exePath, NuGetVersion version)
         {
             Console.WriteLine(LocalizedResourceManager.GetString("UpdateCommandCheckingForUpdates"), NuGetConstants.DefaultFeedUrl);
 
@@ -82,12 +82,12 @@ namespace NuGet.Common
         }
 
         [SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "We don't want this method to throw.")]
-        internal static ISemanticVersion GetNuGetVersion(ICustomAttributeProvider assembly)
+        internal static NuGetVersion GetNuGetVersion(ICustomAttributeProvider assembly)
         {
             try
             {
                 var assemblyInformationalVersion = assembly.GetCustomAttribute<AssemblyInformationalVersionAttribute>();
-                return new NuGetVersion(assemblyInformationalVersion.InformationalVersion);
+                return NuGetVersion.Parse(assemblyInformationalVersion.InformationalVersion);
             }
             catch
             {

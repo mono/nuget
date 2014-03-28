@@ -658,7 +658,7 @@ Mock<IVsShellInfo>().Object);
         public void InstallPackageShouldPickListedPackagesOverUnlistedOnesAsDependency()
         {
             // Arrange
-            var packageA = PackageUtility.CreatePackage("A", "1.0", dependencies: new[] { new PackageDependency("B", new VersionSpec(minVersion: new NuGetVersion("0.5")))});
+            var packageA = PackageUtility.CreatePackage("A", "1.0", dependencies: new[] { new PackageDependency("B", new NuGetVersionRange(lowerBound: new NuGetVersion("0.5")))});
             var packageB1 = PackageUtility.CreatePackage("B", "1.0.0", listed: true);
             var packageB2 = PackageUtility.CreatePackage("B", "1.0.2", listed: false);
             var sharedRepository = new Mock<ISharedPackageRepository>();
@@ -685,7 +685,7 @@ Mock<IVsShellInfo>().Object);
         public void InstallPackageShouldPickListedPackagesOverUnlistedOnesAsDependency2()
         {
             // Arrange
-            var packageA = PackageUtility.CreatePackage("A", "1.0", dependencies: new[] { new PackageDependency("B", new VersionSpec(minVersion: new NuGetVersion("0.5"))) });
+            var packageA = PackageUtility.CreatePackage("A", "1.0", dependencies: new[] { new PackageDependency("B", new NuGetVersionRange(lowerBound: new NuGetVersion("0.5"))) });
             var packageB1 = PackageUtility.CreatePackage("B", "1.0.0", listed: true);
             var packageB2 = PackageUtility.CreatePackage("B", "1.0.2-alpha", listed: true);
             var packageB3 = PackageUtility.CreatePackage("B", "1.0.2", listed: false);
@@ -716,7 +716,7 @@ Mock<IVsShellInfo>().Object);
         public void InstallPackageShouldPickUnListedPackagesIfItSatisfiesContrainsAndOthersAreNot()
         {
             // Arrange
-            var packageA = PackageUtility.CreatePackage("A", "1.0", dependencies: new[] { new PackageDependency("B", new VersionSpec(minVersion: new NuGetVersion("1.0"), isMinInclusive: true)) });
+            var packageA = PackageUtility.CreatePackage("A", "1.0", dependencies: new[] { new PackageDependency("B", new NuGetVersionRange(lowerBound: new NuGetVersion("1.0"), includeLowerBound: true)) });
             var packageB1 = PackageUtility.CreatePackage("B", "0.0.9", listed: true);
             var packageB2 = PackageUtility.CreatePackage("B", "1.0.0", listed: false);
             var sharedRepository = new Mock<ISharedPackageRepository>();
@@ -743,7 +743,7 @@ Mock<IVsShellInfo>().Object);
         public void InstallPackageShouldPickUnListedPrereleasePackagesIfItSatisfiesContrainsAndOthersAreNot()
         {
             // Arrange
-            var packageA = PackageUtility.CreatePackage("A", "1.0", dependencies: new[] { new PackageDependency("B", new VersionSpec(minVersion: new NuGetVersion("1.0"), isMinInclusive: true)) });
+            var packageA = PackageUtility.CreatePackage("A", "1.0", dependencies: new[] { new PackageDependency("B", new NuGetVersionRange(lowerBound: new NuGetVersion("1.0"), includeLowerBound: true)) });
             var packageB1 = PackageUtility.CreatePackage("B", "0.0.9", listed: true);
             var packageB2 = PackageUtility.CreatePackage("B", "1.0.1-a", listed: false);
             var sharedRepository = new Mock<ISharedPackageRepository>();
@@ -900,11 +900,11 @@ Mock<IVsShellInfo>().Object);
 
             public string PackageId { get; set; }
 
-            public ISemanticVersion Version { get; set; }
+            public NuGetVersion Version { get; set; }
 
             public bool IgnoreDependencies { get; set; }
 
-            public override void InstallPackage(IProjectManager projectManager, string packageId, ISemanticVersion version, bool ignoreDependencies, bool allowPreReleaseVersions, ILogger logger)
+            public override void InstallPackage(IProjectManager projectManager, string packageId, NuGetVersion version, bool ignoreDependencies, bool allowPreReleaseVersions, ILogger logger)
             {
                 ProjectManager = projectManager;
                 PackageId = packageId;

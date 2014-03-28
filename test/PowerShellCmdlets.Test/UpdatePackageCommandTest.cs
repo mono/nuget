@@ -416,11 +416,11 @@ namespace NuGet.PowerShell.Commands.Test
 
             public string PackageId { get; set; }
 
-            public ISemanticVersion Version { get; set; }
+            public NuGetVersion Version { get; set; }
 
             public bool UpdateDependencies { get; set; }
 
-            public override void UpdatePackage(IProjectManager projectManager, string packageId, ISemanticVersion version, bool updateDependencies, bool allowPreReleaseVersions, ILogger logger)
+            public override void UpdatePackage(IProjectManager projectManager, string packageId, NuGetVersion version, bool updateDependencies, bool allowPreReleaseVersions, ILogger logger)
             {
                 ProjectManager = projectManager;
                 PackageId = packageId;

@@ -141,7 +141,7 @@ namespace NuGet.Dialog.Providers
             var constraintProvider = localRepository as IPackageConstraintProvider;
             if (constraintProvider != null)
             {
-                IVersionSpec constraint = constraintProvider.GetConstraint(item.Id);
+                NuGetVersionRange constraint = constraintProvider.GetConstraint(item.Id);
                 if (constraint != null && !constraint.Satisfies(item.PackageIdentity.Version))
                 {
                     return false;

@@ -79,7 +79,7 @@ namespace NuGet.Commands
             else
             {
                 string packageId = Arguments[0];
-                ISemanticVersion version = Version != null ? new NuGetVersion(Version) : null;
+                NuGetVersion version = Version != null ? NuGetVersion.Parse(Version) : null;
                 InstallPackage(fileSystem, packageId, version);
             }
         }
@@ -206,7 +206,7 @@ namespace NuGet.Commands
         private bool RestorePackage(
             IFileSystem fileSystem,
             string packageId,
-            ISemanticVersion version,
+            NuGetVersion version,
             bool packageRestoreConsent,
             List<IPackage> satellitePackages)
         {
@@ -244,7 +244,7 @@ namespace NuGet.Commands
         private void InstallPackage(
             IFileSystem fileSystem,
             string packageId,
-            ISemanticVersion version)
+            NuGetVersion version)
         {
             var packageManager = CreatePackageManager(fileSystem, AllowMultipleVersions);
 
@@ -277,7 +277,7 @@ namespace NuGet.Commands
         private bool PackageInstallNeeded(
             IPackageManager packageManager,
             string packageId,
-            ISemanticVersion version)
+            NuGetVersion version)
         {
             if (AllowMultipleVersions)
             {
@@ -345,7 +345,7 @@ namespace NuGet.Commands
         }
 
         // Do a very quick check of whether a package in installed by checking whether the nupkg file exists
-        private bool IsPackageInstalled(IPackageRepository repository, IFileSystem fileSystem, string packageId, ISemanticVersion version)
+        private bool IsPackageInstalled(IPackageRepository repository, IFileSystem fileSystem, string packageId, NuGetVersion version)
         {
             if (!AllowMultipleVersions)
             {

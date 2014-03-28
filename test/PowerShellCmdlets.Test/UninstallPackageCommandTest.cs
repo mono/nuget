@@ -102,13 +102,13 @@ namespace NuGet.PowerShell.Commands.Test
 
             public string PackageId { get; set; }
 
-            public ISemanticVersion Version { get; set; }
+            public NuGetVersion Version { get; set; }
 
             public bool ForceRemove { get; set; }
 
             public bool RemoveDependencies { get; set; }
 
-            public override void UninstallPackage(IProjectManager projectManager, string packageId, ISemanticVersion version, bool forceRemove, bool removeDependencies, ILogger logger)
+            public override void UninstallPackage(IProjectManager projectManager, string packageId, NuGetVersion version, bool forceRemove, bool removeDependencies, ILogger logger)
             {
                 ProjectManager = projectManager;
                 PackageId = packageId;

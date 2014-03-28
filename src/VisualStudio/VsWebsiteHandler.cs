@@ -117,7 +117,7 @@ namespace NuGet.VisualStudio
         /// Gets all assembly references for a package
         /// </summary>
         private IEnumerable<IPackageAssemblyReference> GetAssemblyReferences(
-            IFileSystem fileSystem, string packageId, ISemanticVersion version, out string packageDirectory)
+            IFileSystem fileSystem, string packageId, NuGetVersion version, out string packageDirectory)
         {
             // REVIEW: do we need to search for all variations of versions here? (e.g. 1.0, 1.0.0, 1.0.0.0)
             string packageName = packageId + "." + version.ToString();

@@ -12,7 +12,7 @@ namespace NuGet.Test.Mocks
             throw new NotImplementedException();
         }
 
-        public IEnumerable<IPackage> GetUpdates(IEnumerable<IPackageName> packages, bool includePrerelease, bool includeAllVersions, IEnumerable<System.Runtime.Versioning.FrameworkName> targetFrameworks, IEnumerable<IVersionSpec> versionConstraints)
+        public IEnumerable<IPackage> GetUpdates(IEnumerable<IPackageName> packages, bool includePrerelease, bool includeAllVersions, IEnumerable<System.Runtime.Versioning.FrameworkName> targetFrameworks, IEnumerable<NuGetVersionRange> versionConstraints)
         {
             // only keep the latest version of each package Id to mimic the behavior of nuget.org GetUpdates() service method
             packages = packages.OrderByDescending(p => p.Version).Distinct(PackageEqualityComparer.Id);

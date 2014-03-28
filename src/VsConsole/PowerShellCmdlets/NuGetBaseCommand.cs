@@ -534,7 +534,7 @@ namespace NuGet.PowerShell.Commands
             }
         }
 
-        protected static ISemanticVersion GetSemanticVersion(string version)
+        protected static NuGetVersion GetSemanticVersion(string version)
         {
             NuGetVersion semVer = null;
             if (NuGetVersion.TryParse(version, out semVer))

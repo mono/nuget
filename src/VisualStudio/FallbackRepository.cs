@@ -92,22 +92,22 @@ namespace NuGet.VisualStudio
             bool includePrerelease, 
             bool includeAllVersions, 
             IEnumerable<FrameworkName> targetFrameworks,
-            IEnumerable<IVersionSpec> versionConstraints)
+            IEnumerable<NuGetVersionRange> versionConstraints)
         {
             return _primaryRepository.GetUpdates(packages, includePrerelease, includeAllVersions, targetFrameworks, versionConstraints);
         }
 
-        public IPackage FindPackage(string packageId, ISemanticVersion version)
+        public IPackage FindPackage(string packageId, NuGetVersion version)
         {
             return _primaryRepository.FindPackage(packageId, version);
         }
 
-        public bool Exists(string packageId, ISemanticVersion version)
+        public bool Exists(string packageId, NuGetVersion version)
         {
             return _primaryRepository.Exists(packageId, version);
         }
 
-        public bool TryFindLatestPackageById(string id, out ISemanticVersion latestVersion)
+        public bool TryFindLatestPackageById(string id, out NuGetVersion latestVersion)
         {
             var latestPackageLookup = _primaryRepository as ILatestPackageLookup;
             if (latestPackageLookup != null)

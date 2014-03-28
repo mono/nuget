@@ -146,16 +146,16 @@ namespace NuGet.Test
         }
 
         // All possible ways to parse a version from a string
-        private static List<ISemanticVersion> Parse(string version)
+        private static List<NuGetVersion> Parse(string version)
         {
             // Parse
-            List<ISemanticVersion> versions = new List<ISemanticVersion>();
+            List<NuGetVersion> versions = new List<NuGetVersion>();
             versions.Add(NuGetVersion.Parse(version));
-            versions.Add(SemanticVersionStrict.Parse(version));
+            versions.Add(NuGetVersion.Parse(version));
 
             // TryParse
-            SemanticVersionStrict semVer = null;
-            SemanticVersionStrict.TryParse(version, out semVer);
+            NuGetVersion semVer = null;
+            NuGetVersion.TryParse(version, out semVer);
             versions.Add(semVer);
 
             NuGetVersion nuVer = null;
@@ -168,10 +168,10 @@ namespace NuGet.Test
             versions.Add(nuVer);
 
             // Constructors
-            var normal = new NuGetVersion(version);
+            var normal = NuGetVersion.Parse(version);
 
             versions.Add(normal);
-            versions.Add(new NuGetVersion(SemanticVersionStrict.Parse(version)));
+            versions.Add(new NuGetVersion(NuGetVersion.Parse(version)));
 
             return versions;
         }

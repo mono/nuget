@@ -259,18 +259,18 @@ namespace NuGet.Server.DataServices
         {
             if (targetFramework == null)
             {
-                if (packageDependency.VersionSpec == null)
+                if (packageDependency.VersionRange == null)
                 {
                     return packageDependency.Id;
                 }
                 else
                 {
-                    return String.Format("{0}:{1}", packageDependency.Id, packageDependency.VersionSpec);
+                    return String.Format("{0}:{1}", packageDependency.Id, packageDependency.VersionRange);
                 }
             }
             else
             {
-                return String.Format("{0}:{1}:{2}", packageDependency.Id, packageDependency.VersionSpec, VersionUtility.GetShortFrameworkName(targetFramework));
+                return String.Format("{0}:{1}:{2}", packageDependency.Id, packageDependency.VersionRange, VersionUtility.GetShortFrameworkName(targetFramework));
             }
         }
     }

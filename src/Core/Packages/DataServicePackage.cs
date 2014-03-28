@@ -292,13 +292,13 @@ namespace NuGet
             }
         }
 
-        ISemanticVersion IPackageName.Version
+        NuGetVersion IPackageName.Version
         {
             get
             {
                 if (Version != null)
                 {
-                    return new NuGetVersion(Version);
+                    return NuGetVersion.Parse(Version);
                 }
                 return null;
             }
@@ -424,9 +424,9 @@ namespace NuGet
 
         /// <summary>
         /// Parses a dependency from the feed in the format:
-        /// id or id:versionSpec, or id:versionSpec:targetFramework
+        /// id or id:VersionRange, or id:VersionRange:targetFramework
         /// </summary>
-        private static Tuple<string, IVersionSpec, FrameworkName> ParseDependency(string value)
+        private static Tuple<string, NuGetVersionRange, FrameworkName> ParseDependency(string value)
         {
             if (String.IsNullOrWhiteSpace(value))
             {
@@ -446,18 +446,18 @@ namespace NuGet
             // Trim the id
             string id = tokens[0].Trim();
             
-            IVersionSpec versionSpec = null;
+            NuGetVersionRange versionRange = null;
             if (tokens.Length > 1)
             {
                 // Attempt to parse the version
-                VersionSpec.TryParse(tokens[1], out versionSpec);
+                NuGetVersionRange.TryParse(tokens[1], out versionRange);
             }
 
             var targetFramework = (tokens.Length > 2 && !String.IsNullOrEmpty(tokens[2]))
                                     ? VersionUtility.ParseFrameworkName(tokens[2])
                                     : null;
 
-            return Tuple.Create(id, versionSpec, targetFramework);
+            return Tuple.Create(id, versionRange, targetFramework);
         }
 
         [SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "We want to return null if any error occurred while trying to find the package.")]

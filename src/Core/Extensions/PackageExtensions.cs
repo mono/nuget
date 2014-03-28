@@ -40,8 +40,8 @@ namespace NuGet
                 string corePackageId = package.Id.Substring(0, package.Id.Length - package.Language.Length - 1);
                 return package.DependencySets.SelectMany(s => s.Dependencies).Any(
                        d => d.Id.Equals(corePackageId, StringComparison.OrdinalIgnoreCase) &&
-                       d.VersionSpec != null && VersionComparer.Default.Compare(d.VersionSpec.MaxVersion, d.VersionSpec.MinVersion) == 0 &&
-                       d.VersionSpec.IsMaxInclusive && d.VersionSpec.IsMinInclusive);
+                       d.VersionRange != null && VersionComparer.Default.Compare(d.VersionRange.MaxVersion, d.VersionRange.MinVersion) == 0 &&
+                       d.VersionRange.IsMaxInclusive && d.VersionRange.IsMinInclusive);
             }
             return false;
         }
@@ -52,16 +52,16 @@ namespace NuGet
                    Constants.PackageEmptyFileName.Equals(Path.GetFileName(packageFile.Path), StringComparison.OrdinalIgnoreCase);
         }
 
-        public static IEnumerable<IPackage> FindByVersion(this IEnumerable<IPackage> source, IVersionSpec versionSpec)
+        public static IEnumerable<IPackage> FindByVersion(this IEnumerable<IPackage> source, NuGetVersionRange versionRange)
         {
-            if (versionSpec == null)
+            if (versionRange == null)
             {
-                throw new ArgumentNullException("versionSpec");
+                throw new ArgumentNullException("VersionRange");
             }
 
-            //return source.Where(versionSpec.ToDelegate());
+            //return source.Where(VersionRange.ToDelegate());
 
-            return source.Where(p => versionSpec.Satisfies(p.Version));
+            return source.Where(p => versionRange.Satisfies(p.Version));
         }
 
         public static IEnumerable<IPackageFile> GetFiles(this IPackage package, string directory)

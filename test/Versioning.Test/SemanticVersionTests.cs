@@ -11,7 +11,7 @@ using Xunit.Extensions;
 
 namespace NuGet.Test
 {
-    public class SemanticVersionStrictTest
+    public class SemanticVersionTests
     {
         [Theory]
         [InlineData("1.0.0")]
@@ -27,8 +27,8 @@ namespace NuGet.Test
         public void ParseSemanticVersionStrict(string versionString)
         {
             // Act
-            SemanticVersionStrict semVer = null;
-            SemanticVersionStrict.TryParse(versionString, out semVer);
+            SemanticVersion semVer = null;
+            SemanticVersion.TryParse(versionString, out semVer);
 
             // Assert
             Assert.Equal<string>(versionString, semVer.ToNormalizedString());
@@ -43,30 +43,15 @@ namespace NuGet.Test
         public void SemanticVersionStrictEquality(string versionString)
         {
             // Act
-            SemanticVersionStrict main = null;
-            SemanticVersionStrict.TryParse("1.2.3", out main);
+            SemanticVersion main = null;
+            SemanticVersion.TryParse("1.2.3", out main);
 
-            SemanticVersionStrict semVer = null;
-            SemanticVersionStrict.TryParse(versionString, out semVer);
+            SemanticVersion semVer = null;
+            SemanticVersion.TryParse(versionString, out semVer);
 
             // Assert
-            Assert.True(main == semVer);
             Assert.True(main.Equals(semVer));
-            Assert.True(main <= (semVer));
-            Assert.True(main >= (semVer));
-            Assert.True(main.CompareTo(semVer) == 0);
-            Assert.False(main != (semVer));
-            Assert.False(main < (semVer));
-            Assert.False(main > (semVer));
-
-            Assert.True(semVer == main);
             Assert.True(semVer.Equals(main));
-            Assert.True(semVer <= (main));
-            Assert.True(semVer >= (main));
-            Assert.True(semVer.CompareTo(main) == 0);
-            Assert.False(semVer != (main));
-            Assert.False(semVer < (main));
-            Assert.False(semVer > (main));
 
             Assert.True(main.GetHashCode() == semVer.GetHashCode());
         }
@@ -79,30 +64,15 @@ namespace NuGet.Test
         public void SemanticVersionStrictEqualityPreRelease(string versionString)
         {
             // Act
-            SemanticVersionStrict main = null;
-            SemanticVersionStrict.TryParse("1.2.3-alpha", out main);
+            SemanticVersion main = null;
+            SemanticVersion.TryParse("1.2.3-alpha", out main);
 
-            SemanticVersionStrict semVer = null;
-            SemanticVersionStrict.TryParse(versionString, out semVer);
+            SemanticVersion semVer = null;
+            SemanticVersion.TryParse(versionString, out semVer);
 
             // Assert
-            Assert.True(main == semVer);
             Assert.True(main.Equals(semVer));
-            Assert.True(main <= (semVer));
-            Assert.True(main >= (semVer));
-            Assert.True(main.CompareTo(semVer) == 0);
-            Assert.False(main != (semVer));
-            Assert.False(main < (semVer));
-            Assert.False(main > (semVer));
-
-            Assert.True(semVer == main);
             Assert.True(semVer.Equals(main));
-            Assert.True(semVer <= (main));
-            Assert.True(semVer >= (main));
-            Assert.True(semVer.CompareTo(main) == 0);
-            Assert.False(semVer != (main));
-            Assert.False(semVer < (main));
-            Assert.False(semVer > (main));
 
             Assert.True(main.GetHashCode() == semVer.GetHashCode());
         }
@@ -119,16 +89,15 @@ namespace NuGet.Test
         [InlineData("1.2.03")]
         [InlineData(".2.03")]
         [InlineData("1.2.")]
-        [InlineData("1.2.3-a.b.c+0.0")]
         [InlineData("1.2.3-a$b")]
         [InlineData("a.b.c")]
-        //[InlineData("1.2.3-00")] // TODO: fix the semver regex so these are invalid
-        //[InlineData("1.2.3-A.00.B")]
+        [InlineData("1.2.3-00")]
+        [InlineData("1.2.3-A.00.B")]
         public void TryParseStrictReturnsFalseIfVersionIsNotStrictSemVer(string version)
         {
             // Act 
-            SemanticVersionStrict semanticVersion;
-            bool result = SemanticVersionStrict.TryParse(version, out semanticVersion);
+            SemanticVersion semanticVersion;
+            bool result = SemanticVersion.TryParse(version, out semanticVersion);
 
             // Assert
             Assert.False(result);

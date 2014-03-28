@@ -465,14 +465,14 @@ namespace NuGet.Test
 
 
             // Act
-            IVersionSpec constraint = referenceRepository.GetConstraint("A");
+            NuGetVersionRange constraint = referenceRepository.GetConstraint("A");
 
             // Assert
             Assert.NotNull(constraint);
-            Assert.True(constraint.IsMinInclusive);
+            Assert.True(constraint.Lower.IncludeBound);
             Assert.False(constraint.IsMaxInclusive);
-            Assert.Equal(new NuGetVersion("1.0"), constraint.MinVersion);
-            Assert.Equal(new NuGetVersion("3.0"), constraint.MaxVersion);
+            Assert.Equal(new NuGetVersion("1.0"), constraint.Lower.Bound);
+            Assert.Equal(new NuGetVersion("3.0"), constraint.Upper.Bound);
         }
 
         [Fact]
@@ -593,7 +593,7 @@ namespace NuGet.Test
             ILatestPackageLookup referenceRepository = new PackageReferenceRepository(fileSystem, projectName: null, sourceRepository: repository.Object);
 
             // Act
-            ISemanticVersion latestVersion;
+            NuGetVersion latestVersion;
             bool result = referenceRepository.TryFindLatestPackageById("A", out latestVersion);
 
             // Assert
@@ -627,7 +627,7 @@ namespace NuGet.Test
             ILatestPackageLookup referenceRepository = new PackageReferenceRepository(fileSystem, projectName: null, sourceRepository: repository.Object);
 
             // Act
-            ISemanticVersion latestVersion;
+            NuGetVersion latestVersion;
             bool result = referenceRepository.TryFindLatestPackageById("B", out latestVersion);
 
             // Assert
@@ -661,7 +661,7 @@ namespace NuGet.Test
             ILatestPackageLookup referenceRepository = new PackageReferenceRepository(fileSystem, projectName: null, sourceRepository: repository.Object);
 
             // Act
-            ISemanticVersion latestVersion;
+            NuGetVersion latestVersion;
             bool result = referenceRepository.TryFindLatestPackageById("C", out latestVersion);
 
             // Assert
@@ -686,7 +686,7 @@ namespace NuGet.Test
             var packageReferenceRepository = new PackageReferenceRepository(fileSystem, projectName: null, sourceRepository: sharedRepository.Object);
 
             // Act
-            ISemanticVersion version;
+            NuGetVersion version;
             bool result = packageReferenceRepository.TryFindLatestPackageById("A", out version);
 
             // Assert
@@ -711,7 +711,7 @@ namespace NuGet.Test
             var packageReferenceRepository = new PackageReferenceRepository(fileSystem, projectName: null, sourceRepository: sharedRepository.Object);
 
             // Act
-            ISemanticVersion version;
+            NuGetVersion version;
             bool result = packageReferenceRepository.TryFindLatestPackageById("A", out version);
 
             // Assert
@@ -736,7 +736,7 @@ namespace NuGet.Test
             var packageReferenceRepository = new PackageReferenceRepository(fileSystem, projectName: null, sourceRepository: sharedRepository.Object);
 
             // Act
-            ISemanticVersion version;
+            NuGetVersion version;
             bool result = packageReferenceRepository.TryFindLatestPackageById("B", out version);
 
             // Assert
@@ -761,7 +761,7 @@ namespace NuGet.Test
             var packageReferenceRepository = new PackageReferenceRepository(fileSystem, projectName: null, sourceRepository: sharedRepository.Object);
 
             // Act
-            ISemanticVersion version;
+            NuGetVersion version;
             bool result = packageReferenceRepository.TryFindLatestPackageById("does-not-exist", out version);
 
             // Assert

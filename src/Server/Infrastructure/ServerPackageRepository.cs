@@ -51,7 +51,7 @@ namespace NuGet.Server.Infrastructure
             }
         }
 
-        public void RemovePackage(string packageId, ISemanticVersion version)
+        public void RemovePackage(string packageId, NuGetVersion version)
         {
             IPackage package = FindPackage(packageId, version);
             if (package != null)
@@ -217,7 +217,7 @@ namespace NuGet.Server.Infrastructure
             bool includePrerelease, 
             bool includeAllVersions, 
             IEnumerable<FrameworkName> targetFramework,
-            IEnumerable<IVersionSpec> versionConstraints)
+            IEnumerable<NuGetVersionRange> versionConstraints)
         {
             return this.GetUpdatesCore(packages, includePrerelease, includeAllVersions, targetFramework, versionConstraints);
         }

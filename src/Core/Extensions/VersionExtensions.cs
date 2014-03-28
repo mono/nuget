@@ -7,7 +7,7 @@ namespace NuGet
 {
     public static class VersionExtensions
     {
-        public static Func<IPackage, bool> ToDelegate(this IVersionSpec versionInfo)
+        public static Func<IPackage, bool> ToDelegate(this NuGetVersionRange versionInfo)
         {
             if (versionInfo == null)
             {
@@ -16,7 +16,7 @@ namespace NuGet
             return versionInfo.ToDelegate<IPackage>(p => p.Version);
         }
 
-        public static Func<T, bool> ToDelegate<T>(this IVersionSpec versionInfo, Func<T, ISemanticVersion> extractor)
+        public static Func<T, bool> ToDelegate<T>(this NuGetVersionRange versionInfo, Func<T, NuGetVersion> extractor)
         {
             if (versionInfo == null)
             {
@@ -29,7 +29,7 @@ namespace NuGet
 
             return p =>
             {
-                ISemanticVersion version = extractor(p);
+                NuGetVersion version = extractor(p);
                 bool condition = true;
                 if (versionInfo.MinVersion != null)
                 {
@@ -59,7 +59,7 @@ namespace NuGet
             };
         }
 
-        public static string[] GetOriginalVersionComponents(this ISemanticVersion version)
+        public static string[] GetOriginalVersionComponents(this NuGetVersion version)
         {
             string originalString = version.ToString();
 
@@ -97,9 +97,9 @@ namespace NuGet
             }
         }
 
-        public static Version GetLegacyVersion(this ISemanticVersion version)
+        public static Version GetLegacyVersion(this NuGetVersion version)
         {
-            INuGetVersion legacyVersion = version as INuGetVersion;
+            NuGetVersion legacyVersion = version as NuGetVersion;
             if (legacyVersion != null)
             {
                 return legacyVersion.Version;
@@ -109,7 +109,7 @@ namespace NuGet
         }
 
 
-        public static IEnumerable<string> GetComparableVersionStrings(this ISemanticVersion version)
+        public static IEnumerable<string> GetComparableVersionStrings(this NuGetVersion version)
         {
             Version coreVersion = version.GetLegacyVersion();
             string specialVersion = String.IsNullOrEmpty(version.Release) ? String.Empty : "-" + version.Release;

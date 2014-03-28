@@ -66,7 +66,7 @@ namespace NuGet
             set;
         }
 
-        public ISemanticVersion Version
+        public NuGetVersion Version
         {
             get;
             set;
@@ -331,7 +331,7 @@ namespace NuGet
                  file.Path.EndsWith(".uninstall.xdt", StringComparison.OrdinalIgnoreCase)));
         }
 
-        internal static void ValidateDependencySets(ISemanticVersion version, IEnumerable<PackageDependencySet> dependencies)
+        internal static void ValidateDependencySets(NuGetVersion version, IEnumerable<PackageDependencySet> dependencies)
         {
             if (version == null)
             {
@@ -545,16 +545,15 @@ namespace NuGet
 
         private static bool IsPrereleaseDependency(PackageDependency dependency)
         {
-            var versionSpec = dependency.VersionSpec;
-            if (versionSpec != null)
+            var VersionRange = dependency.VersionRange;
+            if (VersionRange != null)
             {
-                return (versionSpec.MinVersion != null && versionSpec.MinVersion.IsPrerelease) ||
-                       (versionSpec.MaxVersion != null && versionSpec.MaxVersion.IsPrerelease);
+                return VersionRange.IsPrerelease;
             }
             return false;
         }
 
-        private static bool ValidateSpecialVersionLength(ISemanticVersion version)
+        private static bool ValidateSpecialVersionLength(NuGetVersion version)
         {
             return version == null || version.Release == null || version.Release.Length <= 20;
         }

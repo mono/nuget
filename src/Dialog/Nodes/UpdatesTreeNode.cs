@@ -87,7 +87,7 @@ namespace NuGet.Dialog.Providers
             IPackageConstraintProvider constraintProvider = _localRepository as IPackageConstraintProvider;
             if (constraintProvider != null)
             {
-                IEnumerable<IVersionSpec> constraintList = packagesList.Select(p => constraintProvider.GetConstraint(p.Id));
+                IEnumerable<NuGetVersionRange> constraintList = packagesList.Select(p => constraintProvider.GetConstraint(p.Id));
                 updatePackages = Repository.GetUpdates(packagesList, allowPrereleaseVersions, includeAllVersions: false, targetFrameworks: solutionFrameworks, versionConstraints: constraintList)
                                  .AsQueryable();
             }

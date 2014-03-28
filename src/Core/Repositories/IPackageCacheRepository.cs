@@ -6,6 +6,6 @@ namespace NuGet
 {
     public interface IPackageCacheRepository : IPackageRepository
     {
-        bool InvokeOnPackage(string packageId, ISemanticVersion version, Action<Stream> action);
+        bool InvokeOnPackage(string packageId, NuGetVersion version, Action<Stream> action);
     }
 }

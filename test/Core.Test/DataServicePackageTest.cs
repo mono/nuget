@@ -52,13 +52,13 @@ namespace NuGet.Test
             List<PackageDependency> dependencies = dependencySets[0].Dependencies.ToList();            
             Assert.Equal(2, dependencies.Count);
             Assert.Equal("A", dependencies[0].Id);
-            Assert.True(dependencies[0].VersionSpec.IsMinInclusive);
-            Assert.Equal(new NuGetVersion("1.3"), dependencies[0].VersionSpec.MinVersion);
+            Assert.True(dependencies[0].VersionRange.Lower.IncludeBound);
+            Assert.Equal(new NuGetVersion("1.3"), dependencies[0].VersionRange.Lower.Bound);
             Assert.Equal("B", dependencies[1].Id);
-            Assert.True(dependencies[1].VersionSpec.IsMinInclusive);
-            Assert.Equal(new NuGetVersion("2.4"), dependencies[1].VersionSpec.MinVersion);
-            Assert.False(dependencies[1].VersionSpec.IsMaxInclusive);
-            Assert.Equal(new NuGetVersion("5.0"), dependencies[1].VersionSpec.MaxVersion);
+            Assert.True(dependencies[1].VersionRange.Lower.IncludeBound);
+            Assert.Equal(new NuGetVersion("2.4"), dependencies[1].VersionRange.Lower.Bound);
+            Assert.False(dependencies[1].VersionRange.IsMaxInclusive);
+            Assert.Equal(new NuGetVersion("5.0"), dependencies[1].VersionRange.Upper.Bound);
         }
 
         [Fact]
@@ -87,14 +87,14 @@ namespace NuGet.Test
             Assert.Equal(2, dependencySets[2].Dependencies.Count);
             Assert.Null(dependencySets[2].TargetFramework);
             Assert.Equal("C", dependencySets[2].Dependencies.ElementAt(0).Id);
-            Assert.Null(dependencySets[2].Dependencies.ElementAt(0).VersionSpec);
+            Assert.Null(dependencySets[2].Dependencies.ElementAt(0).VersionRange);
             Assert.Equal("E", dependencySets[2].Dependencies.ElementAt(1).Id);
-            Assert.NotNull(dependencySets[2].Dependencies.ElementAt(1).VersionSpec);
+            Assert.NotNull(dependencySets[2].Dependencies.ElementAt(1).VersionRange);
 
             Assert.Equal(1, dependencySets[3].Dependencies.Count);
             Assert.Equal(new FrameworkName(".NETCore, Version=4.5"), dependencySets[3].TargetFramework);
             Assert.Equal("D", dependencySets[3].Dependencies.ElementAt(0).Id);
-            Assert.Null(dependencySets[3].Dependencies.ElementAt(0).VersionSpec);
+            Assert.Null(dependencySets[3].Dependencies.ElementAt(0).VersionRange);
         }
 
         [Fact]
@@ -167,7 +167,7 @@ namespace NuGet.Test
             // Arrange
             var uri = new Uri("http://nuget.org");
             var mockRepository = new Mock<MockPackageRepository>().As<IPackageCacheRepository>();
-            mockRepository.Setup(s => s.InvokeOnPackage(It.IsAny<string>(), It.IsAny<ISemanticVersion>(), It.IsAny<Action<Stream>>())).Returns(false);
+            mockRepository.Setup(s => s.InvokeOnPackage(It.IsAny<string>(), It.IsAny<NuGetVersion>(), It.IsAny<Action<Stream>>())).Returns(false);
 
             var packageDownloader = new Mock<PackageDownloader>();
             packageDownloader.Setup(d => d.DownloadPackage(uri, It.IsAny<IPackageMetadata>(), It.IsAny<Stream>()))

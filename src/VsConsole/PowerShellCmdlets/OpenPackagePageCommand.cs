@@ -61,7 +61,7 @@ namespace NuGet.PowerShell.Commands
         {
             IPackageRepository repository = GetRepository();
 
-            ISemanticVersion semVer = GetSemanticVersion(Version);
+            NuGetVersion semVer = GetSemanticVersion(Version);
 
             IPackage package = repository.FindPackage(Id, semVer);
             if (package != null)

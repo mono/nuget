@@ -123,7 +123,7 @@ namespace NuGet.Test
             Assert.Equal(time, packages[0].Published);
         }
 
-        private void AssertPackage(IPackage package, string id, ISemanticVersion version)
+        private void AssertPackage(IPackage package, string id, NuGetVersion version)
         {
             Assert.NotNull(package);
             Assert.Equal(id, package.Id, StringComparer.OrdinalIgnoreCase);

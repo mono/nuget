@@ -187,7 +187,7 @@ namespace NuGet.PowerShell.Commands
 
                 if (IsDowngradePackage())
                 {
-                    ISemanticVersion semVer = GetSemanticVersion(Version);
+                    NuGetVersion semVer = GetSemanticVersion(Version);
 
                     PackageManager.UpdatePackage(ProjectManager, Id, semVer, !IgnoreDependencies, IncludePrerelease.IsPresent, logger: this);
                 }

@@ -493,7 +493,7 @@ namespace NuGet.VisualStudio.Test
 
             var services = new Mock<IVsPackageInstallerServices>();
             services.Setup(x => x.IsPackageInstalled(It.IsAny<Project>(), packageId)).Returns(true);
-            services.Setup(x => x.IsPackageInstalled(It.IsAny<Project>(), packageId, It.IsAny<ISemanticVersion>())).Returns(false);
+            services.Setup(x => x.IsPackageInstalled(It.IsAny<Project>(), packageId, It.IsAny<NuGetVersion>())).Returns(false);
 
             var installer = new VsPackageInstaller(null, null, null, consoleProvider.Object, new Mock<IVsCommonOperations>().Object, new Mock<ISolutionManager>().Object, null, services.Object, registryKeys: new[] { hkcu.Object });
             var packages = new Dictionary<string, string>();
@@ -627,7 +627,7 @@ namespace NuGet.VisualStudio.Test
                 packageId,
                 packageVersion,
                 new[] { "System" }, null, null,
-                new[] { new PackageDependency(dependencyPackageId, new VersionSpec(new NuGetVersion(dependencyPackageVersion))) });
+                new[] { new PackageDependency(dependencyPackageId, new NuGetVersionRange(new NuGetVersion(dependencyPackageVersion))) });
 
             var dependencyPackage = NuGet.Test.PackageUtility.CreatePackage(
                 dependencyPackageId,
@@ -741,7 +741,7 @@ namespace NuGet.VisualStudio.Test
 
             var services = new Mock<IVsPackageInstallerServices>();
             services.Setup(x => x.IsPackageInstalled(It.IsAny<Project>(), packageId)).Returns(true);
-            services.Setup(x => x.IsPackageInstalled(It.IsAny<Project>(), packageId, It.IsAny<ISemanticVersion>())).Returns(false);
+            services.Setup(x => x.IsPackageInstalled(It.IsAny<Project>(), packageId, It.IsAny<NuGetVersion>())).Returns(false);
 
             var installer = new VsPackageInstaller(null, null, null, consoleProvider.Object, new Mock<IVsCommonOperations>().Object, new Mock<ISolutionManager>().Object, null, services.Object, extensionManagerMock.Object);
             var packages = new Dictionary<string, string>();

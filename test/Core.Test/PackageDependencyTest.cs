@@ -19,7 +19,7 @@ namespace NuGet.Test
         }
 
         [Fact]
-        public void ToStringMinVersionInclusive()
+        public void ToStringlowerBoundInclusive()
         {
             // Arrange
             PackageDependency dependency = PackageDependency.CreateDependency("A", "1.0");
@@ -32,7 +32,7 @@ namespace NuGet.Test
         }
 
         [Fact]
-        public void ToStringMinVersionExclusive()
+        public void ToStringlowerBoundExclusive()
         {
             // Arrange
             PackageDependency dependency = PackageDependency.CreateDependency("A", "(1.0,)");
@@ -45,7 +45,7 @@ namespace NuGet.Test
         }
 
         [Fact]
-        public void ToStringMaxVersionInclusive()
+        public void ToStringupperBoundInclusive()
         {
             // Arrange
             PackageDependency dependency = PackageDependency.CreateDependency("A", "[,1.0]");
@@ -58,7 +58,7 @@ namespace NuGet.Test
         }
 
         [Fact]
-        public void ToStringMaxVersionExclusive()
+        public void ToStringupperBoundExclusive()
         {
             // Arrange
             PackageDependency dependency = PackageDependency.CreateDependency("A", "[,1.0)");
@@ -71,7 +71,7 @@ namespace NuGet.Test
         }
 
         [Fact]
-        public void ToStringMinVersionExclusiveMaxInclusive()
+        public void ToStringlowerBoundExclusiveMaxInclusive()
         {
             // Arrange
             PackageDependency dependency = PackageDependency.CreateDependency("A", "(1.0,5.0]");
@@ -84,7 +84,7 @@ namespace NuGet.Test
         }
 
         [Fact]
-        public void ToStringMinVersionInclusiveMaxExclusive()
+        public void ToStringlowerBoundInclusiveMaxExclusive()
         {
             // Arrange
             PackageDependency dependency = PackageDependency.CreateDependency("A", "[1.0,5.0)");
@@ -97,7 +97,7 @@ namespace NuGet.Test
         }
 
         [Fact]
-        public void ToStringMinVersionInclusiveMaxInclusive()
+        public void ToStringlowerBoundInclusiveMaxInclusive()
         {
             // Arrange
             PackageDependency dependency = PackageDependency.CreateDependency("A", "[1.0,5.0]");
@@ -110,7 +110,7 @@ namespace NuGet.Test
         }
 
         [Fact]
-        public void ToStringMinVersionExclusiveMaxExclusive()
+        public void ToStringlowerBoundExclusiveMaxExclusive()
         {
             // Arrange
             PackageDependency dependency = PackageDependency.CreateDependency("A", "(1.0,5.0)");

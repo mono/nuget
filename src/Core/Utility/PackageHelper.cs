@@ -49,7 +49,7 @@ namespace NuGet
 
                 if (dependency != null)
                 {
-                    runtimePackage = repository.FindPackage(runtimePackageId, versionSpec: dependency.VersionSpec, allowPrereleaseVersions: true, allowUnlisted: true);
+                    runtimePackage = repository.FindPackage(runtimePackageId, versionRange: dependency.VersionRange, allowPrereleaseVersions: true, allowUnlisted: true);
                 }
             }
 
@@ -63,7 +63,7 @@ namespace NuGet
         /// <param name="packageId">Id of the package to find.</param>
         /// <param name="version">Version of the package to find.</param>
         /// <exception cref="System.InvalidOperationException">If the specified package cannot be found in the repository.</exception>
-        public static IPackage ResolvePackage(IPackageRepository repository, string packageId, ISemanticVersion version)
+        public static IPackage ResolvePackage(IPackageRepository repository, string packageId, NuGetVersion version)
         {
             if (repository == null)
             {

@@ -73,10 +73,10 @@ namespace NuGet.Test
         {
             // Arrange
             var repo = GetRemoteRepository();
-            var versionSpec = VersionSpec.Parse("[0.9, 1.1]");
+            var versionRange = NuGetVersionRange.Parse("[0.9, 1.1]");
 
             // Act
-            var package = repo.FindPackage("A", versionSpec, allowPrereleaseVersions: false, allowUnlisted: true);
+            var package = repo.FindPackage("A", versionRange, allowPrereleaseVersions: false, allowUnlisted: true);
 
             // Assert
             Assert.NotNull(package);
@@ -91,8 +91,8 @@ namespace NuGet.Test
             var repo = GetLocalRepository();
 
             // Act
-            var package1 = repo.FindPackage("X", VersionSpec.Parse("[0.9, 1.1]"), allowPrereleaseVersions: false, allowUnlisted: true);
-            var package2 = repo.FindPackage("A", VersionSpec.Parse("[1.4, 1.5]"), allowPrereleaseVersions: false, allowUnlisted: true);
+            var package1 = repo.FindPackage("X", NuGetVersionRange.Parse("[0.9, 1.1]"), allowPrereleaseVersions: false, allowUnlisted: true);
+            var package2 = repo.FindPackage("A", NuGetVersionRange.Parse("[1.4, 1.5]"), allowPrereleaseVersions: false, allowUnlisted: true);
 
             // Assert
             Assert.Null(package1 ?? package2);
@@ -105,7 +105,7 @@ namespace NuGet.Test
             var repo = GetRemoteRepository();
 
             // Act
-            var package = repo.FindPackage("A", VersionSpec.Parse("[0.6, 1.1.5]"), allowPrereleaseVersions: false, allowUnlisted: true);
+            var package = repo.FindPackage("A", NuGetVersionRange.Parse("[0.6, 1.1.5]"), allowPrereleaseVersions: false, allowUnlisted: true);
 
             // Assert
             Assert.NotNull(package);
@@ -246,7 +246,7 @@ namespace NuGet.Test
             remoteRepo.GetUpdates(localRepo.GetPackages(), includePrerelease: false, includeAllVersions: false);
 
             // Assert
-            serviceRepository.Verify(s => s.GetUpdates(It.IsAny<IEnumerable<IPackage>>(), false, false, It.IsAny<IEnumerable<FrameworkName>>(), It.IsAny<IEnumerable<IVersionSpec>>()), Times.Never());
+            serviceRepository.Verify(s => s.GetUpdates(It.IsAny<IEnumerable<IPackage>>(), false, false, It.IsAny<IEnumerable<FrameworkName>>(), It.IsAny<IEnumerable<NuGetVersionRange>>()), Times.Never());
         }
 
         [Fact]

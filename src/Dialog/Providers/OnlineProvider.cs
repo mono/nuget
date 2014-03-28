@@ -197,7 +197,7 @@ namespace NuGet.Dialog.Providers
             {
                 // in this case, we mark this package as installed if the current project has 
                 // any lower-or-equal-versioned package with the same id installed.
-                ISemanticVersion installedVersion;
+                NuGetVersion installedVersion;
                 return !latestPackageLookup.TryFindLatestPackageById(item.Id, out installedVersion) ||
                        installedVersion.CompareTo(item.PackageIdentity.Version) < 0;
             }

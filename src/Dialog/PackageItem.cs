@@ -20,15 +20,15 @@ namespace NuGet.Dialog.Providers
         private bool _isSelected;
         private bool? _isEnabled;
         private readonly ObservableCollection<Project> _referenceProjectNames;
-        private readonly ISemanticVersion _oldPackageVersion;
+        private readonly NuGetVersion _oldPackageVersion;
         private IEnumerable<object> _displayDependencies;
 
-        public PackageItem(PackagesProviderBase provider, IPackage package, ISemanticVersion oldPackageVersion = null) :
+        public PackageItem(PackagesProviderBase provider, IPackage package, NuGetVersion oldPackageVersion = null) :
             this(provider, package, new Project[0], oldPackageVersion)
         {
         }
 
-        public PackageItem(PackagesProviderBase provider, IPackage package, IEnumerable<Project> referenceProjectNames, ISemanticVersion oldPackageVersion = null)
+        public PackageItem(PackagesProviderBase provider, IPackage package, IEnumerable<Project> referenceProjectNames, NuGetVersion oldPackageVersion = null)
         {
             _provider = provider;
             _packageIdentity = package;

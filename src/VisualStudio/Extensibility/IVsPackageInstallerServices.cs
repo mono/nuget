@@ -35,7 +35,7 @@ namespace NuGet.VisualStudio
         /// <param name="id">The id of the package to check.</param>
         /// <param name="version">The version of the package to check.</param>
         /// <returns><c>true</c> if the package is install. <c>false</c> otherwise.</returns>
-        bool IsPackageInstalled(Project project, string id, ISemanticVersion version);
+        bool IsPackageInstalled(Project project, string id, NuGetVersion version);
 
         /// <summary>
         /// Checks if a NuGet package with the specified Id and version is installed in the specified project.

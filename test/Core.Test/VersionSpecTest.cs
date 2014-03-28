@@ -4,13 +4,13 @@ using Xunit;
 namespace NuGet.Test
 {
 
-    public class VersionSpecTest
+    public class VersionRangeTest
     {
         [Fact]
         public void ToStringExactVersion()
         {
             // Arrange
-            var spec = new VersionSpec(new NuGetVersion("1.0"));
+            var spec = new NuGetVersionRange(new NuGetVersion("1.0"));
 
             // Act
             string value = spec.ToString();
@@ -20,10 +20,10 @@ namespace NuGet.Test
         }
 
         [Fact]
-        public void ToStringMinVersionInclusive()
+        public void ToStringlowerBoundInclusive()
         {
             // Arrange
-            var spec = new VersionSpec(new NuGetVersion("1.0"), true);
+            var spec = new NuGetVersionRange(new NuGetVersion("1.0"), true);
 
             // Act
             string value = spec.ToString();
@@ -33,10 +33,10 @@ namespace NuGet.Test
         }
 
         [Fact]
-        public void ToStringMinVersionExclusive()
+        public void ToStringlowerBoundExclusive()
         {
             // Arrange
-            var spec = new VersionSpec(new NuGetVersion("1.0"), false);
+            var spec = new NuGetVersionRange(new NuGetVersion("1.0"), false);
 
             // Act
             string value = spec.ToString();
@@ -46,10 +46,10 @@ namespace NuGet.Test
         }
 
         [Fact]
-        public void ToStringMaxVersionInclusive()
+        public void ToStringupperBoundInclusive()
         {
             // Arrange
-            var spec = new VersionSpec(null, new NuGetVersion("1.0"), false, true);
+            var spec = new NuGetVersionRange(null, false, new NuGetVersion("1.0"), true);
 
             // Act
             string value = spec.ToString();
@@ -59,10 +59,10 @@ namespace NuGet.Test
         }
 
         [Fact]
-        public void ToStringMaxVersionExclusive()
+        public void ToStringupperBoundExclusive()
         {
             // Arrange
-            var spec = new VersionSpec(null, new NuGetVersion("1.0"), false, false);
+            var spec = new NuGetVersionRange(null, false, new NuGetVersion("1.0"), false);
 
             // Act
             string value = spec.ToString();
@@ -72,10 +72,10 @@ namespace NuGet.Test
         }
 
         [Fact]
-        public void ToStringMinVersionExclusiveMaxInclusive()
+        public void ToStringlowerBoundExclusiveMaxInclusive()
         {
             // Arrange
-            var spec = new VersionSpec(new NuGetVersion("1.0"), new NuGetVersion("3.0"), false, true);
+            var spec = new NuGetVersionRange(new NuGetVersion("1.0"), false, new NuGetVersion("3.0"), true);
 
             // Act
             string value = spec.ToString();
@@ -85,10 +85,10 @@ namespace NuGet.Test
         }
 
         [Fact]
-        public void ToStringMinVersionInclusiveMaxExclusive()
+        public void ToStringlowerBoundInclusiveMaxExclusive()
         {
             // Arrange
-            var spec = new VersionSpec(new NuGetVersion("1.0"), new NuGetVersion("4.0"), true, false);
+            var spec = new NuGetVersionRange(new NuGetVersion("1.0"), true, new NuGetVersion("4.0"), false);
 
             // Act
             string value = spec.ToString();
@@ -98,10 +98,10 @@ namespace NuGet.Test
         }
 
         [Fact]
-        public void ToStringMinVersionInclusiveMaxInclusive()
+        public void ToStringlowerBoundInclusiveMaxInclusive()
         {
             // Arrange
-            var spec = new VersionSpec(new NuGetVersion("1.0"), new NuGetVersion("5.0"), true, true);
+            var spec = new NuGetVersionRange(new NuGetVersion("1.0"), true, new NuGetVersion("5.0"), true);
 
             // Act
             string value = spec.ToString();
@@ -111,10 +111,10 @@ namespace NuGet.Test
         }
 
         [Fact]
-        public void ToStringMinVersionExclusiveMaxExclusive()
+        public void ToStringlowerBoundExclusiveMaxExclusive()
         {
             // Arrange
-            var spec = new VersionSpec(new NuGetVersion("1.0"), new NuGetVersion("5.0"), false, false);
+            var spec = new NuGetVersionRange(new NuGetVersion("1.0"), false, new NuGetVersion("5.0"), false);
 
             // Act
             string value = spec.ToString();

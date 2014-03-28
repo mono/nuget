@@ -61,13 +61,13 @@ namespace NuGet.VisualStudio
             return activeRepository == null ? Enumerable.Empty<IPackage>().AsQueryable() : activeRepository.GetPackages();
         }
 
-        public IPackage FindPackage(string packageId, ISemanticVersion version)
+        public IPackage FindPackage(string packageId, NuGetVersion version)
         {
             var activeRepository = GetActiveRepository();
             return activeRepository == null ? null : activeRepository.FindPackage(packageId, version);
         }
 
-        public bool Exists(string packageId, ISemanticVersion version)
+        public bool Exists(string packageId, NuGetVersion version)
         {
             var activeRepository = GetActiveRepository();
             return activeRepository != null ? activeRepository.Exists(packageId, version) : false;
@@ -129,7 +129,7 @@ namespace NuGet.VisualStudio
             bool includePrerelease, 
             bool includeAllVersions, 
             IEnumerable<FrameworkName> targetFrameworks,
-            IEnumerable<IVersionSpec> versionConstraints)
+            IEnumerable<NuGetVersionRange> versionConstraints)
         {
             var activeRepository = GetActiveRepository();
             if (activeRepository == null)
@@ -140,7 +140,7 @@ namespace NuGet.VisualStudio
             return activeRepository.GetUpdates(packages, includePrerelease, includeAllVersions, targetFrameworks, versionConstraints);
         }
 
-        public bool TryFindLatestPackageById(string id, out ISemanticVersion latestVersion)
+        public bool TryFindLatestPackageById(string id, out NuGetVersion latestVersion)
         {
             var latestPackageLookup = GetActiveRepository() as ILatestPackageLookup;
             if (latestPackageLookup != null)

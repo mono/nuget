@@ -211,7 +211,7 @@ namespace NuGet.Test
         }
 
         [Fact]
-        public void GetPackageReferencesThrowsIfVersionSpecIsInvalid()
+        public void GetPackageReferencesThrowsIfVersionRangeIsInvalid()
         {
             // Arrange
             var config = @"<?xml version=""1.0"" encoding=""utf-8""?>

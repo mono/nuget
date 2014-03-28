@@ -316,7 +316,7 @@ namespace NuGet.Test
                     },
                 versionConstraints: new [] 
                     { 
-                        VersionSpec.Parse("[2.3,4.0]")
+                        NuGetVersionRange.Parse("[2.3,4.0]")
                     }
             );
 

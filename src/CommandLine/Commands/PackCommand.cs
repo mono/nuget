@@ -140,7 +140,7 @@ namespace NuGet.Commands
         {
             if (!String.IsNullOrEmpty(Version))
             {
-                builder.Version = new NuGetVersion(Version);
+                builder.Version = NuGetVersion.Parse(Version);
             }
 
             if (_minClientVersionValue != null)

@@ -120,10 +120,10 @@ namespace NuGet
                     throw new InvalidDataException(String.Format(CultureInfo.CurrentCulture, NuGetResources.ReferenceFile_InvalidVersion, versionString, _path));
                 }
 
-                IVersionSpec versionConstaint = null;
+                NuGetVersionRange versionConstaint = null;
                 if (!String.IsNullOrEmpty(versionConstraintString))
                 {
-                    if (!VersionSpec.TryParse(versionConstraintString, out versionConstaint))
+                    if (!NuGetVersionRange.TryParse(versionConstraintString, out versionConstaint))
                     {
                         throw new InvalidDataException(String.Format(CultureInfo.CurrentCulture, NuGetResources.ReferenceFile_InvalidVersion, versionConstraintString, _path));
                     }
@@ -168,7 +168,7 @@ namespace NuGet
         /// <summary>
         /// Deletes an entry from the file with matching id and version. Returns true if the file was deleted.
         /// </summary>
-        public bool DeleteEntry(string id, ISemanticVersion version)
+        public bool DeleteEntry(string id, NuGetVersion version)
         {
             XDocument document = GetDocument();
 
@@ -180,7 +180,7 @@ namespace NuGet
             return DeleteEntry(document, id, version);
         }
 
-        public bool EntryExists(string packageId, ISemanticVersion version)
+        public bool EntryExists(string packageId, NuGetVersion version)
         {
             XDocument document = GetDocument();
             if (document == null)
@@ -191,24 +191,24 @@ namespace NuGet
             return FindEntry(document, packageId, version) != null;
         }
 
-        public void AddEntry(string id, ISemanticVersion version)
+        public void AddEntry(string id, NuGetVersion version)
         {
             AddEntry(id, version, developmentDependency: false);
         }
 
-        public void AddEntry(string id, ISemanticVersion version, bool developmentDependency)
+        public void AddEntry(string id, NuGetVersion version, bool developmentDependency)
         {
             AddEntry(id, version, developmentDependency, targetFramework: null);
         }
 
-        public void AddEntry(string id, ISemanticVersion version, bool developmentDependency, FrameworkName targetFramework)
+        public void AddEntry(string id, NuGetVersion version, bool developmentDependency, FrameworkName targetFramework)
         {
             XDocument document = GetDocument(createIfNotExists: true);
 
             AddEntry(document, id, version, developmentDependency, targetFramework);
         }
 
-        public void MarkEntryForReinstallation(string id, ISemanticVersion version, FrameworkName targetFramework, bool requireReinstallation)
+        public void MarkEntryForReinstallation(string id, NuGetVersion version, FrameworkName targetFramework, bool requireReinstallation)
         {
             Debug.Assert(id != null);
             Debug.Assert(version != null);
@@ -229,12 +229,12 @@ namespace NuGet
             }
         }
 
-        private void AddEntry(XDocument document, string id, ISemanticVersion version, bool developmentDependency, FrameworkName targetFramework)
+        private void AddEntry(XDocument document, string id, NuGetVersion version, bool developmentDependency, FrameworkName targetFramework)
         {
             AddEntry(document, id, version, developmentDependency, targetFramework, requireReinstallation: false);
         }
 
-        private void AddEntry(XDocument document, string id, ISemanticVersion version, bool developmentDependency, FrameworkName targetFramework, bool requireReinstallation)
+        private void AddEntry(XDocument document, string id, NuGetVersion version, bool developmentDependency, FrameworkName targetFramework, bool requireReinstallation)
         {
             XElement element = FindEntry(document, id, version);
 
@@ -279,7 +279,7 @@ namespace NuGet
             SaveDocument(document);
         }
 
-        private static XElement FindEntry(XDocument document, string id, ISemanticVersion version)
+        private static XElement FindEntry(XDocument document, string id, NuGetVersion version)
         {
             if (String.IsNullOrEmpty(id))
             {
@@ -313,7 +313,7 @@ namespace NuGet
             _fileSystem.AddFile(_path, document.Save);
         }
 
-        private bool DeleteEntry(XDocument document, string id, ISemanticVersion version)
+        private bool DeleteEntry(XDocument document, string id, NuGetVersion version)
         {
             XElement element = FindEntry(document, id, version);
 

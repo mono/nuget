@@ -221,7 +221,7 @@ namespace NuGet
                     select new ManifestDependency
                     {
                         Id = dependency.Id.SafeTrim(),
-                        Version = dependency.VersionSpec.ToStringSafe()
+                        Version = dependency.VersionRange.ToStringSafe()
                     }).ToList();
         }
 
@@ -357,20 +357,20 @@ namespace NuGet
 
         private static void ValidateDependencyVersion(PackageDependency dependency)
         {
-            if (dependency.VersionSpec != null)
+            if (dependency.VersionRange != null)
             {
-                if (dependency.VersionSpec.MinVersion != null &&
-                    dependency.VersionSpec.MaxVersion != null)
+                if (dependency.VersionRange.MinVersion != null &&
+                    dependency.VersionRange.MaxVersion != null)
                 {
 
-                    if ((!dependency.VersionSpec.IsMaxInclusive ||
-                         !dependency.VersionSpec.IsMinInclusive) &&
-                        dependency.VersionSpec.MaxVersion.Equals(dependency.VersionSpec.MinVersion))
+                    if ((!dependency.VersionRange.IsMaxInclusive ||
+                         !dependency.VersionRange.IsMinInclusive) &&
+                        dependency.VersionRange.MaxVersion.Equals(dependency.VersionRange.MinVersion))
                     {
                         throw new InvalidOperationException(String.Format(CultureInfo.CurrentCulture, NuGetResources.DependencyHasInvalidVersion, dependency.Id));
                     }
 
-                    if (dependency.VersionSpec.MaxVersion.CompareTo(dependency.VersionSpec.MinVersion) < 0)
+                    if (dependency.VersionRange.MaxVersion.CompareTo(dependency.VersionRange.MinVersion) < 0)
                     {
                         throw new InvalidOperationException(String.Format(CultureInfo.CurrentCulture, NuGetResources.DependencyHasInvalidVersion, dependency.Id));
                     }

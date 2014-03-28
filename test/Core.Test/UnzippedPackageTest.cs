@@ -61,10 +61,10 @@ namespace NuGet.Test
             Assert.Equal("http://www.outercurve.com/", package.IconUrl.ToString());
             Assert.Equal(1, package.DependencySets.Count());
             Assert.Equal("bing", package.DependencySets.ElementAt(0).Dependencies.ElementAt(0).Id);
-            Assert.Equal(new NuGetVersion("1.0-RC"), package.DependencySets.ElementAt(0).Dependencies.ElementAt(0).VersionSpec.MinVersion);
-            Assert.True(package.DependencySets.ElementAt(0).Dependencies.ElementAt(0).VersionSpec.IsMinInclusive);
-            Assert.Equal(null, package.DependencySets.ElementAt(0).Dependencies.ElementAt(0).VersionSpec.MaxVersion);
-            Assert.False(package.DependencySets.ElementAt(0).Dependencies.ElementAt(0).VersionSpec.IsMaxInclusive);
+            Assert.Equal(new NuGetVersion("1.0-RC"), package.DependencySets.ElementAt(0).Dependencies.ElementAt(0).VersionRange.Lower.Bound);
+            Assert.True(package.DependencySets.ElementAt(0).Dependencies.ElementAt(0).VersionRange.Lower.IncludeBound);
+            Assert.Equal(null, package.DependencySets.ElementAt(0).Dependencies.ElementAt(0).VersionRange.Upper.Bound);
+            Assert.False(package.DependencySets.ElementAt(0).Dependencies.ElementAt(0).VersionRange.IsMaxInclusive);
             Assert.Equal("Jumpo Jet", package.Title);
             Assert.True(package.RequireLicenseAcceptance);
             Assert.Equal("My package description.", package.Description);

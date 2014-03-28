@@ -138,7 +138,7 @@ namespace NuGet.Test.Mocks
             return GetEnumerator();
         }
 
-        public bool TryFindLatestPackageById(string id, out ISemanticVersion latestVersion)
+        public bool TryFindLatestPackageById(string id, out NuGetVersion latestVersion)
         {
             List<IPackage> packages;
             bool result = Packages.TryGetValue(id, out packages);
@@ -194,12 +194,12 @@ namespace NuGet.Test.Mocks
             });
         }
 
-        public bool Exists(string packageId, ISemanticVersion version)
+        public bool Exists(string packageId, NuGetVersion version)
         {
             return FindPackage(packageId, version) != null;
         }
 
-        public IPackage FindPackage(string packageId, ISemanticVersion version)
+        public IPackage FindPackage(string packageId, NuGetVersion version)
         {
             List<IPackage> packages;
             if (Packages.TryGetValue(packageId, out packages))

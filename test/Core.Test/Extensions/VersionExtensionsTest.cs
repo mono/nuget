@@ -40,7 +40,7 @@ namespace NuGet.Test.Extensions
         }
 
         [Fact]
-        public void ToDelegateRequiresNonNullVersionSpec()
+        public void ToDelegateRequiresNonNullVersionRange()
         {
             ExceptionAssert.ThrowsArgNull(() => VersionExtensions.ToDelegate(null), "versionInfo");
         }
@@ -49,7 +49,7 @@ namespace NuGet.Test.Extensions
         public void ToDelegateWithExtractorRequiresNonNullParameters()
         {
             ExceptionAssert.ThrowsArgNull(() => VersionExtensions.ToDelegate<IPackage>(null, p => p.Version), "versionInfo");
-            ExceptionAssert.ThrowsArgNull(() => VersionExtensions.ToDelegate<IPackage>(new VersionSpec(new NuGetVersion(1, 0, 0, 0)), null), "extractor");
+            ExceptionAssert.ThrowsArgNull(() => VersionExtensions.ToDelegate<IPackage>(new NuGetVersionRange(new NuGetVersion(1, 0, 0, 0)), null), "extractor");
         }
 
         [Theory]
@@ -57,11 +57,11 @@ namespace NuGet.Test.Extensions
         public void ToDelegateOutputWorksWithPlainSemVers(string verSpec, string semVer, bool expected)
         {
             // Arrange
-            IVersionSpec spec = VersionSpec.Parse(verSpec);
-            ISemanticVersion ver = new NuGetVersion(semVer);
+            NuGetVersionRange spec = NuGetVersionRange.Parse(verSpec);
+            NuGetVersion ver = new NuGetVersion(semVer);
 
             // Act/Assert
-            Assert.Equal(expected, spec.ToDelegate<ISemanticVersion>(v => v)(ver));
+            Assert.Equal(expected, spec.ToDelegate<NuGetVersion>(v => v)(ver));
         }
 
         [Theory]
@@ -69,7 +69,7 @@ namespace NuGet.Test.Extensions
         public void ToDelegateOutputWorksWithPackages(string verSpec, string semVer, bool expected)
         {
             // Arrange
-            IVersionSpec spec = VersionSpec.Parse(verSpec);
+            NuGetVersionRange spec = NuGetVersionRange.Parse(verSpec);
             Mock<IPackage> mockPkg = new Mock<IPackage>();
             mockPkg.Setup(p => p.Version).Returns(new NuGetVersion(semVer));
 

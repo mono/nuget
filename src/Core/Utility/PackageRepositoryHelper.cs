@@ -7,13 +7,13 @@ namespace NuGet
 {
     public static class PackageRepositoryHelper
     {
-        public static IPackage ResolvePackage(IPackageRepository sourceRepository, IPackageRepository localRepository, string packageId, ISemanticVersion version, bool allowPrereleaseVersions)
+        public static IPackage ResolvePackage(IPackageRepository sourceRepository, IPackageRepository localRepository, string packageId, NuGetVersion version, bool allowPrereleaseVersions)
         {
             return ResolvePackage(sourceRepository, localRepository, constraintProvider: NullConstraintProvider.Instance, packageId: packageId, version: version, allowPrereleaseVersions: allowPrereleaseVersions);
         }
 
         public static IPackage ResolvePackage(IPackageRepository sourceRepository, IPackageRepository localRepository, IPackageConstraintProvider constraintProvider,
-            string packageId, ISemanticVersion version, bool allowPrereleaseVersions)
+            string packageId, NuGetVersion version, bool allowPrereleaseVersions)
         {
             if (String.IsNullOrEmpty(packageId))
             {

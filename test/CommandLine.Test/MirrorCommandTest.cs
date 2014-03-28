@@ -527,11 +527,11 @@ namespace NuGet.Test.ServerExtensions
                 {
                     new PackageDependencySet(null, new[]
                         {
-                            new PackageDependency("ChildPackage", new VersionSpec
+                            new PackageDependency("ChildPackage", new NuGetVersionRange
                                 (
-                                    minVersion: new NuGetVersion("1.0"),
-                                    maxVersion: new NuGetVersion("2.0"),
-                                    isMinInclusive: true
+                                    lowerBound: new NuGetVersion("1.0"),
+                                    upperBound: new NuGetVersion("2.0"),
+                                    includeLowerBound: true
                                 ))
                         })
                 };
@@ -540,11 +540,11 @@ namespace NuGet.Test.ServerExtensions
                 {
                     new PackageDependencySet(null, new[]
                         {
-                            new PackageDependency("ChildPackage", new VersionSpec
+                            new PackageDependency("ChildPackage", new NuGetVersionRange
                                 (
-                                    minVersion: new NuGetVersion("2.0"),
-                                    maxVersion: new NuGetVersion("5.0"),
-                                    isMinInclusive: false
+                                    lowerBound: new NuGetVersion("2.0"),
+                                    upperBound: new NuGetVersion("5.0"),
+                                    includeLowerBound: false
                                 ))
                         })
                 };

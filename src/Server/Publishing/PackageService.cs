@@ -100,7 +100,7 @@ namespace NuGet.Server
             }
         }
 
-        private static void WritePackageNotFound(HttpContextBase context, string packageId, ISemanticVersion version)
+        private static void WritePackageNotFound(HttpContextBase context, string packageId, NuGetVersion version)
         {
             WriteStatus(context, HttpStatusCode.NotFound, String.Format("'Package {0} {1}' Not found.", packageId, version));
         }

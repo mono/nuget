@@ -370,7 +370,7 @@ namespace NuGet.VsEvents
         /// <param name="packageId">The package id.</param>
         /// <param name="version">The package version</param>
         /// <returns>True if the package is installed in the local repository.</returns>
-        private static bool IsPackageInstalled(IFileSystem fileSystem, string packageId, ISemanticVersion version)
+        private static bool IsPackageInstalled(IFileSystem fileSystem, string packageId, NuGetVersion version)
         {
             if (version != null)
             {

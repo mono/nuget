@@ -6,7 +6,7 @@ namespace NuGet
 {
     public class DefaultConstraintProvider : IPackageConstraintProvider
     {
-        private readonly Dictionary<string, IVersionSpec> _constraints = new Dictionary<string, IVersionSpec>(StringComparer.OrdinalIgnoreCase);
+        private readonly Dictionary<string, NuGetVersionRange> _constraints = new Dictionary<string, NuGetVersionRange>(StringComparer.OrdinalIgnoreCase);
 
         public string Source
         {
@@ -16,17 +16,17 @@ namespace NuGet
             }
         }
 
-        public void AddConstraint(string packageId, IVersionSpec versionSpec)
+        public void AddConstraint(string packageId, NuGetVersionRange versionRange)
         {
-            _constraints[packageId] = versionSpec;
+            _constraints[packageId] = versionRange;
         }
 
-        public IVersionSpec GetConstraint(string packageId)
+        public NuGetVersionRange GetConstraint(string packageId)
         {
-            IVersionSpec versionSpec;
-            if (_constraints.TryGetValue(packageId, out versionSpec))
+            NuGetVersionRange versionRange;
+            if (_constraints.TryGetValue(packageId, out versionRange))
             {
-                return versionSpec;
+                return versionRange;
             }
             return null;
         }

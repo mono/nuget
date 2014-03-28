@@ -133,7 +133,7 @@ namespace NuGet.VisualStudio
         public virtual void InstallPackage(
             IProjectManager projectManager,
             string packageId,
-            ISemanticVersion version,
+            NuGetVersion version,
             bool ignoreDependencies,
             bool allowPrereleaseVersions,
             ILogger logger)
@@ -145,7 +145,7 @@ namespace NuGet.VisualStudio
         public void InstallPackage(
             IProjectManager projectManager,
             string packageId,
-            ISemanticVersion version,
+            NuGetVersion version,
             bool ignoreDependencies,
             bool allowPrereleaseVersions,
             bool skipAssemblyReferences,
@@ -208,12 +208,12 @@ namespace NuGet.VisualStudio
             }
         }
 
-        public void UninstallPackage(IProjectManager projectManager, string packageId, ISemanticVersion version, bool forceRemove, bool removeDependencies)
+        public void UninstallPackage(IProjectManager projectManager, string packageId, NuGetVersion version, bool forceRemove, bool removeDependencies)
         {
             UninstallPackage(projectManager, packageId, version, forceRemove, removeDependencies, NullLogger.Instance);
         }
 
-        public virtual void UninstallPackage(IProjectManager projectManager, string packageId, ISemanticVersion version, bool forceRemove, bool removeDependencies, ILogger logger)
+        public virtual void UninstallPackage(IProjectManager projectManager, string packageId, NuGetVersion version, bool forceRemove, bool removeDependencies, ILogger logger)
         {
             EventHandler<PackageOperationEventArgs> uninstallingHandler =
                 (sender, e) => _packageEvents.NotifyUninstalling(e);
@@ -283,7 +283,7 @@ namespace NuGet.VisualStudio
             }
         }
 
-        public virtual void UpdatePackage(IProjectManager projectManager, string packageId, ISemanticVersion version, bool updateDependencies, bool allowPrereleaseVersions, ILogger logger)
+        public virtual void UpdatePackage(IProjectManager projectManager, string packageId, NuGetVersion version, bool updateDependencies, bool allowPrereleaseVersions, ILogger logger)
         {
             UpdatePackage(projectManager,
                             packageId,
@@ -361,18 +361,18 @@ namespace NuGet.VisualStudio
             }
         }
 
-        public void UpdatePackage(string packageId, IVersionSpec versionSpec, bool updateDependencies, bool allowPrereleaseVersions, ILogger logger, IPackageOperationEventListener eventListener)
+        public void UpdatePackage(string packageId, NuGetVersionRange versionRange, bool updateDependencies, bool allowPrereleaseVersions, ILogger logger, IPackageOperationEventListener eventListener)
         {
             UpdatePackage(packageId,
-                          projectManager => UpdatePackageReference(projectManager, packageId, versionSpec, updateDependencies, allowPrereleaseVersions),
-                          () => SourceRepository.FindPackage(packageId, versionSpec, allowPrereleaseVersions, allowUnlisted: false),
+                          projectManager => UpdatePackageReference(projectManager, packageId, versionRange, updateDependencies, allowPrereleaseVersions),
+                          () => SourceRepository.FindPackage(packageId, versionRange, allowPrereleaseVersions, allowUnlisted: false),
                           updateDependencies,
                           allowPrereleaseVersions,
                           logger,
                           eventListener);
         }
 
-        public void UpdatePackage(string packageId, ISemanticVersion version, bool updateDependencies, bool allowPrereleaseVersions, ILogger logger, IPackageOperationEventListener eventListener)
+        public void UpdatePackage(string packageId, NuGetVersion version, bool updateDependencies, bool allowPrereleaseVersions, ILogger logger, IPackageOperationEventListener eventListener)
         {
             UpdatePackage(packageId,
                           projectManager => UpdatePackageReference(projectManager, packageId, version, updateDependencies, allowPrereleaseVersions),
@@ -719,8 +719,8 @@ namespace NuGet.VisualStudio
 
             eventListener = eventListener ?? NullPackageOperationEventListener.Instance;
 
-            var projectsHasPackage = new Dictionary<Project, ISemanticVersion>();
-            var versionsChecked = new Dictionary<ISemanticVersion, bool>();
+            var projectsHasPackage = new Dictionary<Project, NuGetVersion>();
+            var versionsChecked = new Dictionary<NuGetVersion, bool>();
 
             // first uninstall from all projects that has the package installed
             RunActionOnProjects(
@@ -777,7 +777,7 @@ namespace NuGet.VisualStudio
                    var projectManager = GetProjectManager(project);
                    if (!projectManager.LocalRepository.Exists(packageId))
                    {
-                       ISemanticVersion oldVersion = projectsHasPackage[project];
+                       NuGetVersion oldVersion = projectsHasPackage[project];
                        using (StartReinstallOperation(packageId, oldVersion.ToString()))
                        {
                            InstallPackage(
@@ -937,7 +937,7 @@ namespace NuGet.VisualStudio
 
         private IPackage FindLocalPackage(IProjectManager projectManager,
                                           string packageId,
-                                          ISemanticVersion version,
+                                          NuGetVersion version,
                                           Func<IProjectManager, IList<IPackage>, Exception> getAmbiguousMatchException,
                                           out bool appliesToProject)
         {
@@ -1139,7 +1139,7 @@ namespace NuGet.VisualStudio
 
         // If the remote package is already determined, consider using the overload which directly takes in the remote package
         // Can avoid calls FindPackage calls to source repository
-        private void UpdatePackageReference(IProjectManager projectManager, string packageId, ISemanticVersion version, bool updateDependencies, bool allowPrereleaseVersions)
+        private void UpdatePackageReference(IProjectManager projectManager, string packageId, NuGetVersion version, bool updateDependencies, bool allowPrereleaseVersions)
         {
             string versionString = version == null ? null : version.ToString();
             using (StartUpdateOperation(packageId, versionString))
@@ -1148,11 +1148,11 @@ namespace NuGet.VisualStudio
             }
         }
 
-        private void UpdatePackageReference(IProjectManager projectManager, string packageId, IVersionSpec versionSpec, bool updateDependencies, bool allowPrereleaseVersions)
+        private void UpdatePackageReference(IProjectManager projectManager, string packageId, NuGetVersionRange versionRange, bool updateDependencies, bool allowPrereleaseVersions)
         {
             using (StartUpdateOperation(packageId, packageVersion: null))
             {
-                RunProjectAction(projectManager, () => projectManager.UpdatePackageReference(packageId, versionSpec, updateDependencies, allowPrereleaseVersions));
+                RunProjectAction(projectManager, () => projectManager.UpdatePackageReference(packageId, versionRange, updateDependencies, allowPrereleaseVersions));
             }
         }
 
@@ -1164,7 +1164,7 @@ namespace NuGet.VisualStudio
             }
         }
 
-        private void AddPackageReference(IProjectManager projectManager, string packageId, ISemanticVersion version, bool ignoreDependencies, bool allowPrereleaseVersions)
+        private void AddPackageReference(IProjectManager projectManager, string packageId, NuGetVersion version, bool ignoreDependencies, bool allowPrereleaseVersions)
         {
             RunProjectAction(projectManager, () => projectManager.AddPackageReference(packageId, version, ignoreDependencies, allowPrereleaseVersions));
         }
@@ -1681,14 +1681,14 @@ namespace NuGet.VisualStudio
             return new AggregateRepository(new[] { _sharedRepository, SourceRepository.Clone() });
         }
 
-        private IVersionSpec GetSafeRange(string packageId)
+        private NuGetVersionRange GetSafeRange(string packageId)
         {
             bool appliesToProject;
             IPackage package = FindLocalPackage(packageId, out appliesToProject);
             return VersionUtility.GetSafeRange(package.Version);
         }
 
-        private IVersionSpec GetSafeRange(IProjectManager projectManager, string packageId)
+        private NuGetVersionRange GetSafeRange(IProjectManager projectManager, string packageId)
         {
             bool appliesToProject;
             IPackage package = FindLocalPackageForUpdate(projectManager, packageId, out appliesToProject);
