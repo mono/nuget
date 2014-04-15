@@ -33,7 +33,7 @@ bin/nuget: nuget.in
 lib/nuget/NuGet.exe:
 	./build.sh
 	$(MKDIR) -p lib/nuget
-	cp "src/CommandLine/bin//Release/*" lib/nuget/
+	cp $(PWD)/src/CommandLine/bin/Release/* lib/nuget/
 
 install:
 	$(INSTALL) -m755 -d $(PREFIX)
