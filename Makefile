@@ -23,7 +23,7 @@ clean:
 
 bin/nuget: nuget.in
 	$(MKDIR) -p bin
-	$(SED) s/__MONO_OPTIONS__/$(mono_opt)/ nuget.in > bin/nuget
+	$(SED) -e 's,@''bindir@,$(PREFIX)/bin,' -e 's,@''mono_instdir@,$(PREFIX)/lib/mono,' nuget.in > bin/nuget
 	$(CHMOD) +x bin/nuget
 
 # lib/nuget/NuGet.exe:
@@ -38,12 +38,11 @@ lib/nuget/NuGet.exe:
 install:
 	$(INSTALL) -m755 -d $(PREFIX)
 	$(INSTALL) -m755 -d $(PREFIX)/bin
-	$(INSTALL) -m755 -d $(PREFIX)/lib
-	$(INSTALL) -m755 -d $(PREFIX)/lib/nuget
+	$(INSTALL) -m755 -d $(PREFIX)/lib/mono/nuget
 	$(INSTALL) -m755 bin/nuget $(PREFIX)/bin
-	$(INSTALL) -m755 lib/nuget/NuGet.exe $(PREFIX)/lib/nuget
-	$(INSTALL) -m755 lib/nuget/NuGet.Core.dll $(PREFIX)/lib/nuget
-	$(INSTALL) -m755 lib/nuget/Microsoft.Web.XmlTransform.dll $(PREFIX)/lib/nuget
+	$(INSTALL) -m755 lib/nuget/NuGet.exe $(PREFIX)/lib/mono/nuget
+	$(INSTALL) -m755 lib/nuget/NuGet.Core.dll $(PREFIX)/lib/mono/nuget
+	$(INSTALL) -m755 lib/nuget/Microsoft.Web.XmlTransform.dll $(PREFIX)/lib/mono/nuget
 
 uninstall:
 	$(RM) $(PREFIX)/lib/nuget/nuget.exe

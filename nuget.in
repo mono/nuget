@@ -1,5 +1,2 @@
-#!/usr/bin/env bash
-MONO_PATH=`dirname $0`/../lib/nuget:$MONO_PATH \
-    exec `which mono` __MONO_OPTIONS__ $MONO_OPTIONS \
-    `dirname $0`/../lib/nuget/NuGet.exe \
-    "$@"
+#!/bin/sh
+exec @bindir@/mono $MONO_OPTIONS @mono_instdir@/nuget/NuGet.exe
