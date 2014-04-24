@@ -41,9 +41,9 @@ install:
 	$(INSTALL) -m755 -d $(PREFIX)/lib
 	$(INSTALL) -m755 -d $(PREFIX)/lib/nuget
 	$(INSTALL) -m755 bin/nuget $(PREFIX)/bin
-	$(INSTALL) -m755 lib/NuGet.exe $(PREFIX)/lib/nuget
-	$(INSTALL) -m755 lib/NuGet.Core.dll $(PREFIX)/lib/nuget
-	$(INSTALL) -m755 lib/Microsoft.Web.XmlTransform.dll $(PREFIX)/lib/nuget
+	$(INSTALL) -m755 lib/nuget/NuGet.exe $(PREFIX)/lib/nuget
+	$(INSTALL) -m755 lib/nuget/NuGet.Core.dll $(PREFIX)/lib/nuget
+	$(INSTALL) -m755 lib/nuget/Microsoft.Web.XmlTransform.dll $(PREFIX)/lib/nuget
 
 uninstall:
 	$(RM) $(PREFIX)/lib/nuget/nuget.exe
