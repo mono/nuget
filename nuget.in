@@ -1,2 +1,2 @@
 #!/bin/sh
-exec @bindir@/mono $MONO_OPTIONS @mono_instdir@/nuget/NuGet.exe
+exec @bindir@/mono $MONO_OPTIONS @mono_instdir@/nuget/NuGet.exe $@
