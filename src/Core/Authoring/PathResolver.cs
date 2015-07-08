@@ -99,8 +99,14 @@ namespace NuGet
 
         private static IEnumerable<SearchPathResult> PerformWildcardSearchInternal(string basePath, string searchPath, bool includeEmptyDirectories, out string normalizedBasePath)
         {
-            if (!searchPath.StartsWith(@"\\", StringComparison.OrdinalIgnoreCase))
+            if (!searchPath.StartsWith(@"\\", StringComparison.OrdinalIgnoreCase)
+                && Path.DirectorySeparatorChar != '/')
             {
+                //If the system's DirectorySeparatorChar is '/' we're probably dealing with Mac or *nix
+                // In any case, if '/' is the separator, we don't want to trim off the first char ever
+                // since it would completely change the meaning of the path
+                //  eg: /var/somedir/ is not at all the same as var/somedir (relative vs absolute)
+
                 // If we aren't dealing with network paths, trim the leading slash. 
                 searchPath = searchPath.TrimStart(Path.DirectorySeparatorChar);
             }
@@ -223,10 +229,10 @@ namespace NuGet
 
         internal static string NormalizeBasePath(string basePath, ref string searchPath)
         {
-            const string relativePath = @"..\";
+            var relativePath = ".." + Path.DirectorySeparatorChar;
 
             // If no base path is provided, use the current directory.
-            basePath = String.IsNullOrEmpty(basePath) ? @".\" : basePath;
+            basePath = String.IsNullOrEmpty(basePath) ? "." + Path.DirectorySeparatorChar : basePath;
 
             // If the search path is relative, transfer the ..\ portion to the base path. 
             // This needs to be done because the base path determines the root for our enumeration.
