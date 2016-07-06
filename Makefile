@@ -15,7 +15,20 @@ endif
 
 .PHONY: all clean install uninstall
 
-all: bin/nuget lib/nuget/NuGet.exe
+all: update_submodules bin/nuget lib/nuget/NuGet.exe
+
+GIT_FOUND = $$(echo $$(which git))
+SYNC_SUBMODULES = \
+	if test -d ".git"; then \
+		if [ "x$(GIT_FOUND)" = "x" ]; then \
+			echo "git not found; please install it first"; \
+			exit 1; \
+		fi; \
+		git submodule update --init || exit 1; \
+	fi
+
+update_submodules:
+	@$(SYNC_SUBMODULES)
 
 clean:
 	$(RM) bin/nuget
